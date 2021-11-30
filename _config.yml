@@ -30,7 +30,7 @@ twitter_username: hoppergeegee
 github_username:  hoppergee
 
 # Build settings
-theme: minima
+# theme: minima
 plugins:
   - jekyll-feed
 
