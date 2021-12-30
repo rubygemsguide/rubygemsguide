@@ -457,12 +457,12 @@ kbd,
 samp {
   font-size: 1.075rem;
   font-family: var(--mono-font);
-  /* color:#fdce93; */
-  color: var(--code);
+  color: #CE9178;
 }
 
 strong {
   color: var(--code);
+  font-size: 1.25rem;
 }
 
 code {
