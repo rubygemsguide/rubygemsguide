@@ -457,7 +457,21 @@ kbd,
 samp {
   font-size: 1.075rem;
   font-family: var(--mono-font);
+  /* color:#fdce93; */
   color: var(--code);
+}
+
+strong {
+  color: var(--code);
+}
+
+code {
+  background-color: var(--accent-bg);
+  padding-left: .5rem;
+  padding-right: .5rem;
+  padding-top: .1rem;
+  padding-bottom: .1rem;
+  border-radius: .25rem;
 }
 
 kbd {
