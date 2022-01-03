@@ -36,108 +36,108 @@ Integrating `stimulus`
 
 1. Add `stimulus` and `importmap` to Gemfile and run `bundle install`
  
-    ```ruby
-    # Gemfile
-    gem 'importmap-rails', '~> 1.0'
-    gem 'stimulus-rails', '~> 1.0'
-    ```
+   ```ruby
+   # Gemfile
+   gem 'importmap-rails', '~> 1.0'
+   gem 'stimulus-rails', '~> 1.0'
+   ```
 
 2. Setup `importmap` and `stimulus` by run
 
-    ```bash
-    bin/rails importmap:install
-    bin/rails stimulus:install
-    ```
+   ```bash
+   bin/rails importmap:install
+   bin/rails stimulus:install
+   ```
 
 Integrating `devise`
 
 1. Add `devise` to Gemfile and run `bundle install`
 
-    ```ruby
-    gem 'devise', '~> 4.8'
-    ```
+   ```ruby
+   gem 'devise', '~> 4.8'
+   ```
 
 2. Setup `devise` by run
 
-    ```bash
-    bin/rails generate devise:install
-    ```
+   ```bash
+   bin/rails generate devise:install
+   ```
 
 3. Add mailer url config to `config/environments/development.rb`
 
-    ```ruby
-    # config/environments/development.rb
-    config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-    ```
+   ```ruby
+   # config/environments/development.rb
+   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+   ```
 
 4. Generate `User` model through `devise` command
 
-    ```bash
-    bin/rails generate devise User
-    bin/rails db:migrate
-    ```
+   ```bash
+   bin/rails generate devise User
+   bin/rails db:migrate
+   ```
 
 5. Update routes
 
-    ```ruby
-    # config/routes.rb
-    devise_for :users
-    ```
+   ```ruby
+   # config/routes.rb
+   devise_for :users
+   ```
 6. Add a before action `authenticate_user!`
 
-    ```ruby
-    # app/controllers/application_controller.rb
-    class ApplicationController < ActionController::Base
-      before_action :authenticate_user!
-    end
-    ```
+   ```ruby
+   # app/controllers/application_controller.rb
+   class ApplicationController < ActionController::Base
+     before_action :authenticate_user!
+   end
+   ```
 
 Generate the home page 
 
 1. Create a home controller: `rails g controller Home`
 2. Update routes
 
-    ```ruby
-    # config/routes.rb
-    root "home#show"
-    ```
+   ```ruby
+   # config/routes.rb
+   root "home#show"
+   ```
 
 3. Create the view `app/views/home/show.html.erb`
 
-    ```html
-    <h1>Welcome to 2FA Demo!</h1>
-    ```
+   ```html
+   <h1>Welcome to 2FA Demo!</h1>
+   ```
 
 4. Skip the devise authenticate before action
 
-    ```ruby
-    # app/controllers/home_controller.rb
-    skip_before_action :authenticate_user!
-    ```
+   ```ruby
+   # app/controllers/home_controller.rb
+   skip_before_action :authenticate_user!
+   ```
 
 Generate the dashboard page
 
 1. Create a dashboard controller: `rails g controller Dashboard`
 2. Update routes
 
-    ```ruby
-    resource :dashboard, controller: :dashboard
-    ```
+   ```ruby
+   resource :dashboard, controller: :dashboard
+   ```
 3. Create the view `app/views/dashboard/show.html.erb`
 
-    ```html
-    <h1>Dashboard</h1>
-    ```
+   ```html
+   <h1>Dashboard</h1>
+   ```
 4. Redirect to dashboard page after sign in
 
-    ```ruby
-    # app/controllers/application_controller.rb
-    private
+   ```ruby
+   # app/controllers/application_controller.rb
+   private
 
-    def after_sign_in_path_for(resource)
-      dashboard_path
-    end
-    ```
+   def after_sign_in_path_for(resource)
+     dashboard_path
+   end
+   ```
 
 Import [RubyGemsGuide/demo.css](https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css)
 
@@ -145,35 +145,35 @@ Import [RubyGemsGuide/demo.css](https://github.com/RubyGemsGuide/demo.css/blob/m
 2. Copy paste [demo.css](https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css)
 3. Update layout
 
-    ```html
-    <body>
-      <header>
-        <h1>
-          <%= link_to '2FA Demo', root_path %>
-        </h1>
+   ```html
+   <body>
+     <header>
+       <h1>
+         <%= link_to '2FA Demo', root_path %>
+       </h1>
 
-        <nav>
-          <% if user_signed_in? %>
-            <%= button_to 'Logout', destroy_user_session_path, method: :delete %>
-          <% else %>
-            <%= link_to 'Login', new_user_session_path %>
-          <% end %>
-        </nav>
-      </header>
+       <nav>
+         <% if user_signed_in? %>
+           <%= button_to 'Logout', destroy_user_session_path, method: :delete %>
+         <% else %>
+           <%= link_to 'Login', new_user_session_path %>
+         <% end %>
+       </nav>
+     </header>
 
-      <section>
-        <% flash.each do |name, msg| -%>
-          <%= content_tag :dialog, msg, role: name %>
-        <% end %>
-      </section>
+     <section>
+       <% flash.each do |name, msg| -%>
+         <%= content_tag :dialog, msg, role: name %>
+       <% end %>
+     </section>
 
-      <%= yield %>
+     <%= yield %>
 
-      <footer>
-        <a href="https://rubygems.guide">RubyGems.Guide</a> - 2FA Demo
-      </footer>
-    </body>
-    ```
+     <footer>
+       <a href="https://rubygems.guide">RubyGems.Guide</a> - 2FA Demo
+     </footer>
+   </body>
+   ```
 
 Start the app at `localhost:3000`
 
@@ -201,45 +201,45 @@ Now we have a basic Rails app that user can sign up, sign in and sign out.
 
 1. Add `devise-two-factor`, `dotenv-rails`, `rqrcode` to Gemfile and run `bundle instll`
 
-    ```ruby
-    # Gemfile
-    gem 'devise-two-factor', '~> 4.0'
-    gem 'dotenv-rails'
-    gem 'rqrcode', '~> 2.1'
-    ```
+   ```ruby
+   # Gemfile
+   gem 'devise-two-factor', '~> 4.0'
+   gem 'dotenv-rails'
+   gem 'rqrcode', '~> 2.1'
+   ```
 
 2. Generate config and update `User` model by run:
 
-    ```bash
-    rails generate devise_two_factor User DEVISE_OTP_ENCRYPT_KEY
-    ```
+   ```bash
+   rails generate devise_two_factor User DEVISE_OTP_ENCRYPT_KEY
+   ```
 
 3. Create and update `.env` file
 
-    ```ruby
-    DEVISE_OTP_ENCRYPT_KEY=opt_encryption_key_must_be_32_bytes_or_longer
-    ```
+   ```ruby
+   DEVISE_OTP_ENCRYPT_KEY=opt_encryption_key_must_be_32_bytes_or_longer
+   ```
 
 4. Add `otp_backup_codes` column to `users` and run `rails db:migrate`
 
-    ```ruby
-    class AddDeviseTwoFactorBackupableToUsers < ActiveRecord::Migration
-      def change
-        # Change type from :string to :text if using MySQL database
-        add_column :users, :otp_backup_codes, :string, array: true
-      end
-    end
-    ```
+   ```ruby
+   class AddDeviseTwoFactorBackupableToUsers < ActiveRecord::Migration
+     def change
+       # Change type from :string to :text if using MySQL database
+       add_column :users, :otp_backup_codes, :string, array: true
+     end
+   end
+   ```
 
 5. Add backup code config to `User` model
 
-    ```ruby
-      devise :two_factor_backupable,
-             otp_backup_code_length: 8,
-             otp_number_of_backup_codes: 12
+   ```ruby
+   devise :two_factor_backupable,
+          otp_backup_code_length: 8,
+          otp_number_of_backup_codes: 12
 
-      serialize :otp_backup_codes, Array
-    ```
+   serialize :otp_backup_codes, Array
+   ```
 
 
 ### Step 3: Enable OTP-based two-factor authentication
@@ -249,7 +249,7 @@ The user flow we want:
 1. Find a link called "Two-factor authentication" on `/dashboard` page
 2. Go to the 2FA setup page(`/two_factor_authentication`) by click the link
 3. Find a 2FA "Enable" button on `/two_factor_authentication` page
-4. Go to a confirmation page(`/two_factor_authentication/confirmation/new`) by click the "Enable" button
+4. Show a confirmation page by click the "Enable" button
 5. See a QR code and a code submit form on the the confirmation page
 6. Scan the QR code with an authenticator app and submit the form with a OTP code
 7. Show a success page after succcess submit the confirmation form
@@ -260,207 +260,206 @@ Create the 2FA setup page
 
 1. Setup routes
 
-    ```ruby
-    # config/routes.rb
-    resource :two_factor_authentication
-    ```
+   ```ruby
+   # config/routes.rb
+   resource :two_factor_authentication
+   ```
 
 2. Create the controller: `TwoFactorAuthenticationsController`
 
-    ```ruby
-    # app/controllers/two_factor_authentications_controller
-    class TwoFactorAuthenticationsController < ApplicationController
-      def show
-      end
-    end
-    ```
+   ```ruby
+   # app/controllers/two_factor_authentications_controller
+   class TwoFactorAuthenticationsController < ApplicationController
+     def show
+     end
+   end
+   ```
 
 3. Create the 2FA setup view `app/views/two_factor_authentications/show.html.erb`
 
-    ```html
-    <h1>Two-factor authentication</h1>
-    ```
-    ![](/images/posts/devise-two-factor/2FA-setup-page-v0.png)
+   ```html
+   <h1>Two-factor authentication</h1>
+   ```
+   ![](/images/posts/devise-two-factor/2FA-setup-page-v0.png)
 
 
 4. Put the link on dashboard show page `app/views/dashboard/show.html.erb`
 
-    ```erb
-    <%= link_to "Two-factor authentication", two_factor_authentication_path %>
-    ```
+   ```erb
+   <%= link_to "Two-factor authentication", two_factor_authentication_path %>
+   ```
 
-    ![](/images/posts/devise-two-factor/dashboard-page.png)
+   ![](/images/posts/devise-two-factor/dashboard-page.png)
 
 Now we can go to the 2FA setup page by click "Two-factor authentication" link on dashboard page
 
-Create the 2FA confirmation page (`/two_factor_authentication/confirmation/new`)
+Show the 2FA confirmation view on enable
 
 1. Add 2FA "Enable" button on 2FA setup page (`/two_factor_authentication`
 
-    ```html
-    <h1>Two-factor authentication</h1>
+   ```html
+   <h1>Two-factor authentication</h1>
 
-    <h2>Authenticator app</h2>
+   <h2>Authenticator app</h2>
 
-    <%= button_to 'Enable', two_factor_authentication_path, method: :post %>
-    ```
+   <%= button_to 'Enable', two_factor_authentication_path, method: :post %>
+   ```
 
 2. Add a `create` action to `TwoFactorAuthenticationsController`
 
-    ```ruby
-    # app/controllers/two_factor_authentications_controller
-    def create
-      current_user.otp_secret = User.generate_otp_secret
-      current_user.save!
-      redirect_to new_two_factor_authentication_confirmation_path
-    end
-    ```
-    This will generate and save the OTP secret which will used for OTP authentication in future. Then it will redirect user to the confirmation page
+   ```ruby
+   # app/controllers/two_factor_authentications_controller
+   def create
+     current_user.otp_secret = User.generate_otp_secret
+     current_user.save!
 
-3. Update routes to add the 2FA setup confirmation url
+     @qrcode = current_user.otp_qrcode
+     render 'two_factor_authentication/confirmations/new'
+   end
+   ```
+    This will generate and save the OTP secret which will used for OTP authentication in future. Then it will redner the confirmation page.
 
-    ```ruby
-    # config/routes
-    resource :two_factor_authentication do
-      scope module: :two_factor_authentication do
-        resource :confirmation
-      end
-    end
-    ```
+3. Add `otp_qrcode` method to `User`
 
-4. Create the confirmation controller `TwoFactorAuthentication::ConfirmationsController`
+   ```ruby
+   def otp_qrcode
+     provision_uri = otp_provisioning_uri(email, issuer: '2FA-Demo')
+     RQRCode::QRCode.new(provision_uri)
+   end
+   ```
 
-    ```ruby
-    # app/controllers/two_factor_authentication/confirmations_controller.rb
-    class TwoFactorAuthentication::ConfirmationsController < ApplicationController
+4. Update routes to add the 2FA setup confirmation url
 
-      def new
-        prepare_2fa_form
-      end
+   ```ruby
+   # config/routes
+   resource :two_factor_authentication do
+     scope module: :two_factor_authentication do
+       resource :confirmation
+     end
+   end
+   ```
 
-      private
+5. Create the confirmation controller `TwoFactorAuthentication::ConfirmationsController`
 
-      def prepare_2fa_form
-        provision_uri = current_user.otp_provisioning_uri(current_user.email, issuer: '2FA-Demo')
-        @qrcode = RQRCode::QRCode.new(provision_uri)
-      end
+   ```ruby
+   # app/controllers/two_factor_authentication/confirmations_controller.rb
+   class TwoFactorAuthentication::ConfirmationsController < ApplicationController
+   end
+   ```
 
-    end
-    ```
+6. Create an OTP field component
 
-5. Create an OTP field component
+   ![](/images/posts/devise-two-factor/otp-field.png)
 
-    ![](/images/posts/devise-two-factor/otp-field.png)
+   A view partial at `app/views/components/_otp_field.html.erb`
+   ```html
+   <div data-controller="otp-digit-field"
+       data-otp-digit-field-code-length-value="<%= code_length %>">
+     <%= f.hidden_field field_name, id: 'otp-code-field', data: { 'otp-digit-field-target': 'mainField' } %>
+     <div class="otp-digit-fields-container">
+       <% (1..code_length).each do |index| %>
+         <% 
+           on_first = (index == 1)
+           on_last = (index == code_length)
+         %>
 
-    A view partial at `app/views/components/_otp_field.html.erb`
-    ```html
-    <div data-controller="otp-digit-field"
-        data-otp-digit-field-code-length-value="<%= code_length %>">
-      <%= f.hidden_field field_name, id: 'otp-code-field', data: { 'otp-digit-field-target': 'mainField' } %>
-      <div class="otp-digit-fields-container">
-        <% (1..code_length).each do |index| %>
-          <% 
-            on_first = (index == 1)
-            on_last = (index == code_length)
-          %>
+         <input
+           type="text"
+           maxLength="1"
+           id="digit-<%= index %>"
+           <%= %Q{data-previous="digit-#{index - 1}"}.html_safe unless on_first %>
+           <%= %Q{data-next="digit-#{index + 1}"}.html_safe unless on_last %>
+           <%= "autofocus" if on_first %>
+           data-action="
+             keydown->otp-digit-field#checkAllowance
+             keyup->otp-digit-field#switchFocus
+             change->otp-digit-field#updateMainField
+           "
+         >
+       <% end %>
+     </div>
+   </div>
+   ```
 
-          <input
-            type="text"
-            maxLength="1"
-            id="digit-<%= index %>"
-            <%= %Q{data-previous="#{index - 1}"}.html_safe unless on_first %>
-            <%= %Q{data-next="#{index + 1}"}.html_safe unless on_last %>
-            <%= "autofocus" if on_first %>
-            data-action="
-              keydown->otp-digit-field#checkAllowance
-              keyup->otp-digit-field#switchFocus
-              change->otp-digit-field#updateMainField
-            "
-          >
-        <% end %>
-      </div>
-    </div>
-    ```
+   With a Stimulus controller at `app/javascripts/controllers/otp_digit_field_controller.js`
 
-    With a Stimulus controller at `app/javascripts/controllers/otp_digit_field_controller.js`
+   ```js
+   import { Controller } from "@hotwired/stimulus"
 
-    ```js
-    import { Controller } from "@hotwired/stimulus"
+   export default class extends Controller {
 
-    export default class extends Controller {
+     static targets = ['mainField']
+     static values = {
+       codeLength: String
+     }
 
-      static targets = ['mainField']
-      static values = {
-        codeLength: String
-      }
+     checkAllowance(e) {
+       if (!this._isValidOtpField(e.key)) {
+         e.preventDefault();
+       }
+     }
 
-      checkAllowance(e) {
-        if (!this._isValidOtpField(e.key)) {
-          e.preventDefault();
-        }
-      }
+     switchFocus(e) {
+       if(e.key === 'Backspace' || e.key === 'ArrowLeft') {
+         const prev = this.element.querySelector(`input#${e.currentTarget.dataset.previous}`)
 
-      switchFocus(e) {
-        if(e.key === 'Backspace' || e.key === 'ArrowLeft') {
-          const prev = this.element.querySelector(`input#digit-${e.currentTarget.dataset.previous}`)
+         if(prev !== null) {
+           prev.focus()
+         }
+       } else if(('0' <= e.key && e.key <= '9') || ('a' <= e.key && e.key <= 'z') || e.key === 'ArrowRight') {
+         const next = this.element.querySelector(`input#${e.currentTarget.dataset.next}`)
 
-          if(prev !== null) {
-            prev.focus()
-          }
-        } else if(('0' <= e.key && e.key <= '9') || ('a' <= e.key && e.key <= 'z') || e.key === 'ArrowRight') {
-          const next = this.element.querySelector(`input#digit-${e.currentTarget.dataset.next}`)
+         if(next !== null) {
+           next.focus()
+         }
+       }
+     }
 
-          if(next !== null) {
-            next.focus()
-          }
-        }
-      }
+     updateMainField(e) {
+       let otpCode = ''
+       for (var i = 1; i < (Number(this.codeLengthValue) + 1); i += 1) {
+         otpCode += this.element.querySelector(`input#digit-${i}`).value
+       }
 
-      updateMainField(e) {
-        let otpCode = ''
-        for (var i = 1; i < (Number(this.codeLengthValue) + 1); i += 1) {
-          otpCode += this.element.querySelector(`input#digit-${i}`).value
-        }
+       this.mainFieldTarget.value = otpCode
+     }
 
-        this.mainFieldTarget.value = otpCode
-      }
+     _isValidOtpField(key) {
+       return (key === 'Backspace') ||
+               (key === 'ArrowLeft') ||
+               (key === 'ArrowRight') ||
+               ('0' <= key && key <= '9') ||
+               ('a' <= key && key <= 'z');
+     }
 
-      _isValidOtpField(key) {
-        return (key === 'Backspace') ||
-                (key === 'ArrowLeft') ||
-                (key === 'ArrowRight') ||
-                ('0' <= key && key <= '9') ||
-                ('a' <= key && key <= 'z');
-      }
+   }
 
-    }
+   ```
 
-    ```
+7. Create the confirmation view at `app/views/two_factor_authentication/confirmations/new.html.erb`
 
-6. Create the confirmation view at `app/views/two_factor_authentication/confirmations/new.html.erb`
+   ```html
+   <h1>Setup Two-Factor Authentication</h1>
+   <p>Use your two-factor authentication app to scan the QR code</p>
 
-    ```html
-    <h1>Setup Two-Factor Authentication</h1>
-    <p>Use your two-factor authentication app to scan the QR code</p>
+   <%= @qrcode.as_svg(module_size: 3, fill: "ffffff").html_safe %>
 
-    <%= @qrcode.as_svg(module_size: 3, fill: "ffffff").html_safe %>
+   <%= form_with(
+         url: two_factor_authentication_confirmation_path,
+         local: true,
+         method: :post
+   ) do |f| %>
+     <p>Enter 6-digit code from your two factor authenticator app.</p>
 
-    <%= form_with(
-          url: two_factor_authentication_confirmation_path,
-          local: true,
-          method: :post
-    ) do |f| %>
-      <p>Enter 6-digit code from your two factor authenticator app.</p>
+     <%= render 'components/otp_field', f: f, field_name: :otp_code, code_length: 6 %>
 
-      <%= render 'components/otp_field', f: f, field_name: :otp_code, code_length: 6 %>
+     <div>
+       <%= f.button "Confirm and activate", type: :submit %>
 
-      <div>
-        <%= f.button "Confirm and activate", type: :submit %>
-
-        <%= link_to 'Cancel', two_factor_authentication_path %>
-      </div>
-    <% end %>
-    ```
+       <%= link_to 'Cancel', two_factor_authentication_path %>
+     </div>
+   <% end %>
+   ```
 
 Now we have a 2FA setup confirmation page
 
@@ -470,29 +469,29 @@ Next, we need to create the confirmation success page for confirmation code subm
 
 1. Add `create` action to `TwoFactorAuthentication::ConfirmationsController`
 
-    ```ruby
-    # app/controllers/two_factor_authentication/confirmations_controller.rb
-    def create
-      if current_user.validate_and_consume_otp!(params.dig(:otp_code))
-        current_user.otp_required_for_login = true
-        current_user.save!
+   ```ruby
+   # app/controllers/two_factor_authentication/confirmations_controller.rb
+   def create
+     if current_user.validate_and_consume_otp!(params.dig(:otp_code))
+       current_user.otp_required_for_login = true
+       current_user.save!
 
-        render "two_factor_authentication/confirmations/success"
-      else
-        flash.now[:alert] = "Failed to confirm the 2FA code"
-        prepare_2fa_form
-        render :new
-      end
-    end
-    ```
+       render "two_factor_authentication/confirmations/success"
+     else
+       flash.now[:alert] = "Failed to confirm the 2FA code"
+       prepare_2fa_form
+       render :new
+     end
+   end
+   ```
 
 2. Create the success page at `app/views/two_factor_authentication/confirmations/success.html.erb`
 
-    ```html
-    <h1>2FA Setup Success</h1>
+   ```html
+   <h1>2FA Setup Success</h1>
 
-    <%= link_to "Done", two_factor_authentication_path %>
-    ```
+   <%= link_to "Done", two_factor_authentication_path %>
+   ```
 
 Now, after scan the QR code, user can succesfully enable 2FA by submit the 6-digit confirmation code from the authenticator app
 
@@ -521,8 +520,7 @@ end
 Show backup codes on success view `app/views/two_factor_authentication/confirmations/success.html.erb`
 
 ```diff
- <h1>2FA Setup Success</h1>
-
+  <h1>2FA Setup Success</h1>
 + <p>Save this emergency backup code and store it somewhere safe. If you lose your phone, you can use backup codes to sign in.</p>
 + 
 + <ul>
@@ -531,7 +529,7 @@ Show backup codes on success view `app/views/two_factor_authentication/confirmat
 +   <% end %>
 + </ul>
 
-<%= link_to "Done", two_factor_authentication_path %>
+  <%= link_to "Done", two_factor_authentication_path %>
 ```
 
 ### Step 5: Login with an OTP token from an authenticator app
@@ -575,98 +573,98 @@ Customize devise session controller
 
 1. Generate session controller by run
 
-    ```bash
-    bin/rails generate devise:controllers users -c=sessions
-    ```
-    Then we get 
-    ```ruby
-    # /app/controllers/users/sessions_controller.b
-    class Users::SessionsController < Devise::SessionsController
-    end
-    ```
+   ```bash
+   bin/rails generate devise:controllers users -c=sessions
+   ```
+   Then we get 
+   ```ruby
+   # /app/controllers/users/sessions_controller.b
+   class Users::SessionsController < Devise::SessionsController
+   end
+   ```
 
 2. Customize `Users::SessionsController#create`
 
-    ```ruby
-    # POST /resource/sign_in
-    def create
-      self.resource = warden.authenticate!(:database_authenticatable, auth_options)
+   ```ruby
+   # POST /resource/sign_in
+   def create
+     self.resource = warden.authenticate!(:database_authenticatable, auth_options)
 
-      if resource.otp_required_for_login?
-        sign_out(resource)
-        session[:otp_user_id] = resource.id
+     if resource.otp_required_for_login?
+       sign_out(resource)
+       session[:otp_user_id] = resource.id
 
-        redirect_to users_sign_in_otp_path
-      else
-        set_flash_message!(:notice, :signed_in)
-        sign_in(resource_name, resource)
-        respond_with resource, location: after_sign_in_path_for(resource)
-      end
-    end
-    ```
+       redirect_to users_sign_in_otp_path
+     else
+       set_flash_message!(:notice, :signed_in)
+       sign_in(resource_name, resource)
+       respond_with resource, location: after_sign_in_path_for(resource)
+     end
+   end
+   ```
 
 Create a OTP session page
 
 1. Update routes
 
-    ```ruby
-    # config/routes.rb
-    devise_scope :user do
-      get '/users/sign_in/otp' => 'users/otp/sessions#new'
-      post '/users/sign_in/otp' => 'users/otp/sessions#create'
-    end
-    ```
+   ```ruby
+   # config/routes.rb
+   devise_scope :user do
+     get '/users/sign_in/otp' => 'users/otp/sessions#new'
+     post '/users/sign_in/otp' => 'users/otp/sessions#create'
+   end
+   ```
 
 2. Create the controller `Users::Otp::SessionsController`
 
-    ```ruby
-    # app/controllers/users/otp/sessions_controller.rb
-    class Users::Otp::SessionsController < DeviseController
-      prepend_before_action :require_no_authentication, only: [:new, :create]
+   ```ruby
+   # app/controllers/users/otp/sessions_controller.rb
+   class Users::Otp::SessionsController < DeviseController
+     prepend_before_action :require_no_authentication, only: [:new, :create]
 
-      def new
-        unless User.exists?(session[:otp_user_id])
-          session[:otp_user_id] = nil
-          redirect_to new_user_session_path 
-        end
-      end
+     def new
+       unless User.exists?(session[:otp_user_id])
+         session[:otp_user_id] = nil
+         redirect_to new_user_session_path 
+       end
+     end
 
-      def create
-        resource = warden.authenticate!(
-          :otp_attempt_authenticatable,
-          {
-            scope: resource_name,
-            recall: "#{controller_path}#new"
-          }
-        )
+     def create
+       resource = warden.authenticate!(
+         :otp_attempt_authenticatable,
+         {
+           scope: resource_name,
+           recall: "#{controller_path}#new"
+         }
+       )
 
-        set_flash_message!(:notice, :signed_in)
-        sign_in(resource_name, resource)
-        respond_with resource, location: after_sign_in_path_for(resource)
-      end
+       set_flash_message!(:notice, :signed_in)
+       sign_in(resource_name, resource)
+       respond_with resource, location: after_sign_in_path_for(resource)
+     end
 
-    end
-    ```
-    Now, it will redirectc to otp session new page after success authentication the email and password
+   end
+   ```
+   Now, it will redirectc to otp session new page after success authentication the email and password
 
 3. Create the OPT session view at `app/views/users/otp/sessions/new.html.erb`
 
-    ```html
-    <h1>Authenticate your account</h1>
+   ```html
+   <h1>Authenticate your account</h1>
 
-    <%= form_with(
-          url: users_sign_in_otp_path,
-          scope: :user,
-          method: :post,
-          local: true
-    ) do |f| %>
-      <p>Enter 6-digit code from your two factor authenticator app.</p>
+   <%= form_with(
+         url: users_sign_in_otp_path,
+         scope: :user,
+         method: :post,
+         local: true
+   ) do |f| %>
+     <p>Enter 6-digit code from your two factor authenticator app.</p>
 
-      <%= render 'components/otp_field', f: f, field_name: :otp_attempt, code_length: 6 %>
+     <%= render 'components/otp_field', f: f, field_name: :otp_attempt, code_length: 6 %>
 
-      <%= f.submit 'Verify' %>
-    <% end %>
-    ```
+     <%= f.submit 'Verify' %>
+   <% end %>
+   ```
 
 Now we get a OTP login page
 
@@ -956,7 +954,24 @@ def index
 end
 ```
 
-### Step 11: How to write system tests for 2FA login?
+### Step 11: Refactor routes to only allow specific actions
+
+```diff
+- resource :two_factor_authentication do
+-   scope module: :two_factor_authentication do
+-     resource :confirmation
+-     resources :recovery_codes
+-   end
+- end
++ resource :two_factor_authentication, only: [:show, :create, :destroy] do
++   scope module: :two_factor_authentication do
++     resource :confirmation, only: [:create, :show]
++     resources :recovery_codes, only: [:create, :index]
++   end
++ end
+```
+
+### Step 12: How to write system tests for 2FA login?
 
 Here is all system tests for two-factor authentication.
 
