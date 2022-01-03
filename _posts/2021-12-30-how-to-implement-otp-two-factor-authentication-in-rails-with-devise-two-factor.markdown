@@ -5,8 +5,6 @@ date:   2021-12-30 16:19:00 +0800
 categories: devise-two-factor
 ---
 
-deviste-two-factor's default way to do two-factor authentidation is put the email, password and OTP field on same page which is not the most common way to do 2FA login. And we will go the common way, submit email and password first, then input the 6 digit OTP code in second page.
-
 The 2FA feature contains below flows:
 
 - Setup flow
@@ -16,6 +14,15 @@ The 2FA feature contains below flows:
 - Login flow
   - Login with OTP
   - Login with recovery code
+
+[devise-two-factor](https://github.com/tinfoil/devise-two-factor)'s default way to do two-factor authentidation is put the email, password and OTP field on same page which is not the most common way to do 2FA login.
+
+The common way is to allow users to sign in with or without 2FA. So we need to submit email and password first, then submit the 6 digit OTP code in second page.
+
+So we need to do some customization base on devise-two-factor gem:
+
+- Replace devise-two-factor `two_factor_authenticatable` strategy with `otp_attempt_authenticatable`
+- Replace devise-two-factor `two_factor_backupable` strategy with `recovery_code_authenticatable`
 
 Let's do it!
 
@@ -136,6 +143,14 @@ Generate the dashboard page
 
    def after_sign_in_path_for(resource)
      dashboard_path
+   end
+   ```
+5. Redirect to dashboard page on home page if user already signed in 
+
+   ```ruby
+   # app/controllers/home_controller.rb
+   def show
+     redirect_to dashboard_path if user_signed_in?
    end
    ```
 
@@ -295,7 +310,7 @@ Now we can go to the 2FA setup page by click "Two-factor authentication" link on
 
 Show the 2FA confirmation view on enable
 
-1. Add 2FA "Enable" button on 2FA setup page (`/two_factor_authentication`
+1. Add 2FA "Enable" button on 2FA setup page (`app/views/two_factor_authentications/show.html.erb`)
 
    ```html
    <h1>Two-factor authentication</h1>
@@ -330,13 +345,13 @@ Show the 2FA confirmation view on enable
 
 4. Update routes to add the 2FA setup confirmation url
 
-   ```ruby
-   # config/routes
-   resource :two_factor_authentication do
-     scope module: :two_factor_authentication do
-       resource :confirmation
-     end
-   end
+   ```diff
+   - resource :two_factor_authentication
+   + resource :two_factor_authentication do
+   +   scope module: :two_factor_authentication do
+   +     resource :confirmation
+   +   end
+   + end
    ```
 
 5. Create the confirmation controller `TwoFactorAuthentication::ConfirmationsController`
@@ -381,7 +396,7 @@ Show the 2FA confirmation view on enable
    </div>
    ```
 
-   With a Stimulus controller at `app/javascripts/controllers/otp_digit_field_controller.js`
+   With a Stimulus controller at `app/javascript/controllers/otp_digit_field_controller.js`
 
    ```js
    import { Controller } from "@hotwired/stimulus"
@@ -436,7 +451,30 @@ Show the 2FA confirmation view on enable
 
    ```
 
-7. Create the confirmation view at `app/views/two_factor_authentication/confirmations/new.html.erb`
+7. Add CSS for OTP digit field at `app/assets/stylesheets/two_factor_authentication.scss`
+
+   ```scss
+   // app/assets/stylesheets/two_factor_authentication.scss
+   .otp-digit-fields-container {
+
+     display: flex;
+     margin-bottom: 1rem;
+
+     input {
+       width: 35px;
+       height: 40px;
+       line-height: 50px;
+       text-align: center;
+       font-size: 24px;
+       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+       font-weight: 200;
+       margin: 2px;
+     }
+
+   }
+   ```
+
+8. Create the confirmation view at `app/views/two_factor_authentication/confirmations/new.html.erb`
 
    ```html
    <h1>Setup Two-Factor Authentication</h1>
@@ -569,6 +607,12 @@ end
 Warden::Strategies.add(:otp_attempt_authenticatable, Devise::Strategies::OtpAttemptAuthenticatable)
 ```
 
+Require this strategy file at the begining of the `config/initializers/devise.rb`
+
+```ruby
+require Rails.root.join("lib/devise-two-factor/strategies/otp_attempt_authenticatable.rb")
+```
+
 Customize devise session controller
 
 1. Generate session controller by run
@@ -581,6 +625,13 @@ Customize devise session controller
    # /app/controllers/users/sessions_controller.b
    class Users::SessionsController < Devise::SessionsController
    end
+   ```
+   We also need to update routes
+   ```diff
+   - devise_for :users
+   + devise_for :users, controllers: {
+   +   sessions: 'users/sessions'
+   + }
    ```
 
 2. Customize `Users::SessionsController#create`
@@ -709,6 +760,12 @@ end
 Warden::Strategies.add(:recovery_code_authenticatable, Devise::Strategies::RecoveryCodeAuthenticatable)
 ```
 
+Require this strategy file at the begining of the `config/initializers/devise.rb`
+
+```ruby
+require Rails.root.join("lib/devise-two-factor/strategies/recovery_code_authenticatable.rb")
+```
+
 Update `config/routes.rb`
 
 ```diff
@@ -772,11 +829,11 @@ Create recovery code login page at `app/views/users/recovery_code/sessions/new.h
 
 Add a login with recovery code link on otp login page at `app/views/users/otp/sessions/new.html.erb`
 
-```html
-<div>
-  <p>Don't have your phone?</p>
-  <%= link_to "Use a recovery code to access your account.", users_sign_in_recovery_code_path %>
-</div>
+```diff
++ <div>
++   <p>Don't have your phone?</p>
++   <%= link_to "Use a recovery code to access your account.", users_sign_in_recovery_code_path %>
++ </div>
 ```
 
 ![](/images/posts/devise-two-factor/2FA-login-with-recovery-code-page.png)
@@ -791,7 +848,7 @@ We need user to re-auth with email and password if an user hasn't pass the OTP a
 So we need a concern for both `Users::Otp::SessionsController` and `Users::RecoveryCode::SessionsController`
 
 ```ruby
-# app/controllers/concern/otp_session_expirable.rb
+# app/controllers/concerns/otp_session_expirable.rb
 module OtpSessionExpirable
   extend ActiveSupport::Concern
 
@@ -888,7 +945,7 @@ class TwoFactorAuthentication::RecoveryCodesController < ApplicationController
 end
 ```
 
-Create the index view at `app/controllers/two_factor_authenticatin_recovery_codes/index.html.erb`
+Create the index view at `app/views/two_factor_authentication/recovery_codes/index.html.erb`
 
 ```html
 <h1>Regenerate Recovery Codes Success</h1>
@@ -1012,7 +1069,7 @@ require "test_helper"
 + require "support/helpers/system/authentication_system_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  include Devise::Test::IntegrationHelpers
++  include Devise::Test::IntegrationHelpers
 +  include AuthenticationSystemHelper
 
   driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
@@ -1254,4 +1311,102 @@ class OTPSessionExpiration < ApplicationSystemTestCase
 
 end
 ```
- 
+
+Update user fixtures at `test/fixtures/users.yml`
+
+```yaml
+hopper:
+  email: hopper@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, '12345678') %>
+  created_at: <%= 10.days.ago.strftime("%Y-%m-%d %H:%M:%S") %>
+```
+
+### Summary
+
+#### Flow design overview
+##### 2FA Enable
+
+![](/images/posts/devise-two-factor/flows/dashboard-to-2fa.png)
+
+|  | From | To |
+| URL | /dashboard | /two_factor_authentication |
+| Controller | DashBoard#show | TwoFactorAuthentications#show |
+| Render | dashboard/show | two_factor_authentication/show |
+
+![](/images/posts/devise-two-factor/flows/2FA-to-setup-confirm.png)
+
+|  | From | To |
+| URL | /two_factor_authentication | /two_factor_authentication |
+| Controller | TwoFactorAuthentications#show | TwoFactorAuthentications#create |
+| Render | two_factor_authentication/show | two_factor_authentication/confirmations/show |
+
+![](/images/posts/devise-two-factor/flows/2FA-setup-success.png)
+
+|  | From | To |
+| URL | /two_factor_authentication | /two_factor_authentication/confirmation |
+| Controller | TwoFactorAuthentications#create | TwoFactorAuthentications/Confirmation#create |
+| Render | two_factor_authentication/confirmations/show | two_factor_authentication/confirmations/success |
+
+##### 2FA Disable
+
+![](/images/posts/devise-two-factor/flows/disable-2FA.png)
+
+|  | From | To |
+| URL | /two_factor_authentication | /two_factor_authentication |
+| Controller | TwoFactorAuthentications#show | TwoFactorAuthentications#destroy -> #show |
+| Render | two_factor_authentication/show | two_factor_authentication/show |
+
+##### Regenerate recovery codes
+
+![](/images/posts/devise-two-factor/flows/regenerate-recovery-codes.png)
+
+|  | From | To |
+| URL | /two_factor_authentication | /two_factor_authentication/recovery_codes |
+| Controller | TwoFactorAuthentications#show | TwoFactorAuthentications/RecoveryCodes#create |
+| Render | two_factor_authentication/show | two_factor_authentication/recovery_codes/index |
+
+##### Login with 2FA
+
+![](/images/posts/devise-two-factor/flows/login-with-email-and-password.png)
+
+|  | From | To |
+| URL | /users/sign_in | /users/sign_in/otp |
+| Controller | users/sessions#new | users/sessions#create -> users/otp/sessions#new |
+| Render | devise/sessions/new | users/otp/sessions/new |
+
+![](/images/posts/devise-two-factor/flows/login-with-otp-code.png)
+
+|  | From | To |
+| URL | /users/sign_in/otp | /dashboard |
+| Controller | users/otp/sessions#new | users/otp/sessions#create -> dashboard#show |
+| Render | users/otp/sessions/new | dashbord/show |
+
+##### Login with recovery code
+
+![](/images/posts/devise-two-factor/flows/go-to-recovery-code-login-page.png)
+
+|  | From | To |
+| URL | /users/sign_in/otp | /users/sign_in/recovery_code |
+| Controller | users/otp/sessions#new | users/recovery_code/sessions#new |
+| Render | users/otp/sessions/new | users/recovery_code/sessions/new |
+
+![](/images/posts/devise-two-factor/flows/login-with-recovery-code.png)
+
+|  | From | To |
+| URL | /users/sign_in/recovery_code | /dashboard |
+| Controller | users/recovery_code/sessions#new | users/recovery_code/sessions#create -> dashboard#show |
+| Render | users/recovery_code/sessions/new | dashboard/show |
+
+#### Database schema overview
+
+```ruby
+create_table "users" do |t|
+  # ...
+  t.string "encrypted_otp_secret"
+  t.string "encrypted_otp_secret_iv"
+  t.string "encrypted_otp_secret_salt"
+  t.integer "consumed_timestep"
+  t.boolean "otp_required_for_login"
+  t.text "otp_backup_codes"
+end
+``` 
