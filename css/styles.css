@@ -14,38 +14,22 @@
   /* Line height is set to the "Golden ratio" for optimal legibility */
   --line-height: 1.618;
 
-  /* Default (light) theme */
-  --bg: #FFF;
-  --accent-bg: #F5F7FF;
-  --text: #212121;
-  --text-light: #585858;
-  --border: #D8DAE1;
-  --accent: #0D47A1;
-  --accent-light: #90CAF9;
-  --code: #D81B60;
-  --preformatted: #444;
+  /* Default (dark) theme */
+  --bg: #212121;
+  --accent-bg: #2B2B2B;
+  --text: #DCDCDC;
+  --text-light: #ABABAB;
+  --border: #666;
+  --accent: #FFB300;
+  --accent-light: #ffb300b7;
+  --strong: #F06292;
+  --preformatted: #CCC;
+  --disabled: #111;
   --marked: #FFDD33;
-  --disabled: #EFEFEF;
 }
 
-/* Dark theme */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #212121;
-    --accent-bg: #2B2B2B;
-    --text: #DCDCDC;
-    --text-light: #ABABAB;
-    --border: #666;
-    --accent: #FFB300;
-    --accent-light: #FFECB3;
-    --code: #F06292;
-    --preformatted: #CCC;
-    --disabled: #111;
-  }
-
-  img, video {
-    opacity: .6;
-  }
+img, video {
+  opacity: .6;
 }
 
 html {
@@ -119,6 +103,7 @@ nav a {
 nav a:hover {
   color: var(--accent) !important;
   border-color: var(--accent);
+  background-color: unset;
 }
 
 nav a.current:hover {
@@ -173,6 +158,8 @@ a:visited {
 
 a:hover {
   text-decoration: none;
+  background-color: var(--accent-light);
+  color: white;
 }
 
 a button,
@@ -461,7 +448,7 @@ samp {
 }
 
 strong {
-  color: var(--code);
+  color: var(--strong);
   font-size: 1.25rem;
 }
 
