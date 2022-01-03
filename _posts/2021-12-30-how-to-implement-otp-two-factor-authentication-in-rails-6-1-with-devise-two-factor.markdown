@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  How to implement OTP two-factor authentication in Rails with devise-two-factor
+title:  How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor
 date:   2021-12-30 16:19:00 +0800
 categories: devise-two-factor
 ---
