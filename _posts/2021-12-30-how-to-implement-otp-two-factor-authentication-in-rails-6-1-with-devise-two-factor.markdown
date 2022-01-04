@@ -387,8 +387,8 @@ Show the 2FA confirmation view on enable
            <%= "autofocus" if on_first %>
            data-action="
              keydown->otp-digit-field#checkAllowance
-             keyup->otp-digit-field#switchFocus
-             change->otp-digit-field#updateMainField
+             input->otp-digit-field#handleInputEvent
+             keyup->otp-digit-field#handleKeyUp
            "
          >
        <% end %>
@@ -414,23 +414,40 @@ Show the 2FA confirmation view on enable
        }
      }
 
-     switchFocus(e) {
-       if(e.key === 'Backspace' || e.key === 'ArrowLeft') {
-         const prev = this.element.querySelector(`input#${e.currentTarget.dataset.previous}`)
+     handleInputEvent(e) {
+       const digitValue = e.data
+       if (digitValue == null) { return; }
 
-         if(prev !== null) {
-           prev.focus()
-         }
-       } else if(('0' <= e.key && e.key <= '9') || ('a' <= e.key && e.key <= 'z') || e.key === 'ArrowRight') {
+       if(('0' <= digitValue && digitValue <= '9') || ('a' <= digitValue && digitValue <= 'z')) {
          const next = this.element.querySelector(`input#${e.currentTarget.dataset.next}`)
 
          if(next !== null) {
            next.focus()
          }
        }
+
+       this._updateMainField()
      }
 
-     updateMainField(e) {
+     handleKeyUp(e) {
+       if(e.key === 'Backspace' || e.key === 'ArrowLeft') {
+         const prev = this.element.querySelector(`input#${e.currentTarget.dataset.previous}`)
+
+         if(prev !== null) {
+           prev.focus()
+         }
+       } else if(e.key === 'ArrowRight') {
+         const next = this.element.querySelector(`input#${e.currentTarget.dataset.next}`)
+
+         if(next !== null) {
+           next.focus()
+         }
+       } else if(e.key === 'Enter' && this._allFieldsAreFilled()) {
+         this.mainFieldTarget.form.submit()
+       }
+     }
+
+     _updateMainField() {
        let otpCode = ''
        for (var i = 1; i < (Number(this.codeLengthValue) + 1); i += 1) {
          otpCode += this.element.querySelector(`input#digit-${i}`).value
@@ -447,8 +464,11 @@ Show the 2FA confirmation view on enable
                ('a' <= key && key <= 'z');
      }
 
-   }
+     _allFieldsAreFilled() {
+       return this.mainFieldTarget.value.length === Number(this.codeLengthValue)
+     }
 
+   }
    ```
 
 7. Add CSS for OTP digit field at `app/assets/stylesheets/two_factor_authentication.scss`
