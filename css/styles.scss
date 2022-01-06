@@ -71,6 +71,17 @@ header {
   margin-right: -50vw;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 32px;
+  height: fit-content;
+  margin-right: 0.5rem;
+}
+
 main {
   /* margin-top: 4rem; */
   padding: 0 2rem 2rem 2rem;
