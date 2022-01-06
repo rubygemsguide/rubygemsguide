@@ -5,6 +5,7 @@ date:   2021-01-03 16:19:00 +0800
 last_modified_at: 2022-01-06 10:41:00 +0800
 categories: devise-two-factor
 author: Hopper Gee
+image: /images/posts/devise-two-factor/devise-two-factor-with-rails-6.1.png
 ---
 
 > The source code could be found in the [rubygemsguide/devise-two-factor-demos](https://github.com/rubygemsguide/devise-two-factor-demos/tree/rails-6.1){:target="_blank"} repository under `rails-6.1` branch.
