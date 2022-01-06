@@ -4,4 +4,21 @@ layout: default
 
 <h1>{{ page.title }}</h1>
 
+<p class="post-date">
+  <span>
+    Published
+    <time datetime="{{ page.date | date: "%Y-%m-%d" }}" itemprop="datePublished">
+      {{ page.date | date_to_string }}
+    </time>
+  </span>
+  <span class="divider">|</span>
+  <span>
+    Last updated
+    <time datetime="{{ page.last_modified_at | date: "%Y-%m-%d" }}" itemprop="dateModified">
+      {{ page.last_modified_at | date_to_string }}
+    </time>
+  </span>
+  <span class="divider">|</span>
+</p>
+
 {{ content }}

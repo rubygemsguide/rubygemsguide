@@ -596,3 +596,13 @@ section {
 section section {
   width: 100%;
 }
+
+p.post-date {
+  font-size: 16px;
+  color: var(--text-light);
+
+  span.divider {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
