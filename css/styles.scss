@@ -61,7 +61,7 @@ header {
   background-color: #ad5153;
   border-bottom: 2px solid var(--border);
   text-align: center;
-  padding: 1rem 2rem;
+  padding: .5rem;
   width: 100vw;
   position: relative;
   box-sizing: border-box;
@@ -71,6 +71,12 @@ header {
   margin-right: -50vw;
 }
 
+@media (min-width: 768px) {
+  header {
+    padding: 1rem 2rem;
+  }
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -78,7 +84,6 @@ header {
 
 .logo {
   width: 32px;
-  height: fit-content;
   margin-right: 0.5rem;
 }
 
@@ -140,7 +145,13 @@ header {
 header h1 {
   margin-top: auto;
   margin-bottom: auto;
-  font-size: 2rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  header h1 {
+    font-size: 2rem;
+  }
 }
 
 header h1 a {
@@ -166,6 +177,7 @@ footer {
   padding: 2rem 1rem 1.5rem 1rem;
   /* color: var(--text-light); */
   color: #ad5153;
+  background-color: var(--bg);
   font-size: 1rem;
   text-align: center;
   /* border-top: 1px solid var(--border); */
@@ -217,8 +229,14 @@ footer {
 
 /* Format headers */
 h1 {
-  font-size: calc(var(--base-fontsize) * var(--header-scale) * var(--header-scale) * var(--header-scale) * var(--header-scale));
+  font-size: 2rem;
   margin-top: calc(var(--line-height) * 1.5rem);
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: calc(var(--base-fontsize) * var(--header-scale) * var(--header-scale) * var(--header-scale) * var(--header-scale));
+  }
 }
 
 h2 {
