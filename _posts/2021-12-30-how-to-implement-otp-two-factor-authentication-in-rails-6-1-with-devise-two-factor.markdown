@@ -7,7 +7,7 @@ categories: devise-two-factor
 author: Hopper Gee
 ---
 
-> The source code could be found in the [rubygemsguide/devise-two-factor-demos](https://github.com/rubygemsguide/devise-two-factor-demos/tree/rails-6.1) repository under `rails-6.1` branch.
+> The source code could be found in the [rubygemsguide/devise-two-factor-demos](https://github.com/rubygemsguide/devise-two-factor-demos/tree/rails-6.1){:target="_blank"} repository under `rails-6.1` branch.
 
 The 2FA feature contains below flows:
 
@@ -19,7 +19,7 @@ The 2FA feature contains below flows:
   - Login with OTP
   - Login with recovery code
 
-[devise-two-factor](https://github.com/tinfoil/devise-two-factor)'s default way to do two-factor authentidation is put the email, password and OTP field on same page which is not the most common way to do 2FA login.
+[devise-two-factor](https://github.com/tinfoil/devise-two-factor){:target="_blank"}'s default way to do two-factor authentidation is put the email, password and OTP field on same page which is not the most common way to do 2FA login.
 
 The common way is to allow users to sign in with or without 2FA. So we need to submit email and password first, then submit the 6 digit OTP code in second page.
 
@@ -158,10 +158,10 @@ Generate the dashboard page
    end
    ```
 
-Import [RubyGemsGuide/demo.css](https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css)
+Import [RubyGemsGuide/demo.css](https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css)){:target="_blank"}
 
 1. `touch app/assets/stylesheets/demo.css`
-2. Copy paste [demo.css](https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css)
+2. Copy paste [demo.css](https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css)){:target="_blank"}
 3. Update layout
 
    ```html
