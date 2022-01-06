@@ -21,11 +21,9 @@
 title: RubyGems.Guide
 email: hopper.gee@hey.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+  Tutorials for popular Ruby gems
+baseurl: "/" # the subpath of your site, e.g. /blog
+url: "https://rubygems.guide" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: hoppergeegee
 github_username:  hoppergee
 permalink: /:categories/:title
@@ -34,6 +32,7 @@ permalink: /:categories/:title
 # theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 
 # Exclude from processing.
 # The following items will not be processed, by default.
