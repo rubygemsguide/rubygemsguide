@@ -1,3 +1,5 @@
+---
+---
 /* Set the global variables for everything. Change these to use your own fonts and colours. */
 :root {
 
@@ -160,6 +162,46 @@ footer {
   border-top: 2px solid var(--border);
   border-left: 2px solid var(--border);
   border-right: 2px solid var(--border);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .social {
+    display: flex;
+    align-items: center;
+  }
+
+  a.twitter {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    opacity: 70%;
+
+    &:hover {
+      background-color: unset;
+      opacity: 100%;
+    }
+    
+    img {
+      width: 24px;
+    }
+  }
+
+  a.github {
+    display: flex;
+    align-items: center;
+    opacity: 70%;
+
+    &:hover {
+      background-color: unset;
+      opacity: 100%;
+    }
+    
+    img {
+      width: 24px;
+    }
+  }
 }
 
 /* Format headers */
