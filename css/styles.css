@@ -76,7 +76,6 @@ main {
   border-right: 2px solid var(--border);
 }
 
-
 /* Remove margins for header text */
 header h1,
 header p {

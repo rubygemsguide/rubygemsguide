@@ -1,0 +1,51 @@
+---
+---
+.home {
+  main {
+    margin-top: 1rem;
+    padding: 0;
+    border: 0;
+
+    ul {
+      padding-left: 0;
+      list-style-type: none;
+    }
+
+    li a {
+      display: block;
+      padding: 1rem;
+      color: unset;
+      margin-top: 1rem;
+      margin-left: auto;
+      margin-right: auto;
+      border: 2px solid var(--border);
+      text-decoration: none;
+
+      border-radius: 10px;
+        box-shadow: 
+          inset 2px 2px var(--bg),
+          inset 10000px 10000px 6px var(--accent),
+          4px 4px 0 0 var(--accent);
+        color: white;
+
+      &:hover {
+        background-color: transparent;
+        color: black;
+
+      box-shadow: 
+        inset 2px 2px var(--bg),
+        inset 10000px 10000px var(--accent),
+        4px 4px 4px 0 var(--accent);
+      }
+    }
+  }
+
+  footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-left: 0;
+    border-right: 0;
+  }
+}
