@@ -3,7 +3,10 @@ layout: post
 title:  How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor
 date:   2021-12-30 16:19:00 +0800
 categories: devise-two-factor
+author: Hopper Gee
 ---
+
+> The source code could be found in the [rubygemsguide/devise-two-factor-demos](https://github.com/rubygemsguide/devise-two-factor-demos/tree/rails-6.1) repository under `rails-6.1` branch.
 
 The 2FA feature contains below flows:
 
