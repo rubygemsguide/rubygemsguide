@@ -4,6 +4,7 @@
 title: RubyGems.Guide
 layout: home
 image: /images/rubygems.guide.png
+custom_css: home
 ---
 
 <ul>
