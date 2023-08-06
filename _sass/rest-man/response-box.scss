@@ -1,0 +1,99 @@
+/*
+###########
+# Response box
+###########
+*/
+
+.response-box-wrapper {
+  width: 33.3333333%;
+  display: flex;
+  justify-content: flex-start;
+}
+.response-box-wrapper a {
+  cursor: pointer;
+}
+
+.response-box {
+  width: 300px;
+  border: 2px solid;
+}
+
+.response {
+  display: block;
+  text-align: center;
+  padding: 20px 0;
+}
+.response:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.response-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -8px;
+}
+
+.response-status {
+  box-sizing: border-box;
+  width: 33.333333%;
+  border: 2px solid;
+  margin-left: -2px;
+  margin-top: -2px;
+  text-align: center;
+  padding: 20px 0;
+}
+.response-status:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.response-headers {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  text-align: center;
+  padding: 30px 0;
+}
+.response-headers:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.response-cookies {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 2px dashed;
+  padding: 4px 16px;
+  margin-right: -2px;
+  background: $gray-50;
+  border-bottom-style: solid;
+  border-right-style: solid;
+}
+.response-cookies:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.response-body {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  margin-bottom: -2px;
+  text-align: center;
+  padding: 30px 0;
+}
+.response-body:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}

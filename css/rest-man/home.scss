@@ -1,0 +1,178 @@
+---
+---
+
+@import "variables/screens";
+@import "variables/colors";
+@import "variables/text-sizes";
+@import "variables/font-family";
+@import "utils";
+
+:root {
+  --sans-font: #{$font-sans};
+  --mono-font: ${$font-mono};
+
+  --brand-color: #ad5153;
+  --brand-border-color: #232323;
+}
+
+html {
+  font-family: var(--sans-font);
+}
+
+body {
+  background: $gray-50;
+  font-size: 16px;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  flex: 1;
+  margin: 0 auto;
+  padding: 0 .5rem;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+header {
+  background-color: var(--brand-color);
+  border-bottom: 2px solid var(--brand-border-color);
+  text-align: center;
+  padding: .5rem;
+  width: 100vw;
+  position: relative;
+  box-sizing: border-box;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+@media (min-width: 768px) {
+  header {
+    padding: 1rem 2rem;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 32px;
+  margin-right: 0.5rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  position: relative;
+}
+
+header h1 {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 1rem;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  header h1 {
+    font-size: 2rem;
+  }
+}
+
+header h1 a {
+  color: white !important;
+  text-decoration: none;
+}
+
+header h1 a:hover {
+  background-color: unset;
+}
+
+header h2 {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: white;
+  top: 0;
+  height: 100%;
+}
+
+footer {
+  padding: 2rem 1rem 1.5rem 1rem;
+  color: #ad5153;
+  background-color: $gray-50;
+  font-size: 1rem;
+  text-align: center;
+
+  border-top: 2px solid var(--brand-border-color);
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  .social {
+    display: flex;
+    align-items: center;
+  }
+
+  a.twitter {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    opacity: 70%;
+
+    &:hover {
+      background-color: unset;
+      opacity: 100%;
+    }
+    
+    img {
+      width: 24px;
+    }
+  }
+
+  a.github {
+    display: flex;
+    align-items: center;
+    opacity: 70%;
+
+    &:hover {
+      background-color: unset;
+      opacity: 100%;
+    }
+    
+    img {
+      width: 24px;
+    }
+  }
+}
+
+.main-section {
+  display: flex;
+  align-items: center;
+  margin: 50px;
+}
+
+.advance-section {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  margin-top: auto;
+}
+
+@import "rest-man/request-box";
+@import "rest-man/arrow";
+@import "rest-man/response-box";
+@import "rest-man/advance-box";
