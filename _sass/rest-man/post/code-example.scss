@@ -112,6 +112,14 @@
   font-weight: 700;
   margin-bottom: 10px;
   font-size: $text-sm;
+
+  padding: 1rem 1.4rem;
+  max-width: 65%;
+  overflow: auto;
+  overflow-x: auto;
+  background-color: $gray-100;
+  border-radius: 2px;
+  text-wrap: nowrap;
 }
 
 .request-arrow {
