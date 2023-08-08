@@ -1,0 +1,162 @@
+.example-section {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+/*
+#####
+# Request
+#####
+*/
+.request-box {
+  width: 25%;
+  max-width: 260px;
+  border: 2px solid black;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 40px auto;
+  gap: 2px;
+}
+
+.http-method {
+  border: 2px solid black;
+  margin: -2px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.request-target {
+  border: 2px solid black;
+  margin: -2px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.http-version {
+  border: 2px solid black;
+  margin: -2px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.http-header {
+  grid-column: 1 / span 3;
+  border: 2px solid black;
+  margin: -2px;
+  padding: 20px 10px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/*
+#####
+# Response
+#####
+*/
+
+.response-box {
+  width: 25%;
+  max-width: 260px;
+  border: 2px solid black;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 40px auto;
+  gap: 2px;
+}
+
+.status-code {
+  border: 2px solid black;
+  margin: -2px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.status-text {
+  border: 2px solid black;
+  margin: -2px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.http-body {
+  grid-column: 1 / span 3;
+  border: 2px solid black;
+  margin: -2px;
+  text-align: left;
+  padding: 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+/*
+#####
+# Code
+#####
+*/
+.code-box {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: $font-mono;
+}
+
+.request-code {
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: $text-sm;
+}
+
+.request-arrow {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+.request-arrow > svg {
+  width: 100%;
+}
+
+.response-code {
+  display: grid;
+  border: 1px solid;
+  grid-template-columns: auto 50px auto;
+  font-size: 12px;
+}
+
+.response-code-title {
+  border: 1px solid;
+  margin: -1px;
+  padding: 5px;
+  grid-column: 1 / space 3;
+  background-color: $gray-100;
+  font-weight: 700;
+}
+
+.code-call {
+  grid-column: 1;
+  padding: 5px;
+  border-bottom: 1px solid;
+  margin-bottom: -1px;
+  font-weight: 700;
+}
+
+.code-output-indicator {
+  grid-column: 2;
+  padding: 5px;
+  border-bottom: 1px solid black;
+  margin-bottom: -1px;
+  color: $stone-500;
+}
+
+.code-output {
+  grid-column: 3;
+  padding: 5px;
+  border-bottom: 1px solid black;
+  margin-bottom: -1px;
+  color: $stone-500;
+}

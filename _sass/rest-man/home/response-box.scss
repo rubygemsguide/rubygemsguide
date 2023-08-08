@@ -43,6 +43,8 @@
   margin-top: -2px;
   text-align: center;
   padding: 20px 0;
+  text-decoration: unset;
+  color: black;
 }
 .response-status:hover {
   background: $red-500;
@@ -58,6 +60,8 @@
   margin-left: -2px;
   text-align: center;
   padding: 30px 0;
+  text-decoration: unset;
+  color: black;
 }
 .response-headers:hover {
   background: $red-500;
@@ -75,6 +79,8 @@
   background: $gray-50;
   border-bottom-style: solid;
   border-right-style: solid;
+  text-decoration: unset;
+  color: black;
 }
 .response-cookies:hover {
   background: $red-500;
@@ -91,6 +97,8 @@
   margin-bottom: -2px;
   text-align: center;
   padding: 30px 0;
+  text-decoration: unset;
+  color: black;
 }
 .response-body:hover {
   background: $red-500;

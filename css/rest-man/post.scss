@@ -1,0 +1,40 @@
+---
+---
+
+@import "variables/screens";
+@import "variables/colors";
+@import "variables/text-sizes";
+@import "variables/font-family";
+@import "utils";
+
+html {
+  font-family: var(--sans-font);
+}
+
+body {
+  background: $gray-50;
+  font-size: 16px;
+  display: flex;
+  min-height: 100vh;
+  flex: 1;
+  margin: 0 auto;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+@import "rest-man/post/sidebar";
+
+main {
+  width: 100%;
+  margin-left: 240px;
+  padding: 40px;
+}
+
+h2.title {
+  font-weight: 700;
+  font-size: $text-2xl;
+  margin-top: 0;
+}
+
+@import "rest-man/post/code-example";

@@ -8,9 +8,9 @@ custom_css: home
 ---
 
 <ul>
-  {% for post in site.posts limit: 20 %}
+  {% for category in site.categories %}
     <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
+      <a href="/{{ category | first }}">{{ category | first }}</a>
     </li>
   {% endfor %}
 </ul>

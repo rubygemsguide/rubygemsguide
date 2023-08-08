@@ -1,0 +1,140 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 240px;
+  border-right: 2px solid $stone-400;
+  align-items: stretch;
+  height: 100%;
+
+  h1 {
+    padding-bottom: 10px;
+    font-size: $text-3xl;
+    background-color: $red-500;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 2px;
+    margin-right: -2px;
+  }
+
+  .rest-man {
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    font-size: 40px;
+  }
+
+  .powered-by {
+    font-size: $text-sm;
+    color: $gray-200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  } 
+
+  .powered-by .logo {
+    width: 20px;
+    margin-right: 0.5rem;
+    opacity: 0.75;
+  }
+
+  .guides {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+    background-clip: padding-box;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: $gray-50; 
+    box-shadow: inset 0 0 10px 10px $gray-50;
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $stone-500; 
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: $gray-600; 
+  }
+
+  .guide {
+    text-align: center;
+    padding: 15px 0;
+    border: 2px solid $stone-200;
+    border-left: 0;
+    text-decoration: none;
+    color: $stone-500;
+    margin-top: -2px;
+    margin-right: -2px;
+    margin-left: 4px;
+  }
+  .guide:hover {
+    background: $stone-300;
+    color: $stone-600;
+    z-index: 1;
+  }
+
+  .advance {
+    padding: 10px 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: $text-lg;
+    color: $stone-600;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $stone-200;
+    padding: 20px 0;
+    margin-top: -2px;
+    margin-right: -2px;
+
+    a.twitter {
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      opacity: 70%;
+
+      &:hover {
+        background-color: unset;
+        opacity: 100%;
+      }
+      
+      img {
+        width: 24px;
+      }
+    }
+
+    a.github {
+      display: flex;
+      align-items: center;
+      opacity: 70%;
+
+      &:hover {
+        background-color: unset;
+        opacity: 100%;
+      }
+      
+      img {
+        width: 24px;
+      }
+    }
+  }
+}
