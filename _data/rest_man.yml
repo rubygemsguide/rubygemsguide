@@ -1,0 +1,60 @@
+examples:
+
+  get:
+    - request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      code: 
+        request_code: 'response = RestMan.get "http://example.com"'
+        response_codes:
+          - code_call: response.status
+            code_output: 200
+          - code_call: response.headers
+            code_output: Hash
+          - code_call: response.headers[:content_type]
+            code_output: text/plain
+          - code_call: response.body
+            code_output: Hello world! 
+
+    - request:
+        http_method: GET
+        request_target: /about
+        http_version: HTTP/1.1
+        http_headers:
+          - "Host: example.com"
+        User-Agent: Mozilla/5.0
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <head><title>About Us</title></head>
+          <body>
+          ...
+          </body>
+          </html>
+      code: 
+        request_code: |
+          response = RestMan.get "http://example.com", headers: {"User-Agent" => "Mozilla/5.0"}
+        response_codes:
+          - code_call: response.status
+            code_output: 200
+          - code_call: response.headers
+            code_output: Hash
+          - code_call: response.headers[:content_type]
+            code_output: text/html
+          - code_call: response.body
+            code_output: <html> ...

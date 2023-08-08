@@ -1,0 +1,39 @@
+{% assign request = include.example.request %}
+{% assign response = include.example.response %}
+{% assign code = include.example.code %}
+
+<div class="example-section">
+  <div class="request-box">
+    <div class="http-method">{{ request.http_method }}</div>
+    <div class="request-target">{{ request.request_target }}</div>
+    <div class="http-version">{{ request.http_version }}</div>
+    {% for header in request.http_headers %}
+      <div class="http-header">{{ header }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="code-box">
+    <div class="request-code">{{ code.request_code }}</div>
+    <div class="request-arrow">
+      {% include rest-man/arrow-right.html %}
+    </div>
+    <div class="response-code">
+      <div class="response-code-title">Response</div>
+      {% for response_code in code.response_codes %}
+        <div class="code-call">{{ response_code.code_call | newline_to_br }}</div>
+        <div class="code-output-indicator">#=></div>
+        <div class="code-output">{{ response_code.code_output | escape }}</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="response-box">
+    <div class="http-version">{{ response.http_version }}</div>
+    <div class="status-code">{{ response.status_code }}</div>
+    <div class="status-text">{{ response.status_text }}</div>
+    {% for header in response.http_headers %}
+      <div class="http-header">{{ header }}</div>
+    {% endfor %}
+    <div class="http-body">{{ response.http_body | escape }}</div>
+  </div>
+</div>
