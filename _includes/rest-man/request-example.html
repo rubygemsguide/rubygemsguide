@@ -14,19 +14,28 @@
     </div>
   </div>
 
-  <div class="code-box">
-    <div class="request-code">{{ code.request_code }}</div>
-    <div class="request-arrow">
-      {% include rest-man/arrow-right.html %}
+  <div class="request-code">
+    <div class="terminal-bar">
+      <div class="close-icon"></div>
+      <div class="minimize-icon"></div>
+      <div class="fullscreen-icon"></div>
     </div>
-    <div class="response-code">
-      <div class="response-code-title">Response</div>
-      {% for response_code in code.response_codes %}
-        <div class="code-call">{{ response_code.code_call | newline_to_br }}</div>
-        <div class="code-output-indicator">#=></div>
-        <div class="code-output">{{ response_code.code_output | escape }}</div>
-      {% endfor %}
+    <div class="terminal-body">
+      {{ code.request_code }}
     </div>
+  </div>
+
+  <div class="request-arrow">
+    {% include rest-man/arrow-right.html %}
+  </div>
+
+  <div class="response-code">
+    <div class="response-code-title">Response</div>
+    {% for response_code in code.response_codes %}
+      <div class="code-call">{{ response_code.code_call | newline_to_br }}</div>
+      <div class="code-output-indicator">#=></div>
+      <div class="code-output">{{ response_code.code_output | escape }}</div>
+    {% endfor %}
   </div>
 
   <div class="response-box">

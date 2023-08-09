@@ -5,6 +5,7 @@
 @import "variables/colors";
 @import "variables/text-sizes";
 @import "variables/font-family";
+@import "variables/shadows";
 @import "utils";
 
 html {
@@ -27,8 +28,15 @@ body {
 
 main {
   width: 100%;
-  margin-left: 240px;
-  padding: 40px;
+  padding: 40px 20px;
+  margin-top: 60px;
+}
+@media (min-width: $xs) {
+  main {
+    padding: 40px;
+    margin-top: 0;
+    margin-left: 240px;
+  }
 }
 
 h2.title {
