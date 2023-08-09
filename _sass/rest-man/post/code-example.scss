@@ -42,15 +42,20 @@
   padding: 10px 0;
 }
 
-.http-header {
+.http-headers {
   grid-column: 1 / span 3;
   border: 2px solid black;
   margin: -2px;
-  padding: 20px 10px;
-  text-align: left;
+  padding: 10px;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.http-header {
+  text-align: left;
+  padding: 5px 0;
 }
 
 /*
