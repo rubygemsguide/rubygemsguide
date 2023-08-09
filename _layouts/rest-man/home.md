@@ -27,7 +27,7 @@
       </a>
     </h1>
     <h2>
-      rest-man
+      <a href="/rest-man">rest-man</a>
     </h2>
   </header>
 

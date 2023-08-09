@@ -5,10 +5,15 @@
 */
 
 .request-box-wrapper {
-  width: 33.3333333%;
   display: flex;
   justify-content: flex-end;
 }
+@media (min-width: $xs) {
+  .request-box-wrapper {
+    width: 33.3333333%;
+  }
+}
+
 .request-box-wrapper a {
   cursor: pointer;
 }

@@ -5,10 +5,17 @@
 */
 
 .response-box-wrapper {
-  width: 33.3333333%;
+  margin-top: 20px;
   display: flex;
   justify-content: flex-start;
 }
+@media (min-width: $xs) {
+  .response-box-wrapper {
+    margin-top: unset;
+    width: 33.3333333%;
+  }
+}
+
 .response-box-wrapper a {
   cursor: pointer;
 }

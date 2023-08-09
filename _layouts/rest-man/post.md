@@ -22,7 +22,7 @@ permalink: /rest-man/:title
 
   <nav class="sidebar">
     <h1>
-      <a href="/" class="rest-man">rest-man</a>
+      <a href="/rest-man" class="rest-man">rest-man</a>
       <div class="powered-by">
         <img src="/images/logo-white.png" alt="logo" class="logo">
         RubyGems.Guide
