@@ -7,6 +7,7 @@ examples:
         http_version: HTTP/1.1
         http_headers:
           - "Host: example.com"
+          - "Accept: */*"
       response:
         http_version: HTTP/1.1
         status_code: 200
@@ -33,7 +34,7 @@ examples:
         http_headers:
           - "Host: example.com"
           - "User-Agent: Mozilla/5.0"
-        User-Agent: Mozilla/5.0
+          - "Accept: */*"
       response:
         http_version: HTTP/1.1
         status_code: 200
@@ -59,3 +60,39 @@ examples:
             code_output: text/html
           - code_call: response.body
             code_output: <html> ...
+
+    - request:
+        http_method: GET
+        request_target: /data
+        http_version: HTTP/1.1
+        http_headers:
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Accept: application/json"
+          - 'If-None-Match: e22d62c1'
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+          - 'ETag: e22d62c1'
+        http_body: |
+          {
+            "name": "John Hill",
+            "age": 30
+          }
+      code: 
+        request_code: |
+          response = RestMan.get "http://example.com", headers: {accept: "application/json", etag: "e22d62c1"}
+        response_codes:
+          - code_call: response.status
+            code_output: 200
+          - code_call: response.headers
+            code_output: Hash
+          - code_call: response.headers[:content_type]
+            code_output: application/json
+          - code_call: response.headers[:etag]
+            code_output: "e22d62c1"
+          - code_call: response.body
+            code_output: |
+              { "name": ... }
