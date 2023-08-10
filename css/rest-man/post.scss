@@ -30,6 +30,8 @@ main {
   width: 100%;
   padding: 40px 20px;
   margin-top: 60px;
+  display: flex;
+  justify-content: center;
 }
 @media (min-width: $xs) {
   main {
@@ -43,6 +45,10 @@ h2.title {
   font-weight: 700;
   font-size: $text-2xl;
   margin-top: 0;
+}
+
+.post {
+  max-width: $md;
 }
 
 @import "rest-man/post/code-example";
