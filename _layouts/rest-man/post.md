@@ -12,6 +12,8 @@ permalink: /rest-man/:title
   {% include favicon.html %}
 
   <link rel="stylesheet" href="/css/{{ 'rest-man/post.css' | bust_css_cache }}">
+  {% include rest-man/importmap.html %}
+  <script type="module" src="/js/{{ 'rest-man/post.js' | bust_js_cache }}">
 
   {% include custom_css.html %}
 

@@ -87,6 +87,11 @@
 .http-header {
   text-align: left;
   padding: 5px 0;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }
 
 /*
@@ -174,6 +179,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  white-space: break-spaces;
 }
 
 
@@ -236,24 +242,50 @@
     height: 10px;
     border-radius: 5px;
     margin-left: 6px;
+    margin-right: 8px;
   }
 }
 
+.terminal-tab {
+  background-color: $gray-300;
+  align-self: stretch;
+  padding: 0 10px;
+  height: 80%;
+  margin-top: auto;
+  margin-left: 4px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  font-size: $text-xs;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.terminal-tab.active {
+  cursor: default;
+  background-color: $gray-100;
+}
+
 .terminal-body {
+  display: none;
   padding: 1rem 10px;
   overflow: auto;
   overflow-x: auto;
 }
 @media (min-width: $xs) {
   .terminal-body {
-    padding: 1rem 1.4rem;
+    padding: 1rem;
   }
+}
+.terminal-body.active {
+  display: block;
 }
 
 .request-code {
   padding: 5px;
   margin-bottom: 10px;
   font-weight: 700;
+  line-height: 1.75;
 }
 
 .response-code {

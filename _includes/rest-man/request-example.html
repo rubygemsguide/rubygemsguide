@@ -1,6 +1,6 @@
 {% assign request = include.example.request %}
 {% assign response = include.example.response %}
-{% assign code = include.example.code %}
+{% assign codes = include.example.codes %}
 
 <div class="example-section">
   <div class="request-box">
@@ -9,7 +9,7 @@
     <div class="http-version">{{ request.http_version }}</div>
     <div class="http-headers">
       {% for header in request.http_headers %}
-        <div class="http-header">{{ header }}</div>
+        <div class="http-header" title="{{ header }}">{{ header }}</div>
       {% endfor %}
     </div>
   </div>
@@ -24,29 +24,50 @@
     <div class="status-text">{{ response.status_text }}</div>
     <div class="http-headers">
       {% for header in response.http_headers %}
-        <div class="http-header">{{ header }}</div>
+        <div class="http-header" title="{{ header }}">{{ header }}</div>
       {% endfor %}
     </div>
     <div class="http-body">{{ response.http_body | escape }}</div>
   </div>
 
-  <div class="terminal">
+  <div class="terminal" data-controller="terminal">
     <div class="terminal-bar">
       <div class="close-icon"></div>
       <div class="minimize-icon"></div>
       <div class="fullscreen-icon"></div>
+      {% for code in codes %}
+        <div
+          class="terminal-tab {% if forloop.index == 1 %}active{% endif %}"
+          data-index="{{forloop.index}}"
+          data-terminal-target="tab"
+          data-action="click->terminal#switchTab"
+        >
+          {{code.tab}}
+        </div>
+      {% endfor %}
     </div>
-    <div class="terminal-body">
-      <div class="request-code">
-        {{ code.request_code }}
+    {% for code in codes %}
+      {{code.to_json}}
+      <div class="terminal-body {% if forloop.index == 1 %}active{% endif %}" data-index="{{ forloop.index }}" data-terminal-target="body">
+        <div class="request-code">
+          {{ code.request_code | newline_to_br }}
+        </div>
+        <div class="response-code">
+          {% for response_code in code.response_codes %}
+            <div class="code-call">{{ response_code.code_call | escape | newline_to_br }}</div>
+            <div class="code-output-indicator">
+              {% if response_code.code_output %}
+                #=>
+              {% endif %}
+            </div>
+            <div class="code-output">
+              {% if response_code.code_output %}
+                {{ response_code.code_output | escape }}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
       </div>
-      <div class="response-code">
-        {% for response_code in code.response_codes %}
-          <div class="code-call">{{ response_code.code_call | newline_to_br }}</div>
-          <div class="code-output-indicator">#=></div>
-          <div class="code-output">{{ response_code.code_output | escape }}</div>
-        {% endfor %}
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </div>
