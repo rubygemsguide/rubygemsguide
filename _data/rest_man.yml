@@ -1,7 +1,12 @@
 examples:
 
+  ######
+  # GET
+  ######
+
   get:
-    - request:
+    - title: Request for plain text
+      request:
         http_method: GET
         request_target: /test
         http_version: HTTP/1.1
@@ -19,46 +24,49 @@ examples:
         http_body: Hello world!
       codes: 
         - tab: simple
-          request_code: 'response = RestMan.get "http://example.com/test"'
-          response_codes:
-            - code_call: response.status
-              code_output: 200
-            - code_call: response.headers
-              code_output: Hash
-            - code_call: response.headers[:content_type]
-              code_output: text/plain
-            - code_call: response.body
-              code_output: Hello world! 
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/test"
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
         - tab: advance
-          request_code: 'response = RestMan.execute(method: :get, url: "http://example.com/test")'
-          response_codes:
-            - code_call: response.status
-              code_output: 200
-            - code_call: response.headers
-              code_output: Hash
-            - code_call: response.headers[:content_type]
-              code_output: text/plain
-            - code_call: response.body
-              code_output: Hello world! 
+          body: |
+            ```ruby
+            response = RestMan.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
         - tab: console
-          request_code: |
+          body: |
+            ```bash
             $ restman http://example.com
             irb(main)> response = get "/test"
-          response_codes:
-            - code_call: irb(main)> response.status
-              code_output: 200
-            - code_call: irb(main)> response.headers
-              code_output: Hash
-            - code_call: irb(main)> response.headers[:content_type]
-              code_output: text/plain
-            - code_call: irb(main)> response.body
-              code_output: Hello world! 
-        - tab: cli
-          request_code: "$ restman get http://example.com/test"
-          response_codes:
-            - code_call: Hello world!
 
-    - request:
+            irb(main)> response.status                  #=> 200
+            irb(main)> response.headers                 #=> Hash
+            irb(main)> response.headers[:content_type]  #=> text/plain
+            irb(main)> response.body                    #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman get http://example.com/test
+
+            Hello world!
+            ```
+
+    - title: Request for a static HTML page
+      request:
         http_method: GET
         request_target: /about
         http_version: HTTP/1.1
@@ -83,56 +91,57 @@ examples:
           </html>
       codes: 
         - tab: simple
-          request_code: |
+          body: |
+            ```ruby
             response = RestMan.get "http://example.com/about", headers: {"User-Agent" => "Mozilla/5.0"}
-          response_codes:
-            - code_call: response.status
-              code_output: 200
-            - code_call: response.headers
-              code_output: Hash
-            - code_call: response.headers[:content_type]
-              code_output: text/html
-            - code_call: response.body
-              code_output: <html> ...
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ...
+            ```
         - tab: advance
-          request_code: |
-            response = RestMan.execute method: :get, url: "http://example.com/about", headers: {"User-Agent" => "Mozilla/5.0"}
-          response_codes:
-            - code_call: response.status
-              code_output: 200
-            - code_call: response.headers
-              code_output: Hash
-            - code_call: response.headers[:content_type]
-              code_output: text/html
-            - code_call: response.body
-              code_output: <html> ...
+          body: |
+            ```ruby
+            response = RestMan.execute(
+              method: :get,
+              url: "http://example.com/about",
+              headers: {"User-Agent" => "Mozilla/5.0"}
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ...
+            ```
         - tab: console
-          request_code: |
+          body: |
+            ```bash
             $ restman http://example.com
             irb(main)> response = get "/about", headers: {"User-Agent" => "Mozilla/5.0"}
-          response_codes:
-            - code_call: irb(main)> response.status
-              code_output: 200
-            - code_call: irb(main)> response.headers
-              code_output: Hash
-            - code_call: irb(main)> response.headers[:content_type]
-              code_output: text/html
-            - code_call: irb(main)> response.body
-              code_output: <html> ...
-        - tab: cli
-          request_code: "$ restman get http://example.com/about"
-          response_codes:
-            - code_call: |
-                <html>
-                <head>
-                <title>About Us</title>
-                </head>
-                <body>
-                ...
-                </body>
-                </html>
 
-    - request:
+            irb(main)> response.status                  #=> 200
+            irb(main)> response.headers                 #=> Hash
+            irb(main)> response.headers[:content_type]  #=> text/html
+            irb(main)> response.body                    #=> <html> ...
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman get http://example.com/about
+
+            <html>
+            <head>
+            <title>About Us</title>
+            </head>
+            <body>
+            ...
+            </body>
+            </html>
+            ```
+
+    - title: Request with custom headers and caching
+      request:
         http_method: GET
         request_target: /data
         http_version: HTTP/1.1
@@ -156,51 +165,328 @@ examples:
           }
       codes: 
         - tab: simple
-          request_code: |
+          body: |
+            ```ruby
             response = RestMan.get "http://example.com/data", headers: {accept: "application/json", etag: "e22d62c1"}
-          response_codes:
-            - code_call: response.status
-              code_output: 200
-            - code_call: response.headers
-              code_output: Hash
-            - code_call: response.headers[:content_type]
-              code_output: application/json
-            - code_call: response.headers[:etag]
-              code_output: "e22d62c1"
-            - code_call: response.body
-              code_output: |
-                { "name": ... }
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.headers[:etag]         #=> "e22d62c1"
+            response.body                   #=> {"name": ...}
+            ```
         - tab: advance
-          request_code: |
-            response = RestMan.execute(method: :get, url: "http://example.com/data", headers: {accept: "application/json", etag: "e22d62c1"})
-          response_codes:
-            - code_call: response.status
-              code_output: 200
-            - code_call: response.headers
-              code_output: Hash
-            - code_call: response.headers[:content_type]
-              code_output: application/json
-            - code_call: response.headers[:etag]
-              code_output: "e22d62c1"
-            - code_call: response.body
-              code_output: |
-                { "name": ... }
+          body: |
+            ```ruby
+            response = RestMan.execute(
+              method: :get,
+              url: "http://example.com/data",
+              headers: {accept: "application/json", etag: "e22d62c1"}
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.headers[:etag]         #=> "e22d62c1"
+            response.body                   #=> {"name": ...}
+            ```
         - tab: console
-          request_code: |
+          body: |
+            ```bash
             $ restman http://example.com
             irb(main)> response = get "/data", headers: {accept: "application/json", etag: "e22d62c1"}
-          response_codes:
-            - code_call: irb(main)> response.status
-              code_output: 200
-            - code_call: irb(main)> response.headers
-              code_output: Hash
-            - code_call: irb(main)> response.headers[:content_type]
-              code_output: application/json
-            - code_call: irb(main)> response.headers[:etag]
-              code_output: "e22d62c1"
-            - code_call: irb(main)> response.body
-              code_output: |
-                { "name": ... }
+
+            irb(main)> response.status                  #=> 200
+            irb(main)> response.headers                 #=> Hash
+            irb(main)> response.headers[:content_type]  #=> application/json
+            irb(main)> response.headers[:etag]          #=> "e22d62c1"
+            irb(main)> response.body                    #=> {"name": ...}
+            ```
         - tab: cli
-          request_code: RestMan CLI does not support customize headers currently.
-          response_codes:
+          body: |
+            ```
+            RestMan CLI does not support customize headers currently.
+            ```
+
+  ######
+  # POST
+  ######
+
+  post:
+    - title: Submitting plain text data
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: "http://example.com/resource",
+              payload: "Hello, word!",
+              headers: { content_type: "text/plain" }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: console
+          body: |
+            ```bash
+            $ restman http://example.com
+            irb(main)> response = post "/resource", "Hello, world!", { content_type: "text/plain" }
+
+            irb(main)> response.status                  #=> code_output: 200
+            irb(main)> response.headers                 #=> Hash
+            irb(main)> response.headers[:content_type]  #=> text/plain
+            irb(main)> response.body                    #=> Text received.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "Hello world!" | restman post http://example.com/resource
+
+            Text received.
+            ```
+
+    - title: Submitting form data
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/x-www-form-urlencoded"
+          - "Content-Length: 27"
+        http_body: first_name=john&last_name=hil
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <body>
+          Thank you, John Hill, for submitting the form!
+          </body>
+          </html>
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post "http://example.com/resource", { first_name: "John", last_name: "Hill" }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: "http://example.com/resource",
+              payload: { first_name: "John", last_name: "Hill" }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: console
+          body: |
+            ```bash
+            $ restman http://example.com
+            irb(main)> response = post "http://example.com/resource", { first_name: "John", last_name: "Hill" }
+
+            irb(main)> response.status                  #=> 200
+            irb(main)> response.headers                 #=> Hash
+            irb(main)> response.headers[:content_type]  #=> text/plain
+            irb(main)> response.body                    #=> <html> ...
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "first_name=john&last_name=hil" | restman post http://example.com/resource
+
+            <html>
+            <body>
+            Thank you, John Hill, for submitting the form!
+            </body>
+            </html>
+            ```
+
+    - title: Posting JSON data with custom headers
+      request:
+        http_method: POST
+        request_target: /api/resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/json"
+          - "Authorization: Bearer token123"
+          - "Content-Length: 32"
+        http_body: {"username": "johnhill", "age": 20}
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Data updated successfully"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post "http://example.com/api/resource", { username: "johnhill", age: 30 }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: post,
+              url: "http://example.com/api/resource",
+              payload: { username: "johnhill", age: 30 }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: console
+          body: |
+            ```bash
+            $ restman http://example.com
+            irb(main)> response = post "/api/resource", { username: "johnhill", age: 30 }
+
+            irb(main)> response.status                  #=> 200
+            irb(main)> response.headers                 #=> Hash
+            irb(main)> response.headers[:content_type]  #=> application/json
+            irb(main)> response.body                    #=> { "status": ... }
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support JSON submit currently.
+            ```
+
+    - title: Posting a file
+      request:
+        http_method: POST
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: multipart/form-data; boundary=boundary123"
+          - "Content-Length: 8362"
+        http_body: |
+          --boundary123
+          Content-Disposition: form-data; name="file"; filename="profile.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          --boundary123--
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Profile updated successfully",
+            "url": "/images/profile.jpg"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post "http://example.com/api/resource", { username: "johnhill", age: 30 }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: post,
+              url: "http://example.com/api/resource",
+              payload: { username: "johnhill", age: 30 }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: console
+          body: |
+            ```bash
+            $ restman http://example.com
+            irb(main)> response = post "/api/resource", { username: "johnhill", age: 30 }
+
+            irb(main)> response.status                  #=> 200
+            irb(main)> response.headers                 #=> Hash
+            irb(main)> response.headers[:content_type]  #=> application/json
+            irb(main)> response.body                    #=> { "status": ... }
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support JSON submit currently.
+            ```

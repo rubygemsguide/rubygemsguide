@@ -1,8 +1,10 @@
+{% assign title = include.example.title %}
 {% assign request = include.example.request %}
 {% assign response = include.example.response %}
 {% assign codes = include.example.codes %}
 
 <div class="example-section">
+  <h3 class="example-title">{{title}}</h3>
   <div class="request-box">
     <div class="http-method">{{ request.http_method }}</div>
     <div class="request-target">{{ request.request_target }}</div>
@@ -12,6 +14,9 @@
         <div class="http-header" title="{{ header }}">{{ header }}</div>
       {% endfor %}
     </div>
+    {% if request.http_body %}
+      <div class="http-body">{{ request.http_body | escape }}</div>
+    {% endif %}
   </div>
 
   <div class="request-arrow">
@@ -47,26 +52,8 @@
       {% endfor %}
     </div>
     {% for code in codes %}
-      {{code.to_json}}
       <div class="terminal-body {% if forloop.index == 1 %}active{% endif %}" data-index="{{ forloop.index }}" data-terminal-target="body">
-        <div class="request-code">
-          {{ code.request_code | newline_to_br }}
-        </div>
-        <div class="response-code">
-          {% for response_code in code.response_codes %}
-            <div class="code-call">{{ response_code.code_call | escape | newline_to_br }}</div>
-            <div class="code-output-indicator">
-              {% if response_code.code_output %}
-                #=>
-              {% endif %}
-            </div>
-            <div class="code-output">
-              {% if response_code.code_output %}
-                {{ response_code.code_output | escape }}
-              {% endif %}
-            </div>
-          {% endfor %}
-        </div>
+        {{code.body | markdownify}}
       </div>
     {% endfor %}
   </div>
