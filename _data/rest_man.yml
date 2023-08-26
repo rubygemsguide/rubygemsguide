@@ -1625,3 +1625,152 @@ examples:
             ```bash
             RestMan CLI hasn't support options request.
             ```
+
+  ######
+  # HEAD
+  ######
+
+  head:
+    - title: Check file metadata
+      request:
+        http_method: HEAD
+        request_target: /version-2.0.1.zip
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Date: Fri, 25 Aug 2023 17:22:33 GMT"
+          - "Last-Modified: Wed, 23 Aug 2023 11:41:12 GMT"
+          - "Content-Type: application/zip"
+          - "Content-Length: 10338267"
+        http_body:
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.head "http://example.com/version-2.0.1.zip"
+
+            response.status                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> application/zip
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/version-2.0.1.zip"
+            )
+
+            response.status                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> application/zip
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/version-2.0.1.zip")
+            resposne = resource.head
+
+            response.status                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> application/zip
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support head request.
+            ```
+
+    - title: Verifying Availability of a video streaming resource
+      request:
+        http_method: HEAD
+        request_target: /video/1.mp4
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+          - "X-Api-Key: api-key-abc"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Date: Fri, 25 Aug 2023 17:22:33 GMT"
+          - "Last-Modified: Wed, 23 Aug 2023 11:41:12 GMT"
+          - "Content-Type: video/mp4"
+          - "Accept-Range: bytes"
+          - "Content-Length: 10338267"
+        http_body:
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.head "http://example.com/video/1.mp4", { "X-API-Key": "api-key-abc" }
+
+            response.status                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> video/mp4
+            response.headers[:accept_range]   #=> bytes
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/video/1.mp4",
+              headers: {
+                "X-API-Key": "api-key-abc"
+              }
+            )
+
+            response.status                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> video/mp4
+            response.headers[:accept_range]   #=> bytes
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/video/1.mp4")
+            resposne = resource.head({
+              "X-API-Key": "api-key-abc"
+            })
+
+            response.status                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> video/mp4
+            response.headers[:accept_range]   #=> bytes
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support head request.
+            ```

@@ -32,7 +32,9 @@
         <div class="http-header" title="{{ header }}">{{ header }}</div>
       {% endfor %}
     </div>
-    <div class="http-body">{{ response.http_body | escape }}</div>
+    {% if request.http_body %}
+      <div class="http-body">{{ response.http_body | escape }}</div>
+    {% endif %}
   </div>
 
   <div class="terminal" data-controller="terminal">
