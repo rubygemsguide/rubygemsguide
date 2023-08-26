@@ -208,7 +208,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support customize headers currently.
+            RestMan CLI hasn't support customize headers currently.
             ```
 
   ######
@@ -450,7 +450,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support JSON submit currently.
+            RestMan CLI hasn't support JSON submit currently.
             ```
 
     - title: Posting a file directly
@@ -520,7 +520,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support file upload with custom headers
+            RestMan CLI hasn't support file upload with custom headers
             ```
 
     - title: Posting files with multipart
@@ -619,7 +619,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support multipart request currently.
+            RestMan CLI hasn't support multipart request currently.
             ```
 
   ######
@@ -861,7 +861,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support JSON submit currently.
+            RestMan CLI hasn't support JSON submit currently.
             ```
 
     - title: Posting a file directly
@@ -931,7 +931,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support file upload with custom headers
+            RestMan CLI hasn't support file upload with custom headers
             ```
 
     - title: Posting files with multipart
@@ -1030,7 +1030,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support multipart request currently.
+            RestMan CLI hasn't support multipart request currently.
             ```
 
   ######
@@ -1272,7 +1272,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support JSON submit currently.
+            RestMan CLI hasn't support JSON submit currently.
             ```
 
     - title: Posting a file directly
@@ -1342,7 +1342,7 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support file upload with custom headers
+            RestMan CLI hasn't support file upload with custom headers
             ```
 
     - title: Posting files with multipart
@@ -1441,5 +1441,135 @@ examples:
         - tab: cli
           body: |
             ```
-            RestMan CLI does not support multipart request currently.
+            RestMan CLI hasn't support multipart request currently.
+            ```
+
+  ######
+  # DELETE
+  ######
+
+  delete:
+    - title: Delete resource
+      request:
+        http_method: DELETE
+        request_target: /resource/1
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "message": "Resource with ID 1 has been deleted."
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.delete "http://example.com/resource/1"
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan.execute(method: :delete, url: "http://example.com/resource/1")
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource/1")
+            resposne = resource.delete
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman delete http://example.com/resource/1
+
+            {"message": ...}
+            ```
+
+    - title: Delete resource with custom headers
+      request:
+        http_method: DELETE
+        request_target: /user/1
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Authorization: Bearer token123"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "message": "User with ID 1 has been deleted."
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.delete "http://example.com/user/1", { authorization: "Bearer token123" }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan.execute(
+              method: :delete,
+              url: "http://example.com/user/1",
+              headers: {
+                authorization: "Bearer token123"
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource/1")
+            resposne = resource.delete({authorization: "Bearer token123"})
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support custom headers
             ```
