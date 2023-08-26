@@ -1573,3 +1573,55 @@ examples:
             ```bash
             RestMan CLI hasn't support custom headers
             ```
+
+  ######
+  # OPTIONS
+  ######
+
+  options:
+    - title: OPTIONS request for a resource
+      request:
+        http_method: OPTIONS
+        request_target: /resource/1
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Allow: GET, POST, HEAD, OPTIONS"
+        http_body:
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.options "http://example.com/resource/1"
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:allow] #=> "GET, POST, HEAD, OPTIONS"
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan.execute(method: :options, url: "http://example.com/resource/1")
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:allow] #=> "GET, POST, HEAD, OPTIONS"
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            # RestMan::Resource hasn't support options request
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support options request.
+            ```
