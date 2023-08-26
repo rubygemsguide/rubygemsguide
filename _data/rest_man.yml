@@ -621,3 +621,825 @@ examples:
             ```
             RestMan CLI does not support multipart request currently.
             ```
+
+  ######
+  # PUT
+  ######
+
+  put:
+    - title: Submitting plain text data
+      request:
+        http_method: PUT
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: { content_type: "text/plain" }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            resposne = resource.put(
+              "Hello, world!",
+              {content_type: "text/plain"}
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "Hello world!" | restman put http://example.com/resource
+
+            Text received.
+            ```
+
+    - title: Submitting form data
+      request:
+        http_method: PUT
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/x-www-form-urlencoded"
+          - "Content-Length: 27"
+        http_body: first_name=john&last_name=hil
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <body>
+          Thank you, John Hill, for submitting the form!
+          </body>
+          </html>
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/resource',
+              payload: { first_name: "John", last_name: "Hill" }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            response = resource.put({ first_name: "John", last_name: "Hill" })
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "first_name=john&last_name=hil" | restman put http://example.com/resource
+
+            <html>
+            <body>
+            Thank you, John Hill, for submitting the form!
+            </body>
+            </html>
+            ```
+
+    - title: Posting JSON data with custom headers
+      request:
+        http_method: PUT
+        request_target: /api/resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: application/json"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/json"
+          - "Authorization: Bearer token123"
+          - "Content-Length: 32"
+        http_body: {"username": "johnhill", "age": 20}
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Data updated successfully"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/resource',
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/api/resource',
+              payload: {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              headers: {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/api/resource")
+            response = resource.put(
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support JSON submit currently.
+            ```
+
+    - title: Posting a file directly
+      request:
+        http_method: PUT
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: image/jpeg"
+          - "Content-Length: 143685"
+        http_body: [JPEG binary data goes here]
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Image uploaded successfully
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/image',
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/api/image',
+              payload: File.new("./files/profile.jpg", 'rb'),
+              headers: { content_type: :jpg }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/image")
+            response = resource.put(
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support file upload with custom headers
+            ```
+
+    - title: Posting files with multipart
+      request:
+        http_method: PUT
+        request_target: /api/profile
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: multipart/form-data; boundary=RubyFormBoundary123"
+          - "Content-Length: 8362"
+        http_body: |
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="username"
+
+          johnhill
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile1"; filename="profile.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile2"; filename="profile2.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123--
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Profile updated successfully",
+            "url": "/images/profile.jpg"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/profile',
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: put,
+              url: "http://example.com/api/profile",
+              payload: {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/profile")
+            resposne = resource.put(
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support multipart request currently.
+            ```
+
+  ######
+  # PATCH
+  ######
+
+  patch:
+    - title: Submitting plain text data
+      request:
+        http_method: PATCH
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: { content_type: "text/plain" }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            resposne = resource.patch(
+              "Hello, world!",
+              {content_type: "text/plain"}
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "Hello world!" | restman patch http://example.com/resource
+
+            Text received.
+            ```
+
+    - title: Submitting form data
+      request:
+        http_method: PATCH
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/x-www-form-urlencoded"
+          - "Content-Length: 27"
+        http_body: first_name=john&last_name=hil
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <body>
+          Thank you, John Hill, for submitting the form!
+          </body>
+          </html>
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: 'http://example.com/resource',
+              payload: { first_name: "John", last_name: "Hill" }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            response = resource.patch({ first_name: "John", last_name: "Hill" })
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "first_name=john&last_name=hil" | restman patch http://example.com/resource
+
+            <html>
+            <body>
+            Thank you, John Hill, for submitting the form!
+            </body>
+            </html>
+            ```
+
+    - title: Posting JSON data with custom headers
+      request:
+        http_method: PATCH
+        request_target: /api/resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: application/json"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/json"
+          - "Authorization: Bearer token123"
+          - "Content-Length: 32"
+        http_body: {"username": "johnhill", "age": 20}
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Data updated successfully"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch(
+              'http://example.com/api/resource',
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: 'http://example.com/api/resource',
+              payload: {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              headers: {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/api/resource")
+            response = resource.patch(
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support JSON submit currently.
+            ```
+
+    - title: Posting a file directly
+      request:
+        http_method: PATCH
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: image/jpeg"
+          - "Content-Length: 143685"
+        http_body: [JPEG binary data goes here]
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Image uploaded successfully
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch(
+              'http://example.com/api/image',
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: 'http://example.com/api/image',
+              payload: File.new("./files/profile.jpg", 'rb'),
+              headers: { content_type: :jpg }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/image")
+            response = resource.patch(
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support file upload with custom headers
+            ```
+
+    - title: Posting files with multipart
+      request:
+        http_method: PATCH
+        request_target: /api/profile
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: multipart/form-data; boundary=RubyFormBoundary123"
+          - "Content-Length: 8362"
+        http_body: |
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="username"
+
+          johnhill
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile1"; filename="profile.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile2"; filename="profile2.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123--
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Profile updated successfully",
+            "url": "/images/profile.jpg"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch(
+              'http://example.com/api/profile',
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: patch,
+              url: "http://example.com/api/profile",
+              payload: {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/profile")
+            resposne = resource.patch(
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.status                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI does not support multipart request currently.
+            ```
