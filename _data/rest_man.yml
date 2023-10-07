@@ -1949,3 +1949,65 @@ ssl_tls:
             ```
             RestMan CLI hasn't support SSL/TLS customization.
             ```
+
+retry:
+  examples:
+    - title: Manually set max retries
+      pre_desc: |
+        The default `max_retries` is 1. You can change it to any number you like. 
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support retry customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              max_retries: 0
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              max_retries: 0
+            )
+            resposne = resource.get
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support SSL/TLS customization.
+            ```

@@ -1,11 +1,15 @@
 {% assign index = include.index %}
 {% assign title = include.example.title %}
+{% assign pre_desc = include.example.pre_desc %}
 {% assign request = include.example.request %}
 {% assign response = include.example.response %}
 {% assign codes = include.example.codes %}
 
 <div class="example-section" id="example-{{ index }}">
   <h3 class="example-title">{{title}}</h3>
+  {% if pre_desc %}
+    <div class="example-pre-desc">{{pre_desc | markdownify}}</div>
+  {% endif %}
   <div class="request-box">
     <div class="http-method">{{ request.http_method }}</div>
     <div class="request-target">{{ request.request_target }}</div>
