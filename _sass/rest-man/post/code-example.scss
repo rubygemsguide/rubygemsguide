@@ -15,6 +15,10 @@
     margin: auto;
   }
 }
+#example-1 {
+  border-top-color: transparent;
+  padding-top: 10px;
+}
 
 .example-title {
   order: 1;
@@ -127,6 +131,36 @@
 }
 .request-arrow > svg {
   width: 80%;
+}
+
+.request-https {
+  position: absolute;
+}
+@media (min-width: $md) {
+  .request-https {
+    margin-right: 14px;
+  }
+}
+.https-icon {
+  display: none;  
+}
+@media (min-width: $md) {
+  .https-icon {
+    display: unset;
+  }
+}
+.https-lock-icon {
+  display: none;
+}
+@media (min-width: 900px) {
+  .https-lock-icon {
+    display: unset;
+  }
+}
+@media (min-width: $md) {
+  .https-lock-icon {
+    display: none;
+  }
 }
 
 /*

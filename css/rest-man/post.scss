@@ -45,10 +45,26 @@ h2.title {
   font-weight: 700;
   font-size: $text-2xl;
   margin-top: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $gray-300;
 }
 
 .post {
   max-width: $md;
+}
+
+.post-desc {
+  padding: 10px 0;
+  line-height: 1.5;
+}
+
+code.language-plaintext {
+  font-size: 14px;
+  background-color: $gray-200;
+  font-family: $font-mono;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 6px;
 }
 
 @import "rest-man/post/code-example";

@@ -1,9 +1,10 @@
+{% assign index = include.index %}
 {% assign title = include.example.title %}
 {% assign request = include.example.request %}
 {% assign response = include.example.response %}
 {% assign codes = include.example.codes %}
 
-<div class="example-section">
+<div class="example-section" id="example-{{ index }}">
   <h3 class="example-title">{{title}}</h3>
   <div class="request-box">
     <div class="http-method">{{ request.http_method }}</div>
@@ -21,6 +22,12 @@
 
   <div class="request-arrow">
     {% include rest-man/arrow-right.html %}
+    {% if request.https %}
+      <div class="request-https">
+        <img src="/images/posts/rest-man/https.svg" class="https-icon">
+        <img src="/images/posts/rest-man/lock.svg" class="https-lock-icon">
+      </div>
+    {% endif %}
   </div>
 
   <div class="response-box">
@@ -32,7 +39,7 @@
         <div class="http-header" title="{{ header }}">{{ header }}</div>
       {% endfor %}
     </div>
-    {% if request.http_body %}
+    {% if response.http_body %}
       <div class="http-body">{{ response.http_body | escape }}</div>
     {% endif %}
   </div>

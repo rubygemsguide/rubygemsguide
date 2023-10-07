@@ -10,6 +10,6 @@ permalink: /rest-man/request/delete
   <h2 class="title">DELETE</h2>
 
   {% for example in site.data.rest_man.examples.delete %}
-    {% include rest-man/request-example.md example=example %}
+    {% include rest-man/request-example.md example=example index=forloop.index %}
   {% endfor %}
 </div>

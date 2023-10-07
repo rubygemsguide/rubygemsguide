@@ -10,6 +10,6 @@ permalink: /rest-man/request/patch
   <h2 class="title">PATCH</h2>
 
   {% for example in site.data.rest_man.examples.patch %}
-    {% include rest-man/request-example.md example=example %}
+    {% include rest-man/request-example.md example=example index=forloop.index  %}
   {% endfor %}
 </div>

@@ -10,6 +10,6 @@ permalink: /rest-man/request/post
   <h2 class="title">POST</h2>
 
   {% for example in site.data.rest_man.examples.post %}
-    {% include rest-man/request-example.md example=example %}
+    {% include rest-man/request-example.md example=example index=forloop.index  %}
   {% endfor %}
 </div>
