@@ -2011,3 +2011,301 @@ retry:
             ```
             RestMan CLI hasn't support SSL/TLS customization.
             ```
+
+timeout:
+  examples:
+    - title: Set Read Timeout
+      pre_desc: |
+        The default `read_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              read_timeout: 30
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              read_timeout: 30
+            )
+            resposne = resource.get
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set Open Timeout
+      pre_desc: |
+        The default `open_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              open_timeout: 30
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              open_timeout: 30
+            )
+            resposne = resource.get
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set Write Timeout
+      pre_desc: |
+        The default `write_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              write_timeout: 30
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              write_timeout: 30
+            )
+            resposne = resource.get
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set SSL Timeout
+      pre_desc: |
+        The default `ssl_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              ssl_timeout: 30
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              ssl_timeout: 30
+            )
+            resposne = resource.get
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set Keep-Alive Timeout
+      pre_desc: |
+        The default `keep_alive_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              keep_alive_timeout: 30
+            )
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              keep_alive_timeout: 30
+            )
+            resposne = resource.get
+
+            response.status                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```

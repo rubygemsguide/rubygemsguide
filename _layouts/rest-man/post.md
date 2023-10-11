@@ -42,7 +42,7 @@ permalink: /rest-man/:title
       <div class="advance">Advance</div>
       <a href="/rest-man/advance/ssl-tls" class="guide">SSL/TLS</a>
       <a href="/rest-man/advance/retry" class="guide">Retry</a>
-      <a href="/rest-man/advance/timeouts" class="guide">Timeouts</a>
+      <a href="/rest-man/advance/timeout" class="guide">Timeout</a>
       <a href="/rest-man/advance/proxy" class="guide">Proxy</a>
       <a href="/rest-man/advance/redirection" class="guide">Redirection</a>
       <a href="/rest-man/advance/exception" class="guide">Exception</a>
