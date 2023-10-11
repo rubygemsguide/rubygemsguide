@@ -32,6 +32,9 @@
         <img src="/images/posts/rest-man/lock.svg" class="https-lock-icon">
       </div>
     {% endif %}
+    {% if request.proxy %}
+      <div class="request-proxy">proxy</div>
+    {% endif %}
   </div>
 
   <div class="response-box">

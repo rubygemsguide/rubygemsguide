@@ -2309,3 +2309,157 @@ timeout:
             ```
             RestMan CLI hasn't support timeout customization.
             ```
+
+proxy:
+  examples:
+    - title: Set global proxy
+      pre_desc: |
+        All calls to RestMan, including Resources, will use the proxy specified by `RestMan.proxy`.
+      request:
+        proxy: true
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan.proxy = "http://proxy.example.com"
+            RestMan.get "http://example.com/test"
+
+            response.status                 #=>200
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            RestMan.proxy = "http://proxy.example.com"
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            response.status                 #=>200
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            RestMan.proxy = "http://proxy.example.com"
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            response.status                 #=>200
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support proxy customization.
+            ```
+    - title: Set per-request proxy
+      pre_desc: |
+        Specify a per-request proxy by passing the :proxy option to RestMan::Request. This will override any proxies set by environment variable
+        or by the global `RestMan.proxy` value.
+      request:
+        proxy: true
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              proxy: "http://proxy.example.com"
+            )
+
+            response.status                 #=>200
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support proxy customization.
+            ```
+    - title: Disable proxy for a particular request
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            RestMan.proxy = "http://proxy.example.com"
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              proxy: nil
+            )
+
+            response.status                 #=>200
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support proxy customization.
+            ```

@@ -175,6 +175,23 @@
   }
 }
 
+.request-proxy {
+  display: none;
+}
+@media (min-width: $md) {
+  .request-proxy {
+    position: absolute;
+    background-color: $gray-50;
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+}
+
 /*
 #####
 # Response
