@@ -54,7 +54,7 @@ permalink: /rest-man
 
 <div class="advance-section">
   <div class="advance-box">
-    <a href="/rest-man/advance/ssl_tls" >SSL/TLS</a>
+    <a href="/rest-man/advance/ssl-tls" >SSL/TLS</a>
     <a href="/rest-man/advance/retry" >Retry</a>
     <a href="/rest-man/advance/timeout" >Timeout</a>
     <a href="/rest-man/advance/proxy" >Proxy</a>
