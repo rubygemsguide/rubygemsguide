@@ -6,7 +6,7 @@
   border-top: 1px solid $gray-300;
   padding: 20px 0;
   font-family: $font-mono-reverse;
-  row-gap: 12px;
+  row-gap: 20px;
 }
 @media (min-width: $xs) {
   .example-section {
@@ -23,6 +23,7 @@
 .example-title {
   grid-column: 1;
   font-family: $font-mono;
+  margin: 0;
 }
 @media (min-width: $xs) {
   .example-title {
@@ -32,7 +33,8 @@
 
 .example-pre-desc {
   grid-column: 1;
-  margin-top: -20px;
+  margin-top: -16px;
+  margin-bottom: -16px;
   font-family: $font-sans;
 }
 @media (min-width: $xs) {
@@ -271,8 +273,6 @@
   margin-bottom: 10px;
   font-size: $text-sm;
 
-  margin-top: 20px;
-
   box-shadow: $shadow-md;
   background-color: $gray-100;
   border-radius: 6px;
@@ -282,7 +282,6 @@
 @media (min-width: $xs) {
   .terminal {
     grid-column: 1 / span 3;
-    margin-top: 20px;
     margin-bottom: 30px;
   }
 }

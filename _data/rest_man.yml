@@ -2851,3 +2851,66 @@ redirection:
             ```
             RsetMan CLI doesn't offer a way to follow redirection. You have to doing it manually.
             ```
+
+exception:
+  description: |
+    Exceptions (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
+
+    - for result codes between `200` and `207`, a `RestMan::Response` will be returned
+    - for result codes `301`, `302` or `307`, the redirection will be followed if the request is a `GET` or a `HEAD`
+    - for result code `303`, the redirection will be followed and the request transformed into a `GET`
+    - for other cases, a `RestMan::ExceptionWithResponse` holding the Response will be raised; a specific exception class will be thrown for known error codes
+    - call `.response` on the exception to get the server's response
+  examples:
+    - title: Catch errors
+      pre_desc: |
+        Most exceptions are collected under `RestMan::RequestFaield`.
+      codes:
+        - body: |
+            ```ruby
+            begin
+              RestMan.get "http://example.com/test"
+            rescue => RestMan::RequestFailed => e
+              e.response    #=> RestMan::Response
+            end
+            ```
+    - title: Catch socket errors
+      pre_desc: |
+        RestMan will propagate up socket errors without modification:
+      codes:
+        - body: |
+            ```ruby
+            RestMan.get 'http://example.com/test'
+            #=> Exception: Errno::ECONNREFUSED: Connection refused - connect(2) for "localhost" port 12345
+            ```
+    - title: Catch EOFError 
+      pre_desc: |
+        `RestMan::ServerBrokeConnection` is translated from `EOFError` to give a better error message.
+      codes:
+        - body: |
+            ```ruby
+            begin
+              RestMan.get 'http://example.com/test'
+            rescue RestMan::ServerBrokeConnection => error
+              error.message         #=> Server broke connection
+            end
+            ```
+    - title: Catch specific HTTP errors
+      pre_desc: |
+        It may be more straightforward to use exceptions to handle different HTTP error response cases.
+      codes:
+        - body: |
+            ```ruby
+            begin
+              response = RestMan.get('http://example.com/resource')
+            rescue RestMan::Unauthorized, RestMan::Forbidden => error
+              puts 'Access denied'
+              return error.response
+            rescue RestMan::ImATeapot =>error
+              puts 'The server is a teapot! # RFC 2324'
+              return error.response
+            else
+              puts 'It worked!'
+              return response
+            end
+            ```
