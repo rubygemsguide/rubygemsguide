@@ -28,7 +28,7 @@ examples:
             ```ruby
             response = RestMan.get "http://example.com/test"
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -41,7 +41,7 @@ examples:
               url: "http://example.com/test"
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -52,7 +52,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/test")
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -95,7 +95,7 @@ examples:
             ```ruby
             response = RestMan.get "http://example.com/about", headers: {"User-Agent" => "Mozilla/5.0"}
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ...
@@ -109,7 +109,7 @@ examples:
               headers: {"User-Agent" => "Mozilla/5.0"}
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ...
@@ -120,7 +120,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/about")
             resposne = resource.get({"User-Agent" => "Mozilla/5.0"})
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ...
@@ -169,7 +169,7 @@ examples:
             ```ruby
             response = RestMan.get "http://example.com/data", headers: {accept: "application/json", "If-None-Match": "e22d62c1"}
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.headers[:etag]         #=> "e22d62c1"
@@ -184,7 +184,7 @@ examples:
               headers: {accept: "application/json", "If-None-Match": "e22d62c1"}
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.headers[:etag]         #=> "e22d62c1"
@@ -199,7 +199,7 @@ examples:
               "If-None-Match": "e22d62c1"
             })
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.headers[:etag]         #=> "e22d62c1"
@@ -242,7 +242,7 @@ examples:
             ```ruby
             response = RestMan.post "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -257,7 +257,7 @@ examples:
               headers: { content_type: "text/plain" }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -271,7 +271,7 @@ examples:
               {content_type: "text/plain"}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -315,7 +315,7 @@ examples:
             ```ruby
             response = RestMan.post 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -329,7 +329,7 @@ examples:
               payload: { first_name: "John", last_name: "Hill" }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -340,7 +340,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/resource")
             response = resource.post({ first_name: "John", last_name: "Hill" })
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -399,7 +399,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -421,7 +421,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -442,7 +442,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -483,7 +483,7 @@ examples:
               {content_type: :jpg}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -498,7 +498,7 @@ examples:
               headers: { content_type: :jpg }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -512,7 +512,7 @@ examples:
               {content_type: :jpg}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -576,7 +576,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -594,7 +594,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -611,7 +611,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -653,7 +653,7 @@ examples:
             ```ruby
             response = RestMan.put "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -668,7 +668,7 @@ examples:
               headers: { content_type: "text/plain" }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -682,7 +682,7 @@ examples:
               {content_type: "text/plain"}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -726,7 +726,7 @@ examples:
             ```ruby
             response = RestMan.put 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -740,7 +740,7 @@ examples:
               payload: { first_name: "John", last_name: "Hill" }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -751,7 +751,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/resource")
             response = resource.put({ first_name: "John", last_name: "Hill" })
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -810,7 +810,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -832,7 +832,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -853,7 +853,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -894,7 +894,7 @@ examples:
               {content_type: :jpg}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -909,7 +909,7 @@ examples:
               headers: { content_type: :jpg }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -923,7 +923,7 @@ examples:
               {content_type: :jpg}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -987,7 +987,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1005,7 +1005,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1022,7 +1022,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1064,7 +1064,7 @@ examples:
             ```ruby
             response = RestMan.patch "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -1079,7 +1079,7 @@ examples:
               headers: { content_type: "text/plain" }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -1093,7 +1093,7 @@ examples:
               {content_type: "text/plain"}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Text received.
@@ -1137,7 +1137,7 @@ examples:
             ```ruby
             response = RestMan.patch 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -1151,7 +1151,7 @@ examples:
               payload: { first_name: "John", last_name: "Hill" }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -1162,7 +1162,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/resource")
             response = resource.patch({ first_name: "John", last_name: "Hill" })
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/html
             response.body                   #=> <html> ... 
@@ -1221,7 +1221,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1243,7 +1243,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1264,7 +1264,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1305,7 +1305,7 @@ examples:
               {content_type: :jpg}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -1320,7 +1320,7 @@ examples:
               headers: { content_type: :jpg }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -1334,7 +1334,7 @@ examples:
               {content_type: :jpg}
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Image uploaded successfully
@@ -1398,7 +1398,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1416,7 +1416,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1433,7 +1433,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"status": ...}
@@ -1475,7 +1475,7 @@ examples:
             ```ruby
             response = RestMan.delete "http://example.com/resource/1"
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"message": ...}
@@ -1485,7 +1485,7 @@ examples:
             ```ruby
             response = RestMan.execute(method: :delete, url: "http://example.com/resource/1")
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"message": ...}
@@ -1496,7 +1496,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/resource/1")
             resposne = resource.delete
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"message": ...}
@@ -1536,7 +1536,7 @@ examples:
             ```ruby
             response = RestMan.delete "http://example.com/user/1", { authorization: "Bearer token123" }
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"message": ...}
@@ -1552,7 +1552,7 @@ examples:
               }
             )
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"message": ...}
@@ -1563,7 +1563,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/resource/1")
             resposne = resource.delete({authorization: "Bearer token123"})
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:content_type] #=> application/json
             response.body                   #=> {"message": ...}
@@ -1602,7 +1602,7 @@ examples:
             ```ruby
             response = RestMan.options "http://example.com/resource/1"
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:allow] #=> "GET, POST, HEAD, OPTIONS"
             ```
@@ -1611,7 +1611,7 @@ examples:
             ```ruby
             response = RestMan.execute(method: :options, url: "http://example.com/resource/1")
 
-            response.status                 #=> 200
+            response.code                 #=> 200
             response.headers                #=> Hash
             response.headers[:allow] #=> "GET, POST, HEAD, OPTIONS"
             ```
@@ -1657,7 +1657,7 @@ examples:
             ```ruby
             response = RestMan.head "http://example.com/version-2.0.1.zip"
 
-            response.status                   #=>200
+            response.code                   #=>200
             response.headers                  #=> Hash
             response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
             response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
@@ -1672,7 +1672,7 @@ examples:
               url: "http://example.com/version-2.0.1.zip"
             )
 
-            response.status                   #=>200
+            response.code                   #=>200
             response.headers                  #=> Hash
             response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
             response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
@@ -1685,7 +1685,7 @@ examples:
             resource = RestMan::Resource.new("http://example.com/version-2.0.1.zip")
             resposne = resource.head
 
-            response.status                   #=>200
+            response.code                   #=>200
             response.headers                  #=> Hash
             response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
             response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
@@ -1726,7 +1726,7 @@ examples:
             ```ruby
             response = RestMan.head "http://example.com/video/1.mp4", { "X-API-Key": "api-key-abc" }
 
-            response.status                   #=>200
+            response.code                   #=>200
             response.headers                  #=> Hash
             response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
             response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
@@ -1745,7 +1745,7 @@ examples:
               }
             )
 
-            response.status                   #=>200
+            response.code                   #=>200
             response.headers                  #=> Hash
             response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
             response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
@@ -1761,7 +1761,7 @@ examples:
               "X-API-Key": "api-key-abc"
             })
 
-            response.status                   #=>200
+            response.code                   #=>200
             response.headers                  #=> Hash
             response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
             response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
@@ -1843,7 +1843,7 @@ ssl_tls:
               verify_ssl: OpenSSL::SSL::VERIFY_PEER
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -1879,7 +1879,7 @@ ssl_tls:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -1924,7 +1924,7 @@ ssl_tls:
               ssl_client_key: OpenSSL::PKey::RSA.new(File.read("client.key"))
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -1939,7 +1939,7 @@ ssl_tls:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -1987,7 +1987,7 @@ retry:
               max_retries: 0
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2001,7 +2001,7 @@ retry:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2049,7 +2049,7 @@ timeout:
               read_timeout: 30
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2063,7 +2063,7 @@ timeout:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2108,7 +2108,7 @@ timeout:
               open_timeout: 30
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2122,7 +2122,7 @@ timeout:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2167,7 +2167,7 @@ timeout:
               write_timeout: 30
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2181,7 +2181,7 @@ timeout:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2226,7 +2226,7 @@ timeout:
               ssl_timeout: 30
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2240,7 +2240,7 @@ timeout:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2285,7 +2285,7 @@ timeout:
               keep_alive_timeout: 30
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2299,7 +2299,7 @@ timeout:
             )
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             response.headers                #=> Hash
             response.headers[:content_type] #=> text/plain
             response.body                   #=> Hello world! 
@@ -2339,7 +2339,7 @@ proxy:
             RestMan.proxy = "http://proxy.example.com"
             RestMan.get "http://example.com/test"
 
-            response.status                 #=>200
+            response.code                 #=>200
             ```
         - tab: advance
           body: |
@@ -2350,7 +2350,7 @@ proxy:
               url: "http://example.com/test"
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             ```
         - tab: resource
           body: |
@@ -2359,7 +2359,7 @@ proxy:
             resource = RestMan::Resource.new("http://example.com/test")
             resposne = resource.get
 
-            response.status                 #=>200
+            response.code                 #=>200
             ```
         - tab: cli
           body: |
@@ -2403,7 +2403,7 @@ proxy:
               proxy: "http://proxy.example.com"
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             ```
         - tab: resource
           body: |
@@ -2450,7 +2450,7 @@ proxy:
               proxy: nil
             )
 
-            response.status                 #=>200
+            response.code                 #=>200
             ```
         - tab: resource
           body: |
@@ -2462,4 +2462,392 @@ proxy:
           body: |
             ```
             RestMan CLI hasn't support proxy customization.
+            ```
+
+redirection:
+  description: |
+    By default, rest-man will follow:
+      - HTTP 301, 302, 307 redirection requests for GET and HEAD only
+      - HTTP 303 redirection requests
+
+    `RestMan::Response` exposes a `#history` method that returns
+    a list of each response received in a redirection chain.
+  examples:
+    - title: Get responses in the redirection chain
+      pre_desc: |
+        All calls to RestMan, including Resources, will use the proxy specified by `RestMan.proxy`.
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/test"
+        http_body: The document has moved to http://www.example.com/test
+      redirection_request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: www.example.com"
+      redirection_response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan.get "http://example.com/test"
+
+            response.code                 #=> 200
+            response.request.url          #=> http://www.example.com/test
+
+            response.history              #=> Arry of RestMan::Response
+            response.history[0].code      #=> 301
+            response.history[0].url       #=> http://example.com/test
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            response.code                 #=> 200
+            response.request.url          #=> http://www.example.com/test
+
+            response.history              #=> Arry of RestMan::Response
+            response.history[0].code      #=> 301
+            response.history[0].url       #=> http://example.com/test
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            response.code                 #=> 200
+            response.request.url          #=> http://www.example.com/test
+
+            response.history              #=> Arry of RestMan::Response
+            response.history[0].code      #=> 301
+            response.history[0].url       #=> http://example.com/test
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman get http://example.com/test
+
+            Hello world!
+
+            RestMan CLI hasn't support a way to check the history
+            ```
+    - title: Disable auto redirection
+      pre_desc: |
+        To disable automatic redirection, set `:max_redirects => 0`.
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/test"
+        http_body: The document has moved to http://www.example.com/test
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support disable auto redirection.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            begin
+              RestMan::Request.execute(
+                method: :get,
+                url: "http://example.com/test",
+                max_redirects: 0
+              )
+            rescue => error
+              error                             #=> 301 Moved Permanently
+              error.response.code               #=> 301
+              error.response.headers[:location] #=> http://www.example.com/test
+              error.response.body               #=> The document has moved to http://www.example.com/test
+            end 
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support disable auto redirection.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support disable auto redirection.
+            ```
+    - title: Manually follow redirection
+      pre_desc: |
+        To manually follow redirection, you can call `Response#follow_redirection`. Or
+        you could of course inspect the result and choose custom behavior.
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/test"
+        http_body: The document has moved to http://www.example.com/test
+      redirection_request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: www.example.com"
+      redirection_response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support disable auto redirection and manual follow redirection.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            begin
+              RestMan::Request.execute(
+                method: :get,
+                url: "http://example.com/test",
+                max_redirects: 0
+              )
+            rescue => error
+              error.response.code               #=> 301
+              error.response.headers[:location] #=> http://www.example.com/test
+
+              response = error.response.follow_redirection
+              response.code                     #=> 200
+              response.request.url              #=> http://www.example.com/test
+            end 
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support disable auto redirection and manual follow redirection.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support manual follow redirectino.
+            ```
+    - title: Follow redirection for POST request
+      pre_desc: |
+        Follow redirections for all request types and not only for get and head
+
+        RFC : If the 301, 302 or 307 status code is received in response to a request other than GET or HEAD,
+              the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
+              since this might change the conditions under which the request was issued.
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/resource"
+        http_body: The document has moved to http://www.example.com/resource
+      redirection_request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: www.example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      redirection_response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            # block style
+            RestMan.post("http://example.com/resource", "Hello, world!", { content_type: "text/plain" }) do |response, request, result|
+              case response.code
+              when 301, 302, 307
+                response.follow_redirection
+              else
+                response.return!
+              end
+            end
+
+            # exception style by explicit classes
+            begin
+              RestMan.post("http://example.com/resource", "Hello, world!", { content_type: "text/plain" }) 
+            rescue RestMan::MovedPermanently, RestMan::Found, RestMan::TemporaryRedirect => error
+              error.response.follow_redirection
+            end
+
+            # exception style by response code
+            begin
+              RestMan.post("http://example.com/resource", "Hello, world!", { content_type: "text/plain" }) 
+            rescue RestMan::ExceptionWithResponse => error
+              case error.http_code
+              when 301, 302, 307
+                error.response.follow_redirection
+              else
+                raise
+              end
+            end
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            # block style
+            RestMan::Request.execute(
+              method: :post,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: { content_type: "text/plain" }
+            ) do |response, request, result|
+              case response.code
+              when 301, 302, 307
+                response.follow_redirection
+              else
+                response.return!
+              end
+            end
+
+            # exception style by explicit classes
+            begin
+              RestMan::Request.execute(
+                method: :post,
+                url: "http://example.com/resource",
+                payload: "Hello, world!",
+                headers: { content_type: "text/plain" }
+              )
+            rescue RestMan::MovedPermanently, RestMan::Found, RestMan::TemporaryRedirect => error
+              error.response.follow_redirection
+            end
+
+            # exception style by response code
+            begin
+              RestMan::Request.execute(
+                method: :post,
+                url: "http://example.com/resource",
+                payload: "Hello, world!",
+                headers: { content_type: "text/plain" }
+              )
+            rescue RestMan::ExceptionWithResponse => error
+              case error.http_code
+              when 301, 302, 307
+                error.response.follow_redirection
+              else
+                raise
+              end
+            end
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+
+            # block style
+            resource.post("Hello, world!", {content_type: "text/plain"}) do |response, request, result|
+              case response.code
+              when 301, 302, 307
+                response.follow_redirection
+              else
+                response.return!
+              end
+            end
+
+            # exception style by explicit classes
+            begin
+              resource.post("Hello, world!", {content_type: "text/plain"})
+            rescue RestMan::MovedPermanently, RestMan::Found, RestMan::TemporaryRedirect => error
+              error.response.follow_redirection
+            end
+
+            # exception style by response code
+            begin
+              resource.post("Hello, world!", {content_type: "text/plain"})
+            rescue RestMan::ExceptionWithResponse => error
+              case error.http_code
+              when 301, 302, 307
+                error.response.follow_redirection
+              else
+                raise
+              end
+            end
+            ```
+        - tab: cli
+          body: |
+            ```
+            RsetMan CLI doesn't offer a way to follow redirection. You have to doing it manually.
             ```

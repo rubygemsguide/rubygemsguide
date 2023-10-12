@@ -6,22 +6,21 @@
   border-top: 1px solid $gray-300;
   padding: 20px 0;
   font-family: $font-mono-reverse;
+  row-gap: 12px;
 }
 @media (min-width: $xs) {
   .example-section {
     grid-template-columns: clamp(260px, 40%, 300px) auto clamp(260px, 40%, 300px);
-    padding: 30px 0;
     max-width: $md;
     margin: auto;
   }
 }
 #example-1 {
   border-top-color: transparent;
-  padding-top: 10px;
+  padding-top: 0;
 }
 
 .example-title {
-  order: 1;
   grid-column: 1;
   font-family: $font-mono;
 }
@@ -32,10 +31,9 @@
 }
 
 .example-pre-desc {
-  order: 2;
   grid-column: 1;
-  margin-top: -10px;
-  margin-bottom: 10px;
+  margin-top: -20px;
+  font-family: $font-sans;
 }
 @media (min-width: $xs) {
   .example-pre-desc {
@@ -48,8 +46,8 @@
 # Request
 #####
 */
-.request-box {
-  order: 3;
+.request-box,
+.redirection-request-box {
   grid-column: 1;
   border: 2px solid var(--box-border-color);
   display: grid;
@@ -62,7 +60,8 @@
   font-size: $text-sm;
 }
 @media (min-width: $xs) {
-  .request-box {
+  .request-box,
+  .redirection-request-box {
     min-width: 260px;
     max-width: 300px;
   }
@@ -125,12 +124,13 @@
 #####
 */
 
-.request-arrow {
+.request-arrow,
+.redirection-request-arrow {
   display: none;
 }
 @media (min-width: $xs) {
-  .request-arrow {
-    order: 4;
+  .request-arrow,
+  .redirection-request-arrow {
     grid-column: 2;
     display: flex;
     align-items: center;
@@ -141,7 +141,8 @@
     opacity: 0.75;
   }
 }
-.request-arrow > svg {
+.request-arrow > svg,
+.redirection-request-arrow > svg {
   width: 80%;
 }
 
@@ -198,8 +199,8 @@
 #####
 */
 
-.response-box {
-  order: 5;
+.response-box,
+.redirection-response-box {
   grid-column: 1;
   margin-top: 20px;
   border: 2px solid var(--box-border-color);
@@ -213,8 +214,8 @@
   font-size: $text-sm;
 }
 @media (min-width: $xs) {
-  .response-box {
-    order: 5;
+  .response-box,
+  .redirection-response-box {
     grid-column: 3;
     min-width: 260px;
     max-width: 300px;
@@ -265,7 +266,6 @@
 .terminal {
   font-family: $font-mono;
 
-  order: 6;
   grid-column: 1;
 
   margin-bottom: 10px;
@@ -353,4 +353,39 @@
 }
 .terminal-body.active {
   display: block;
+}
+
+
+/*
+#####
+# GRID Order
+#####
+*/
+
+.example-title {
+  order: 1;
+}
+.example-pre-desc {
+  order: 2;
+}
+.request-box {
+  order: 3;
+}
+.request-arrow {
+  order: 4;
+}
+.response-box {
+  order: 5;
+}
+.redirection-request-box {
+  order: 6;
+}
+.redirection-request-arrow {
+  order: 7;
+}
+.redirection-response-box {
+  order: 8;
+}
+.terminal {
+  order: 9;
 }
