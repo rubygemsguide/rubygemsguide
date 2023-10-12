@@ -2914,3 +2914,40 @@ exception:
               return response
             end
             ```
+
+logging:
+  description: |
+    To enable logging globally you can:
+
+    Set RestMan.log with a Ruby Logger
+
+    ```ruby
+    RestMan.log = STDOUT
+    ```
+
+    Or set an environment variable to avoid modifying the code (in this case you can use a file name, "stdout" or "stderr"):
+
+    ```bash
+    $ RESTCLIENT_LOG=stdout path/to/my/program
+    ```
+
+    You can also set individual loggers when instantiating a Resource or making an
+    individual request:
+
+    ```ruby
+    resource = RestMan::Resource.new 'http://example.com/resource', log: Logger.new(STDOUT)
+
+    RestMan::Request.execute(method: :get, url: 'http://example.com/foo', log: Logger.new(STDERR))
+    ```
+
+    All options produce logs like this:
+
+    ```ruby
+    RestMan.get "http://some/resource"
+    # => 200 OK | text/html 250 bytes
+    RestMan.put "http://some/resource", "payload"
+    # => 401 Unauthorized | application/xml 340 bytes
+    ```
+
+    Note that these logs are valid Ruby, so you can paste them into the `restman`
+    shell or a script to replay your sequence of rest calls.
