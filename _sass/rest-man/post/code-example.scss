@@ -2,7 +2,7 @@
   --box-border-color: #{$zinc-700};
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 100%;
   border-top: 1px solid $gray-300;
   padding: 20px 0;
   font-family: $font-mono-reverse;
@@ -10,7 +10,7 @@
 }
 @media (min-width: $xs) {
   .example-section {
-    grid-template-columns: clamp(260px, 40%, 300px) auto clamp(260px, 40%, 300px);
+    grid-template-columns: clamp(260px, 40%, 300px) 1fr clamp(260px, 40%, 300px);
     max-width: $md;
     margin: auto;
   }
@@ -36,11 +36,17 @@
   margin-top: -16px;
   margin-bottom: -16px;
   font-family: $font-sans;
+  line-height: 1.4;
 }
 @media (min-width: $xs) {
   .example-pre-desc {
     grid-column: 1/span 3;
   }
+}
+.example-pre-desc pre.highlight {
+  padding: 8px 16px;
+  border-radius: 10px;
+  overflow-x: scroll;
 }
 
 /*

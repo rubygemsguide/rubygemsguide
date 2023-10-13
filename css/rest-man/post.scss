@@ -28,14 +28,15 @@ body {
 
 main {
   width: 100%;
-  padding: 40px 20px;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 40px 0;
   margin-top: 60px;
   display: flex;
   justify-content: center;
 }
-@media (min-width: $xs) {
+@media (min-width: $md) {
   main {
-    padding: 40px;
     margin-top: 0;
     margin-left: 240px;
   }
@@ -50,12 +51,27 @@ h2.title {
 }
 
 .post {
-  max-width: $md;
+  max-width: 90%;
+}
+@media (min-width: $sm) {
+  .post {
+    max-width: $xs;
+  }
+}
+@media (min-width: $md) {
+  .post {
+    max-width: $sm;
+  }
 }
 
 .post-desc {
   padding: 0;
   line-height: 1.5;
+}
+.post-desc pre.highlight {
+  padding: 8px 16px;
+  border-radius: 10px;
+  overflow-x: scroll;
 }
 
 code.language-plaintext {

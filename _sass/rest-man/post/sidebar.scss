@@ -42,7 +42,7 @@
   .guides {
     display: none;
   }
-  @media (min-width: $xs) {
+  @media (min-width: $md) {
     .guides {
       display: flex;
       flex: 1;
@@ -107,7 +107,7 @@
   .footer {
     display: none;
   }
-  @media (min-width: $xs) {
+  @media (min-width: $md) {
     .footer {
       display: flex;
       align-items: center;
@@ -150,7 +150,7 @@
     }
   }
 }
-@media (min-width: $xs) {
+@media (min-width: $md) {
   .sidebar {
     width: 240px;
     height: 100%;

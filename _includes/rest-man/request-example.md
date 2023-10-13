@@ -99,28 +99,30 @@
     </div>
   {% endif %}
 
-  <div class="terminal" data-controller="terminal">
-    <div class="terminal-bar">
-      <div class="close-icon"></div>
-      <div class="minimize-icon"></div>
-      <div class="fullscreen-icon"></div>
+  {% if codes %}
+    <div class="terminal" data-controller="terminal">
+      <div class="terminal-bar">
+        <div class="close-icon"></div>
+        <div class="minimize-icon"></div>
+        <div class="fullscreen-icon"></div>
+        {% for code in codes %}
+          {% if code.tab %}
+            <div
+              class="terminal-tab {% if forloop.index == 1 %}active{% endif %}"
+              data-index="{{forloop.index}}"
+              data-terminal-target="tab"
+              data-action="click->terminal#switchTab"
+            >
+              {{code.tab}}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
       {% for code in codes %}
-        {% if code.tab %}
-          <div
-            class="terminal-tab {% if forloop.index == 1 %}active{% endif %}"
-            data-index="{{forloop.index}}"
-            data-terminal-target="tab"
-            data-action="click->terminal#switchTab"
-          >
-            {{code.tab}}
-          </div>
-        {% endif %}
+        <div class="terminal-body {% if forloop.index == 1 %}active{% endif %}" data-index="{{ forloop.index }}" data-terminal-target="body">
+          {{code.body | markdownify}}
+        </div>
       {% endfor %}
     </div>
-    {% for code in codes %}
-      <div class="terminal-body {% if forloop.index == 1 %}active{% endif %}" data-index="{{ forloop.index }}" data-terminal-target="body">
-        {{code.body | markdownify}}
-      </div>
-    {% endfor %}
-  </div>
+  {% endif %}
 </div>

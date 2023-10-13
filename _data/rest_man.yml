@@ -2951,3 +2951,146 @@ logging:
 
     Note that these logs are valid Ruby, so you can paste them into the `restman`
     shell or a script to replay your sequence of rest calls.
+
+streaming:
+  examples:
+    - title: Streaming request payload 
+      pre_desc: |
+        RestMan will try to stream any file-like payload rather than reading it into
+        memory. This happens through `RestMan::Payload::Streamed`, which is
+        automatically called internally by `RestMan::Payload.generate` on anything
+        with a `read` method.
+      request:
+        http_method: PUT
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: image/jpeg"
+          - "Content-Length: 143685"
+        http_body: [JPEG binary data goes here]
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Image uploaded successfully
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/image',
+              File.open("./files/profile.jpg", 'r'),
+              {content_type: :jpg}
+            )
+
+            response.code                   #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/api/image',
+              payload: File.open("./files/profile.jpg", 'r'),
+              headers: { content_type: :jpg }
+            )
+
+            response.code                   #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/api/image")
+            response = resource.put(
+              File.open("./files/profile.jpg", 'r'),
+              {content_type: :jpg}
+            )
+
+            response.code                   #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support file upload with custom headers
+            ```
+    - title: Streaming responses
+      pre_desc: |
+        #### Use `raw_response` with Tempfile
+
+        If you pass `raw_response: true` to `RestMan::Request.execute`, it will save
+        the response body to a temporary file (using `Tempfile`) and return a
+        `RestMan::RawResponse` object rather than a `RestMan::Response`.
+
+        Note that the tempfile created by `Tempfile.new` will be in `Dir.tmpdir`
+        (usually `/tmp/`), which you can override to store temporary files in a
+        different location. This file will be unlinked when it is dereferenced.
+
+        If logging is enabled, this will also print download progress.
+        Customize the interval with `:stream_log_percent` (defaults to
+        10 for printing a message every 10% complete).
+
+        For example:
+
+        ```ruby
+        raw = RestMan::Request.execute(
+          method: :get,
+          url: 'http://releases.ubuntu.com/16.04.2/ubuntu-16.04.2-desktop-amd64.iso',
+          raw_response: true
+        )
+        #=> <RestMan::RawResponse
+        # @code=200,@file=#<Tempfile:/tmp/rest-man.20170522-5346-1pptjm1>,
+        # @request=<RestMan::Request @method="get",
+        # @url="http://releases.ubuntu.com/16.04.2/ubuntu-16.04.2-desktop-amd64.iso">>
+
+        raw.file.size     #=> 1554186240
+        raw.file.path     #=> "/tmp/rest-man.20170522-5346-1pptjm1"
+        raw.file.path     #=> "/tmp/rest-man.20170522-5346-1pptjm1"
+
+        require 'digest/sha1'
+        Digest::SHA1.file(raw.file.path).hexdigest
+        #=> "4375b73e3a1aa305a36320ffd7484682922262b3"
+        ```
+
+        #### Use `block_response` to receive raw Net::HTTPResponse
+
+        If you want to stream the data from the response to a file as it comes, rather
+        than entirely in memory, you can also pass `RestMan::Request.execute` a
+        parameter `:block_response` to which you pass a block/proc. This block receives
+        the raw unmodified Net::HTTPResponse object from Net::HTTP, which you can use
+        to stream directly to a file as each chunk is received.
+
+        Note that this bypasses all the usual HTTP status code handling, so you will
+        want to do you own checking for HTTP 20x response codes, redirects, etc.
+
+        The following is an example:
+
+        ````ruby
+        File.open('/some/output/file', 'w') {|f|
+          block = proc { |response|
+            response.read_body do |chunk|
+              f.write chunk
+            end
+          }
+          RestMan::Request.execute(
+            method: :get,
+            url: 'http://example.com/some/really/big/file.img',
+            block_response: block
+          )
+        }
+        ````
+
