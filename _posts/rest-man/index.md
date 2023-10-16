@@ -9,7 +9,7 @@ permalink: /rest-man
 <div class="main-section">
   <div class="request-box-wrapper">
     <div class="request-box">
-      <a class="request">Request</a>
+      <div class="request">Request</div>
       <div class="request-actions">
         <a href="/rest-man/request/get" class="request-action">GET</a>
         <a href="/rest-man/request/post" class="request-action">POST</a>
@@ -33,9 +33,7 @@ permalink: /rest-man
 
   <div class="response-box-wrapper">
     <div class="response-box">
-      <a class="response">
-        Response
-      </a>
+      <div class="response">Response</div>
       <div class="response-statuses">
         <a href="/rest-man/response/1xx" class="response-status">1xx</a>
         <a href="/rest-man/response/2xx" class="response-status">2xx</a>
