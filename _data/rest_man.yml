@@ -3094,3 +3094,36 @@ streaming:
         }
         ````
 
+headers:
+  examples:
+    - pre_desc: |
+        Request headers can be set by passing a ruby hash containing keys and values
+        representing header names and values
+        ```ruby
+        # GET request with modified headers
+        RestMan.get(
+          'http://example.com/resource',
+          {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+
+        # POST request with modified headers
+        RestMan.post(
+          'http://example.com/resource',
+          {
+            foo: 'bar',
+            baz: 'qux'
+          }, {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+
+        # DELETE request with modified headers
+        RestMan.delete(
+          'http://example.com/resource',
+          {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```

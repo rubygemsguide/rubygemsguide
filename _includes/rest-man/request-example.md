@@ -8,7 +8,9 @@
 {% assign codes = include.example.codes %}
 
 <div class="example-section" id="example-{{ index }}">
-  <h3 class="example-title">{{title}}</h3>
+  {% if title %}
+    <h3 class="example-title">{{title}}</h3>
+  {% endif %}
   {% if pre_desc %}
     <div class="example-pre-desc">{{pre_desc | markdownify}}</div>
   {% endif %}
