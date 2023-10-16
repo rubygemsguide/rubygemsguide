@@ -3127,3 +3127,129 @@ headers:
           }
         )
         ```
+
+cookies:
+  description: |
+    Request and Response objects know about HTTP cookies, and will automatically
+    extract and set headers for them as needed.
+  examples:
+    - title: Cookies in response
+      request:
+        http_method: GET
+        request_target: /
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Set-Cookie: app_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV; path=/; secure; HttpOnly"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/"
+
+            response.cookies["app_session"] #=> BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/"
+            )
+
+            response.cookies["app_session"] #=> BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/")
+            resposne = resource.get
+
+            response.cookies["app_session"] #=> BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support check cookies currently.
+            ```
+    - title: Request with cookies
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+          - "Cookie: app_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Set-Cookie: app_session=c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post(
+              "http://example.com/resource",
+              "Hello, world!",
+              {
+                content_type: "text/plain",
+                cookie: "BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+              }
+            )
+
+            response.cookies["app_session"] #=> c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: {
+                content_type: "text/plain",
+                cookie: "BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+              }
+            )
+
+            response.cookies["app_session"] #=> c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            resposne = resource.post(
+              "Hello, world!",
+              {
+                content_type: "text/plain",
+                cookie: "BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+              }
+            )
+
+            response.cookies["app_session"] #=> c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support set custom cookie currently.
+            ```
