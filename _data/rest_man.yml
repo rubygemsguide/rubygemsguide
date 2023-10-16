@@ -167,7 +167,7 @@ examples:
         - tab: simple
           body: |
             ```ruby
-            response = RestMan.get "http://example.com/data", headers: {accept: "application/json", "If-None-Match": "e22d62c1"}
+            response = RestMan.get "http://example.com/data", {accept: "application/json", "If-None-Match": "e22d62c1"}
 
             response.code                 #=>200
             response.headers                #=> Hash
@@ -3096,9 +3096,12 @@ streaming:
 
 headers:
   examples:
-    - pre_desc: |
+    - title: Request headers
+      pre_desc: |
         Request headers can be set by passing a ruby hash containing keys and values
         representing header names and values
+
+        ##### GET
         ```ruby
         # GET request with modified headers
         RestMan.get(
@@ -3107,7 +3110,10 @@ headers:
             Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
           }
         )
+        ```
 
+        ##### POST
+        ```ruby
         # POST request with modified headers
         RestMan.post(
           'http://example.com/resource',
@@ -3118,7 +3124,38 @@ headers:
             Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
           }
         )
+        ```
 
+        ##### PUT
+        ```ruby
+        # PUT request with modified headers
+        RestMan.put(
+          'http://example.com/resource',
+          {
+            foo: 'bar',
+            baz: 'qux'
+          }, {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+
+        ##### PATCH
+        ```ruby
+        # PUT request with modified headers
+        RestMan.patch(
+          'http://example.com/resource',
+          {
+            foo: 'bar',
+            baz: 'qux'
+          }, {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+
+        ##### DELETE
+        ```ruby
         # DELETE request with modified headers
         RestMan.delete(
           'http://example.com/resource',
@@ -3127,6 +3164,184 @@ headers:
           }
         )
         ```
+
+        ##### HEAD
+        ```ruby
+        # HEAD request with modified headers
+        RestMan.head(
+          'http://example.com/resource',
+          {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+    - title: Request headers customization with underscore symbol
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: RestMan"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            RestMan.get(
+              "http://example.com/test",
+              { "User-Agent" => "RestMan" }
+            )
+
+            # Underscore symbol
+            RestMan.get(
+              "http://example.com/test",
+              { user_agent: "RestMan" }
+            )
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              headers: { "User-Agent" => "RestMan" }
+            )
+
+            # Underscore symbol
+            RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              headers: { user_agent: "RestMan" }
+            )
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              headers: { "User-Agent" => "RestMan" }
+            )
+            resposne = resource.get
+
+            # Underscore symbol
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              headers: { user_agent: "RestMan" }
+            )
+            resposne = resource.get
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support custom headers currently.
+            ```
+    - title: Response headers (processed)
+      pre_desc: RestMan will parse response header keys to underscore symbol
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/test"
+
+            resonse.headers[:content_type] #=> "text/plain"
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            resonse.headers[:content_type] #=> "text/plain"
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            resonse.headers[:content_type] #=> "text/plain"
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support check headers currently.
+            ```
+    - title: Response headers (raw)
+      pre_desc: RestMan offer a way to access raw headers if you don't like above underscore symbol style
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/test"
+
+            resonse.headers["content-type"] #=> "text/plain"
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            resonse.headers["content-type"] #=> "text/plain"
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            resonse.headers["content-type"] #=> "text/plain"
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support check headers currently.
+            ```
 
 cookies:
   description: |
