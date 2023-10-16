@@ -23,7 +23,7 @@ permalink: /rest-man
         <a href="/rest-man/basic/headers" class="request-headers">Headers</a>
         <a href="/rest-man/basic/cookies" class="request-cookies">Cookies</a>
       </div>
-      <a href="/rest-man/request/body" class="request-body">Body</a>
+      <a href="/rest-man/basic/body" class="request-body">Body</a>
     </div>
   </div>
 
@@ -47,7 +47,7 @@ permalink: /rest-man
         <a href="/rest-man/basic/headers" class="response-headers">Headers</a>
         <a href="/rest-man/basic/cookies" class="response-cookies">Cookies</a>
       </div>
-      <a href="/rest-man/response/body" class="response-body">Body</a>
+      <a href="/rest-man/basic/body" class="response-body">Body</a>
     </div>
   </div>
 </div>

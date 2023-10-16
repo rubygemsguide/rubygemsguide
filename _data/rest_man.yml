@@ -3468,3 +3468,19 @@ cookies:
             ```
             RestMan CLI hasn't support set custom cookie currently.
             ```
+
+body:
+  description: |
+    RestMan offers an intuitive way to deal with the body of HTTP requests and responses.
+
+    Request with body:
+    - [Submit plan text data (text/plain)](/rest-man/request/post)
+    - [Submit form data (application/x-www-form-urlencoded)](/rest-man/request/post)
+    - [Submit json (application/json)](/rest-man/request/post)
+    - [Submit file (image/jpeg ...)](/rest-man/request/post)
+    - [Submit multipart form data (multipart/form-data)](/rest-man/request/post)
+
+    Handle response body:
+    - Get string or binary response with `response.body`
+    - Handle json resposne with `JSON.parse(response.body)`
+    - [Handle file response with `raw_response`](/rest-man/advance/streaming)
