@@ -1,5 +1,6 @@
 {% assign index = include.index %}
 {% assign title = include.example.title %}
+{% assign example_id = include.example.id %}
 {% assign pre_desc = include.example.pre_desc %}
 {% assign request = include.example.request %}
 {% assign response = include.example.response %}
@@ -7,7 +8,7 @@
 {% assign redirection_response = include.example.redirection_response %}
 {% assign codes = include.example.codes %}
 
-<div class="example-section" id="example-{{ index }}">
+<div class="example-section" id="{{example_id}}">
   {% if title %}
     <h3 class="example-title">{{title}}</h3>
   {% endif %}

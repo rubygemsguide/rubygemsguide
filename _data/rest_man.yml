@@ -3097,6 +3097,7 @@ streaming:
 headers:
   examples:
     - title: Request headers
+      id: request-headers
       pre_desc: |
         Request headers can be set by passing a ruby hash containing keys and values
         representing header names and values
@@ -3245,6 +3246,7 @@ headers:
             RestMan doesn't support custom headers currently.
             ```
     - title: Response headers (processed)
+      id: response-headers
       pre_desc: RestMan will parse response header keys to underscore symbol
       request:
         http_method: GET
@@ -3349,6 +3351,7 @@ cookies:
     extract and set headers for them as needed.
   examples:
     - title: Cookies in response
+      id: response-cookies
       request:
         http_method: GET
         request_target: /
@@ -3398,6 +3401,7 @@ cookies:
             RestMan doesn't support check cookies currently.
             ```
     - title: Request with cookies
+      id: request-cookies
       request:
         http_method: POST
         request_target: /resource

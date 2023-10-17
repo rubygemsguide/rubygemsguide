@@ -21,7 +21,7 @@ permalink: /rest-man
       </div>
       <div class="relative">
         <a href="/rest-man/headers" class="request-headers">Headers</a>
-        <a href="/rest-man/cookies" class="request-cookies">Cookies</a>
+        <a href="/rest-man/cookies#request-cookies" class="request-cookies">Cookies</a>
       </div>
       <a href="/rest-man/body" class="request-body">Body</a>
     </div>
@@ -42,8 +42,8 @@ permalink: /rest-man
         <a href="/rest-man/http-status#5xx" class="response-status">5xx</a>
       </div>
       <div class="relative">
-        <a href="/rest-man/headers" class="response-headers">Headers</a>
-        <a href="/rest-man/cookies" class="response-cookies">Cookies</a>
+        <a href="/rest-man/headers#response-headers" class="response-headers">Headers</a>
+        <a href="/rest-man/cookies#response-cookies" class="response-cookies">Cookies</a>
       </div>
       <a href="/rest-man/body" class="response-body">Body</a>
     </div>
