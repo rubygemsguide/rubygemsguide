@@ -3,7 +3,7 @@ layout: rest-man/post
 title:  RubyGems.Guide | rest-man | Proxy
 author: Hopper Gee
 categories: rest-man
-permalink: /rest-man/advance/proxy
+permalink: /rest-man/proxy
 ---
 
 <div class="post">

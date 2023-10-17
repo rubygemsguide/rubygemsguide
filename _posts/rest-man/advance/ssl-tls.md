@@ -3,7 +3,7 @@ layout: rest-man/post
 title:  RubyGems.Guide | rest-man | SSL/TLS
 author: Hopper Gee
 categories: rest-man
-permalink: /rest-man/advance/ssl-tls
+permalink: /rest-man/ssl-tls
 ---
 
 <div class="post">

@@ -3,7 +3,7 @@ layout: rest-man/post
 title:  RubyGems.Guide | rest-man | Cookies
 author: Hopper Gee
 categories: rest-man
-permalink: /rest-man/basic/cookies
+permalink: /rest-man/cookies
 ---
 
 <div class="post">

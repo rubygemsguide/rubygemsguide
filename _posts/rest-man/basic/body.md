@@ -3,7 +3,7 @@ layout: rest-man/post
 title:  RubyGems.Guide | rest-man | Body
 author: Hopper Gee
 categories: rest-man
-permalink: /rest-man/basic/body
+permalink: /rest-man/body
 ---
 
 <div class="post">

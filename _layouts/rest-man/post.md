@@ -40,19 +40,19 @@ permalink: /rest-man/:title
       <a href="/rest-man/request/options" class="guide">OPTIONS</a>
       <a href="/rest-man/request/head" class="guide">HEAD</a>
       <div class="basic">Basic</div>
-      <a href="/rest-man/basic/headers" class="guide">Headers</a>
-      <a href="/rest-man/basic/cookies" class="guide">Cookies</a>
-      <a href="/rest-man/basic/body" class="guide">Body</a>
-      <a href="/rest-man/basic/http-status" class="guide">Status</a>
+      <a href="/rest-man/headers" class="guide">Headers</a>
+      <a href="/rest-man/cookies" class="guide">Cookies</a>
+      <a href="/rest-man/body" class="guide">Body</a>
+      <a href="/rest-man/http-status" class="guide">Status</a>
       <div class="advance">Advance</div>
-      <a href="/rest-man/advance/ssl-tls" class="guide">SSL/TLS</a>
-      <a href="/rest-man/advance/retry" class="guide">Retry</a>
-      <a href="/rest-man/advance/timeout" class="guide">Timeout</a>
-      <a href="/rest-man/advance/proxy" class="guide">Proxy</a>
-      <a href="/rest-man/advance/redirection" class="guide">Redirection</a>
-      <a href="/rest-man/advance/exception" class="guide">Exception</a>
-      <a href="/rest-man/advance/logging" class="guide">Logging</a>
-      <a href="/rest-man/advance/streaming" class="guide">Streaming</a>
+      <a href="/rest-man/ssl-tls" class="guide">SSL/TLS</a>
+      <a href="/rest-man/retry" class="guide">Retry</a>
+      <a href="/rest-man/timeout" class="guide">Timeout</a>
+      <a href="/rest-man/proxy" class="guide">Proxy</a>
+      <a href="/rest-man/redirection" class="guide">Redirection</a>
+      <a href="/rest-man/exception" class="guide">Exception</a>
+      <a href="/rest-man/logging" class="guide">Logging</a>
+      <a href="/rest-man/streaming" class="guide">Streaming</a>
     </div>
     <div class="footer">
       <a href="https://twitter.com/hoppergeegee" target="_blank" class="twitter">

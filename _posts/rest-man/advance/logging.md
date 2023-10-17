@@ -3,7 +3,7 @@ layout: rest-man/post
 title:  RubyGems.Guide | rest-man | Logging
 author: Hopper Gee
 categories: rest-man
-permalink: /rest-man/advance/logging
+permalink: /rest-man/logging
 ---
 
 <div class="post">

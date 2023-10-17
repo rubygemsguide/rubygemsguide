@@ -20,10 +20,10 @@ permalink: /rest-man
         <a href="/rest-man/request/head" class="request-action">HEAD</a>
       </div>
       <div class="relative">
-        <a href="/rest-man/basic/headers" class="request-headers">Headers</a>
-        <a href="/rest-man/basic/cookies" class="request-cookies">Cookies</a>
+        <a href="/rest-man/headers" class="request-headers">Headers</a>
+        <a href="/rest-man/cookies" class="request-cookies">Cookies</a>
       </div>
-      <a href="/rest-man/basic/body" class="request-body">Body</a>
+      <a href="/rest-man/body" class="request-body">Body</a>
     </div>
   </div>
 
@@ -35,30 +35,30 @@ permalink: /rest-man
     <div class="response-box">
       <div class="response">Response</div>
       <div class="response-statuses">
-        <a href="/rest-man/basic/http-status#1xx" class="response-status">1xx</a>
-        <a href="/rest-man/basic/http-status#2xx" class="response-status">2xx</a>
-        <a href="/rest-man/basic/http-status#3xx" class="response-status">3xx</a>
-        <a href="/rest-man/basic/http-status#4xx" class="response-status">4xx</a>
-        <a href="/rest-man/basic/http-status#5xx" class="response-status">5xx</a>
+        <a href="/rest-man/http-status#1xx" class="response-status">1xx</a>
+        <a href="/rest-man/http-status#2xx" class="response-status">2xx</a>
+        <a href="/rest-man/http-status#3xx" class="response-status">3xx</a>
+        <a href="/rest-man/http-status#4xx" class="response-status">4xx</a>
+        <a href="/rest-man/http-status#5xx" class="response-status">5xx</a>
       </div>
       <div class="relative">
-        <a href="/rest-man/basic/headers" class="response-headers">Headers</a>
-        <a href="/rest-man/basic/cookies" class="response-cookies">Cookies</a>
+        <a href="/rest-man/headers" class="response-headers">Headers</a>
+        <a href="/rest-man/cookies" class="response-cookies">Cookies</a>
       </div>
-      <a href="/rest-man/basic/body" class="response-body">Body</a>
+      <a href="/rest-man/body" class="response-body">Body</a>
     </div>
   </div>
 </div>
 
 <div class="advance-section">
   <div class="advance-box">
-    <a href="/rest-man/advance/ssl-tls" >SSL/TLS</a>
-    <a href="/rest-man/advance/retry" >Retry</a>
-    <a href="/rest-man/advance/timeout" >Timeout</a>
-    <a href="/rest-man/advance/proxy" >Proxy</a>
-    <a href="/rest-man/advance/redirection" >Redirection</a>
-    <a href="/rest-man/advance/exception" >Exception</a>
-    <a href="/rest-man/advance/logging" >Logging</a>
-    <a href="/rest-man/advance/streaming" >Streaming</a>
+    <a href="/rest-man/ssl-tls" >SSL/TLS</a>
+    <a href="/rest-man/retry" >Retry</a>
+    <a href="/rest-man/timeout" >Timeout</a>
+    <a href="/rest-man/proxy" >Proxy</a>
+    <a href="/rest-man/redirection" >Redirection</a>
+    <a href="/rest-man/exception" >Exception</a>
+    <a href="/rest-man/logging" >Logging</a>
+    <a href="/rest-man/streaming" >Streaming</a>
   </div>
 </div>

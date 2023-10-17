@@ -3483,7 +3483,7 @@ body:
     Handle response body:
     - Get string or binary response with `response.body`
     - Handle json resposne with `JSON.parse(response.body)`
-    - [Handle file response with `raw_response`](/rest-man/advance/streaming)
+    - [Handle file response with `raw_response`](/rest-man/streaming)
 
 status_code:
   - title: 1XX Informational

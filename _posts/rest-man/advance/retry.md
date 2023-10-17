@@ -3,7 +3,7 @@ layout: rest-man/post
 title:  RubyGems.Guide | rest-man | Retry
 author: Hopper Gee
 categories: rest-man
-permalink: /rest-man/advance/retry
+permalink: /rest-man/retry
 ---
 
 <div class="post">

@@ -3,7 +3,7 @@ layout: rest-man/post
 title:  RubyGems.Guide | rest-man | Streaming
 author: Hopper Gee
 categories: rest-man
-permalink: /rest-man/advance/streaming
+permalink: /rest-man/streaming
 ---
 
 <div class="post">
