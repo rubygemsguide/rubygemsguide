@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="apple-mobile-web-app-title" content="RubyGems.Guide">
+<meta name="application-name" content="RubyGems.Guide">
+<meta name="msapplication-TileColor" content="#ad5153">
+<meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/css/styles.css?81a7d00c459574cfc21cded0942ccd2e">
+  <link rel="stylesheet" href="/css/syntax.css?81a7d00c459574cfc21cded0942ccd2e">
+
+  
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor | RubyGems.Guide</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor" />
+<meta name="author" content="Hopper Gee" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The source code could be found in the rubygemsguide/devise-two-factor-demos repository under rails-6.1 branch." />
+<meta property="og:description" content="The source code could be found in the rubygemsguide/devise-two-factor-demos repository under rails-6.1 branch." />
+<link rel="canonical" href="https://rubygems.guide/devise-two-factor/how-to-implement-otp-two-factor-authentication-in-rails-6-1-with-devise-two-factor" />
+<meta property="og:url" content="https://rubygems.guide/devise-two-factor/how-to-implement-otp-two-factor-authentication-in-rails-6-1-with-devise-two-factor" />
+<meta property="og:site_name" content="RubyGems.Guide" />
+<meta property="og:image" content="https://rubygems.guide/images/posts/devise-two-factor/devise-two-factor-with-rails-6.1.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-03T08:19:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://rubygems.guide/images/posts/devise-two-factor/devise-two-factor-with-rails-6.1.png" />
+<meta property="twitter:title" content="How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Hopper Gee"},"dateModified":"2022-01-06T02:41:00+00:00","datePublished":"2021-01-03T08:19:00+00:00","description":"The source code could be found in the rubygemsguide/devise-two-factor-demos repository under rails-6.1 branch.","headline":"How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor","image":"https://rubygems.guide/images/posts/devise-two-factor/devise-two-factor-with-rails-6.1.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://rubygems.guide/devise-two-factor/how-to-implement-otp-two-factor-authentication-in-rails-6-1-with-devise-two-factor"},"url":"https://rubygems.guide/devise-two-factor/how-to-implement-otp-two-factor-authentication-in-rails-6-1-with-devise-two-factor"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+
+  <header>
+    <h1>
+      <a href="/" class="brand">
+        <img src="/images/logo-white.png" alt="logo" class="logo">
+        RubyGems.Guide
+      </a>
+    </h1>
+  </header>
+
+  <main>
+    <h1>How to implement OTP two-factor authentication in Rails 6.1 with devise-two-factor</h1>
+
+<p class="post-date">
+  <span>
+    Published
+    <time datetime="2021-01-03" itemprop="datePublished">
+      03 Jan 2021
+    </time>
+  </span>
+  <span class="divider">|</span>
+  <span>
+    Last updated
+    <time datetime="2022-01-06" itemprop="dateModified">
+      06 Jan 2022
+    </time>
+  </span>
+  <span class="divider">|</span>
+</p>
+
+<blockquote>
+  <p>The source code could be found in the <a href="https://github.com/rubygemsguide/devise-two-factor-demos/tree/rails-6.1" target="_blank">rubygemsguide/devise-two-factor-demos</a> repository under <code class="language-plaintext highlighter-rouge">rails-6.1</code> branch.</p>
+</blockquote>
+
+<p>The 2FA feature contains below flows:</p>
+
+<ul>
+  <li>Setup flow
+    <ul>
+      <li>Enable OTP-based two-factor authentication</li>
+      <li>Disable 2FA</li>
+      <li>Regenerate recovery codes</li>
+    </ul>
+  </li>
+  <li>Login flow
+    <ul>
+      <li>Login with OTP</li>
+      <li>Login with recovery code</li>
+    </ul>
+  </li>
+</ul>
+
+<p><a href="https://github.com/tinfoil/devise-two-factor" target="_blank">devise-two-factor</a>’s default way to do two-factor authentidation is put the email, password and OTP field on same page which is not the most common way to do 2FA login.</p>
+
+<p>The common way is to allow users to sign in with or without 2FA. So we need to submit email and password first, then submit the 6 digit OTP code in second page.</p>
+
+<p>So we need to do some customization base on devise-two-factor gem:</p>
+
+<ul>
+  <li>Replace devise-two-factor <code class="language-plaintext highlighter-rouge">two_factor_authenticatable</code> strategy with <code class="language-plaintext highlighter-rouge">otp_attempt_authenticatable</code></li>
+  <li>Replace devise-two-factor <code class="language-plaintext highlighter-rouge">two_factor_backupable</code> strategy with <code class="language-plaintext highlighter-rouge">recovery_code_authenticatable</code></li>
+</ul>
+
+<p>Let’s do it!</p>
+
+<h3 id="step-1-start-a-rails-app-with-devise">Step 1: Start a Rails app with Devise</h3>
+
+<p>Build a new Rails 6 app without webpacker</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>two-factor-auth-rails-6
+<span class="nb">cd </span>two-factor-auth-rails-6
+<span class="nb">touch </span>Gemfile
+<span class="nb">echo</span> <span class="s2">"gem 'rails', '~&gt; 6.1'"</span> <span class="o">&gt;</span> Gemfile
+bundle <span class="nb">install
+</span>bundle <span class="nb">exec </span>rails new <span class="nb">.</span> <span class="nt">-f</span> <span class="nt">--skip-javascript</span>
+</code></pre></div></div>
+
+<p>Integrating <code class="language-plaintext highlighter-rouge">stimulus</code></p>
+
+<ol>
+  <li>
+    <p>Add <code class="language-plaintext highlighter-rouge">stimulus</code> and <code class="language-plaintext highlighter-rouge">importmap</code> to Gemfile and run <code class="language-plaintext highlighter-rouge">bundle install</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Gemfile</span>
+<span class="n">gem</span> <span class="s1">'importmap-rails'</span><span class="p">,</span> <span class="s1">'~&gt; 1.0'</span>
+<span class="n">gem</span> <span class="s1">'stimulus-rails'</span><span class="p">,</span> <span class="s1">'~&gt; 1.0'</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Setup <code class="language-plaintext highlighter-rouge">importmap</code> and <code class="language-plaintext highlighter-rouge">stimulus</code> by run</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/rails importmap:install
+bin/rails stimulus:install
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Integrating <code class="language-plaintext highlighter-rouge">devise</code></p>
+
+<ol>
+  <li>
+    <p>Add <code class="language-plaintext highlighter-rouge">devise</code> to Gemfile and run <code class="language-plaintext highlighter-rouge">bundle install</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gem</span> <span class="s1">'devise'</span><span class="p">,</span> <span class="s1">'~&gt; 4.8'</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Setup <code class="language-plaintext highlighter-rouge">devise</code> by run</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/rails generate devise:install
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add mailer url config to <code class="language-plaintext highlighter-rouge">config/environments/development.rb</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># config/environments/development.rb</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">action_mailer</span><span class="p">.</span><span class="nf">default_url_options</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">host: </span><span class="s1">'localhost'</span><span class="p">,</span> <span class="ss">port: </span><span class="mi">3000</span> <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Generate <code class="language-plaintext highlighter-rouge">User</code> model through <code class="language-plaintext highlighter-rouge">devise</code> command</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/rails generate devise User
+bin/rails db:migrate
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Update routes</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># config/routes.rb</span>
+<span class="n">devise_for</span> <span class="ss">:users</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a before action <code class="language-plaintext highlighter-rouge">authenticate_user!</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/application_controller.rb</span>
+<span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">before_action</span> <span class="ss">:authenticate_user!</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Generate the home page</p>
+
+<ol>
+  <li>Create a home controller: <code class="language-plaintext highlighter-rouge">rails g controller Home</code></li>
+  <li>
+    <p>Update routes</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># config/routes.rb</span>
+<span class="n">root</span> <span class="s2">"home#show"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the view <code class="language-plaintext highlighter-rouge">app/views/home/show.html.erb</code></p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Welcome to 2FA Demo!<span class="nt">&lt;/h1&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Skip the devise authenticate before action</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/home_controller.rb</span>
+<span class="n">skip_before_action</span> <span class="ss">:authenticate_user!</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Generate the dashboard page</p>
+
+<ol>
+  <li>Create a dashboard controller: <code class="language-plaintext highlighter-rouge">rails g controller Dashboard</code></li>
+  <li>
+    <p>Update routes</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resource</span> <span class="ss">:dashboard</span><span class="p">,</span> <span class="ss">controller: :dashboard</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the view <code class="language-plaintext highlighter-rouge">app/views/dashboard/show.html.erb</code></p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Dashboard<span class="nt">&lt;/h1&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Redirect to dashboard page after sign in</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/application_controller.rb</span>
+<span class="kp">private</span>
+
+<span class="k">def</span> <span class="nf">after_sign_in_path_for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+  <span class="n">dashboard_path</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Redirect to dashboard page on home page if user already signed in</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/home_controller.rb</span>
+<span class="k">def</span> <span class="nf">show</span>
+  <span class="n">redirect_to</span> <span class="n">dashboard_path</span> <span class="k">if</span> <span class="n">user_signed_in?</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Import <a href="https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css">RubyGemsGuide/demo.css</a>){:target=”_blank”}</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">touch app/assets/stylesheets/demo.css</code></li>
+  <li>Copy paste <a href="https://github.com/RubyGemsGuide/demo.css/blob/main/demo.css">demo.css</a>){:target=”_blank”}</li>
+  <li>
+    <p>Update layout</p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;header&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>
+      <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">link_to</span> <span class="err">'2</span><span class="na">FA</span> <span class="na">Demo</span><span class="err">',</span> <span class="na">root_path</span> <span class="err">%</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/h1&gt;</span>
+
+    <span class="nt">&lt;nav&gt;</span>
+      <span class="nt">&lt;</span><span class="err">%</span> <span class="na">if</span> <span class="na">user_signed_in</span><span class="err">?</span> <span class="err">%</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">button_to</span> <span class="err">'</span><span class="na">Logout</span><span class="err">',</span> <span class="na">destroy_user_session_path</span><span class="err">,</span> <span class="na">method:</span> <span class="na">:delete</span> <span class="err">%</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;</span><span class="err">%</span> <span class="na">else</span> <span class="err">%</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">link_to</span> <span class="err">'</span><span class="na">Login</span><span class="err">',</span> <span class="na">new_user_session_path</span> <span class="err">%</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;</span><span class="err">%</span> <span class="na">end</span> <span class="err">%</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/nav&gt;</span>
+  <span class="nt">&lt;/header&gt;</span>
+
+  <span class="nt">&lt;section&gt;</span>
+    <span class="nt">&lt;</span><span class="err">%</span> <span class="na">flash.each</span> <span class="na">do</span> <span class="err">|</span><span class="na">name</span><span class="err">,</span> <span class="na">msg</span><span class="err">|</span> <span class="na">-</span><span class="err">%</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">content_tag</span> <span class="na">:dialog</span><span class="err">,</span> <span class="na">msg</span><span class="err">,</span> <span class="na">role:</span> <span class="na">name</span> <span class="err">%</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;</span><span class="err">%</span> <span class="na">end</span> <span class="err">%</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/section&gt;</span>
+
+  <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">yield</span> <span class="err">%</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;footer&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"https://rubygems.guide"</span><span class="nt">&gt;</span>RubyGems.Guide<span class="nt">&lt;/a&gt;</span> - 2FA Demo
+  <span class="nt">&lt;/footer&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Start the app at <code class="language-plaintext highlighter-rouge">localhost:3000</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/rails s
+<span class="c"># =&gt; Booting Puma</span>
+<span class="c"># =&gt; Rails 6.1.4.4 application starting in development</span>
+<span class="c"># =&gt; Run `bin/rails server --help` for more startup options</span>
+<span class="c"># Puma starting in single mode...</span>
+<span class="c"># * Puma version: 5.5.2 (ruby 3.0.1-p64) ("Zawgyi")</span>
+<span class="c"># *  Min threads: 5</span>
+<span class="c"># *  Max threads: 5</span>
+<span class="c"># *  Environment: development</span>
+<span class="c"># *          PID: 41093</span>
+<span class="c"># * Listening on http://127.0.0.1:3000</span>
+<span class="c"># * Listening on http://[::1]:3000</span>
+<span class="c"># Use Ctrl-C to stop</span>
+</code></pre></div></div>
+
+<p>Now we have a basic Rails app that user can sign up, sign in and sign out.</p>
+
+<p><img src="/images/posts/devise-two-factor/home-page.png" alt="" /></p>
+
+<h3 id="step-2-install-and-setup-devise-two-factor">Step 2: Install and setup devise-two-factor</h3>
+
+<ol>
+  <li>
+    <p>Add <code class="language-plaintext highlighter-rouge">devise-two-factor</code>, <code class="language-plaintext highlighter-rouge">dotenv-rails</code>, <code class="language-plaintext highlighter-rouge">rqrcode</code> to Gemfile and run <code class="language-plaintext highlighter-rouge">bundle instll</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Gemfile</span>
+<span class="n">gem</span> <span class="s1">'devise-two-factor'</span><span class="p">,</span> <span class="s1">'~&gt; 4.0'</span>
+<span class="n">gem</span> <span class="s1">'dotenv-rails'</span>
+<span class="n">gem</span> <span class="s1">'rqrcode'</span><span class="p">,</span> <span class="s1">'~&gt; 2.1'</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Generate config and update <code class="language-plaintext highlighter-rouge">User</code> model by run:</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails generate devise_two_factor User DEVISE_OTP_ENCRYPT_KEY
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create and update <code class="language-plaintext highlighter-rouge">.env</code> file</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">DEVISE_OTP_ENCRYPT_KEY</span><span class="o">=</span><span class="n">opt_encryption_key_must_be_32_bytes_or_longer</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add <code class="language-plaintext highlighter-rouge">otp_backup_codes</code> column to <code class="language-plaintext highlighter-rouge">users</code> and run <code class="language-plaintext highlighter-rouge">rails db:migrate</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AddDeviseTwoFactorBackupableToUsers</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="c1"># Change type from :string to :text if using MySQL database</span>
+    <span class="n">add_column</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:otp_backup_codes</span><span class="p">,</span> <span class="ss">:string</span><span class="p">,</span> <span class="ss">array: </span><span class="kp">true</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add backup code config to <code class="language-plaintext highlighter-rouge">User</code> model</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">devise</span> <span class="ss">:two_factor_backupable</span><span class="p">,</span>
+       <span class="ss">otp_backup_code_length: </span><span class="mi">8</span><span class="p">,</span>
+       <span class="ss">otp_number_of_backup_codes: </span><span class="mi">12</span>
+
+<span class="n">serialize</span> <span class="ss">:otp_backup_codes</span><span class="p">,</span> <span class="no">Array</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="step-3-enable-otp-based-two-factor-authentication">Step 3: Enable OTP-based two-factor authentication</h3>
+
+<p>The user flow we want:</p>
+
+<ol>
+  <li>Find a link called “Two-factor authentication” on <code class="language-plaintext highlighter-rouge">/dashboard</code> page</li>
+  <li>Go to the 2FA setup page(<code class="language-plaintext highlighter-rouge">/two_factor_authentication</code>) by click the link</li>
+  <li>Find a 2FA “Enable” button on <code class="language-plaintext highlighter-rouge">/two_factor_authentication</code> page</li>
+  <li>Show a confirmation page by click the “Enable” button</li>
+  <li>See a QR code and a code submit form on the the confirmation page</li>
+  <li>Scan the QR code with an authenticator app and submit the form with a OTP code</li>
+  <li>Show a success page after succcess submit the confirmation form</li>
+  <li>Find 12 recovery codes and a “Done” button on the success page</li>
+  <li>Back to the 2FA setup page(<code class="language-plaintext highlighter-rouge">/two_factor_authentication</code>) after click the “Done” button</li>
+</ol>
+
+<p>Create the 2FA setup page</p>
+
+<ol>
+  <li>
+    <p>Setup routes</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># config/routes.rb</span>
+<span class="n">resource</span> <span class="ss">:two_factor_authentication</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the controller: <code class="language-plaintext highlighter-rouge">TwoFactorAuthenticationsController</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentications_controller</span>
+<span class="k">class</span> <span class="nc">TwoFactorAuthenticationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">show</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the 2FA setup view <code class="language-plaintext highlighter-rouge">app/views/two_factor_authentications/show.html.erb</code></p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Two-factor authentication<span class="nt">&lt;/h1&gt;</span>
+</code></pre></div>    </div>
+    <p><img src="/images/posts/devise-two-factor/2FA-setup-page-v0.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Put the link on dashboard show page <code class="language-plaintext highlighter-rouge">app/views/dashboard/show.html.erb</code></p>
+
+    <div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">"Two-factor authentication"</span><span class="p">,</span> <span class="n">two_factor_authentication_path</span> <span class="cp">%&gt;</span>
+</code></pre></div>    </div>
+
+    <p><img src="/images/posts/devise-two-factor/dashboard-page.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>Now we can go to the 2FA setup page by click “Two-factor authentication” link on dashboard page</p>
+
+<p>Show the 2FA confirmation view on enable</p>
+
+<ol>
+  <li>
+    <p>Add 2FA “Enable” button on 2FA setup page (<code class="language-plaintext highlighter-rouge">app/views/two_factor_authentications/show.html.erb</code>)</p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Two-factor authentication<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;h2&gt;</span>Authenticator app<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;</span><span class="err">%=</span> <span class="na">button_to</span> <span class="err">'</span><span class="na">Enable</span><span class="err">',</span> <span class="na">two_factor_authentication_path</span><span class="err">,</span> <span class="na">method:</span> <span class="na">:post</span> <span class="err">%</span><span class="nt">&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a <code class="language-plaintext highlighter-rouge">create</code> action to <code class="language-plaintext highlighter-rouge">TwoFactorAuthenticationsController</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentications_controller</span>
+<span class="k">def</span> <span class="nf">create</span>
+  <span class="n">current_user</span><span class="p">.</span><span class="nf">otp_secret</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">generate_otp_secret</span>
+  <span class="n">current_user</span><span class="p">.</span><span class="nf">save!</span>
+
+  <span class="vi">@qrcode</span> <span class="o">=</span> <span class="n">current_user</span><span class="p">.</span><span class="nf">otp_qrcode</span>
+  <span class="n">render</span> <span class="s1">'two_factor_authentication/confirmations/new'</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+    <p>This will generate and save the OTP secret which will used for OTP authentication in future. Then it will redner the confirmation page.</p>
+  </li>
+  <li>
+    <p>Add <code class="language-plaintext highlighter-rouge">otp_qrcode</code> method to <code class="language-plaintext highlighter-rouge">User</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">otp_qrcode</span>
+  <span class="n">provision_uri</span> <span class="o">=</span> <span class="n">otp_provisioning_uri</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="ss">issuer: </span><span class="s1">'2FA-Demo'</span><span class="p">)</span>
+  <span class="no">RQRCode</span><span class="o">::</span><span class="no">QRCode</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">provision_uri</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Update routes to add the 2FA setup confirmation url</p>
+
+    <div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gd">- resource :two_factor_authentication
+</span><span class="gi">+ resource :two_factor_authentication do
++   scope module: :two_factor_authentication do
++     resource :confirmation
++   end
++ end
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the confirmation controller <code class="language-plaintext highlighter-rouge">TwoFactorAuthentication::ConfirmationsController</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentication/confirmations_controller.rb</span>
+<span class="k">class</span> <span class="nc">TwoFactorAuthentication::ConfirmationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create an OTP field component</p>
+
+    <p><img src="/images/posts/devise-two-factor/otp-field.png" alt="" /></p>
+
+    <p>A view partial at <code class="language-plaintext highlighter-rouge">app/views/components/_otp_field.html.erb</code></p>
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">data-controller=</span><span class="s">"otp-digit-field"</span>
+    <span class="na">data-otp-digit-field-code-length-value=</span><span class="s">"&lt;%= code_length %&gt;"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">f.hidden_field</span> <span class="na">field_name</span><span class="err">,</span> <span class="na">id:</span> <span class="err">'</span><span class="na">otp-code-field</span><span class="err">',</span> <span class="na">data:</span> <span class="err">{</span> <span class="err">'</span><span class="na">otp-digit-field-target</span><span class="err">'</span><span class="na">:</span> <span class="err">'</span><span class="na">mainField</span><span class="err">'</span> <span class="err">}</span> <span class="err">%</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"otp-digit-fields-container"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;</span><span class="err">%</span> <span class="err">(1..</span><span class="na">code_length</span><span class="err">).</span><span class="na">each</span> <span class="na">do</span> <span class="err">|</span><span class="na">index</span><span class="err">|</span> <span class="err">%</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;</span><span class="err">%</span> 
+        <span class="na">on_first = </span><span class="s">(index</span> <span class="err">==</span> <span class="err">1)</span>
+        <span class="na">on_last = </span><span class="s">(index</span> <span class="err">==</span> <span class="na">code_length</span><span class="err">)</span>
+      <span class="err">%</span><span class="nt">&gt;</span>
+
+      <span class="nt">&lt;input</span>
+        <span class="na">type=</span><span class="s">"text"</span>
+        <span class="na">maxLength=</span><span class="s">"1"</span>
+        <span class="na">id=</span><span class="s">"digit-&lt;%= index %&gt;"</span>
+        <span class="err">&lt;%=</span> <span class="err">%</span><span class="na">Q</span><span class="err">{</span><span class="na">data-previous=</span><span class="s">"digit-#{index - 1}"</span><span class="err">}.</span><span class="na">html_safe</span> <span class="na">unless</span> <span class="na">on_first</span> <span class="err">%</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;</span><span class="err">%=</span> <span class="err">%</span><span class="na">Q</span><span class="err">{</span><span class="na">data-next=</span><span class="s">"digit-#{index + 1}"</span><span class="err">}.</span><span class="na">html_safe</span> <span class="na">unless</span> <span class="na">on_last</span> <span class="err">%</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;</span><span class="err">%=</span> <span class="err">"</span><span class="na">autofocus</span><span class="err">"</span> <span class="na">if</span> <span class="na">on_first</span> <span class="err">%</span><span class="nt">&gt;</span>
+        data-action="
+          keydown-&gt;otp-digit-field#checkAllowance
+          input-&gt;otp-digit-field#handleInputEvent
+          keyup-&gt;otp-digit-field#handleKeyUp
+        "
+      &gt;
+    <span class="nt">&lt;</span><span class="err">%</span> <span class="na">end</span> <span class="err">%</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div>    </div>
+
+    <p>With a Stimulus controller at <code class="language-plaintext highlighter-rouge">app/javascript/controllers/otp_digit_field_controller.js</code></p>
+
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Controller</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@hotwired/stimulus</span><span class="dl">"</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nc">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+
+  <span class="kd">static</span> <span class="nx">targets</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">mainField</span><span class="dl">'</span><span class="p">]</span>
+  <span class="kd">static</span> <span class="nx">values</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">codeLength</span><span class="p">:</span> <span class="nb">String</span>
+  <span class="p">}</span>
+
+  <span class="nf">checkAllowance</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nf">_isValidOtpField</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nf">preventDefault</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nf">handleInputEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">digitValue</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">digitValue</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">((</span><span class="dl">'</span><span class="s1">0</span><span class="dl">'</span> <span class="o">&lt;=</span> <span class="nx">digitValue</span> <span class="o">&amp;&amp;</span> <span class="nx">digitValue</span> <span class="o">&lt;=</span> <span class="dl">'</span><span class="s1">9</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span> <span class="o">&lt;=</span> <span class="nx">digitValue</span> <span class="o">&amp;&amp;</span> <span class="nx">digitValue</span> <span class="o">&lt;=</span> <span class="dl">'</span><span class="s1">z</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">next</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nf">querySelector</span><span class="p">(</span><span class="s2">`input#</span><span class="p">${</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">next</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+
+      <span class="k">if</span><span class="p">(</span><span class="nx">next</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">next</span><span class="p">.</span><span class="nf">focus</span><span class="p">()</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nf">_updateMainField</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="nf">handleKeyUp</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">Backspace</span><span class="dl">'</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">ArrowLeft</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">prev</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nf">querySelector</span><span class="p">(</span><span class="s2">`input#</span><span class="p">${</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">previous</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+
+      <span class="k">if</span><span class="p">(</span><span class="nx">prev</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">prev</span><span class="p">.</span><span class="nf">focus</span><span class="p">()</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">ArrowRight</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">next</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nf">querySelector</span><span class="p">(</span><span class="s2">`input#</span><span class="p">${</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">next</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+
+      <span class="k">if</span><span class="p">(</span><span class="nx">next</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">next</span><span class="p">.</span><span class="nf">focus</span><span class="p">()</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">Enter</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nf">_allFieldsAreFilled</span><span class="p">())</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">mainFieldTarget</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nf">submit</span><span class="p">()</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nf">_updateMainField</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">otpCode</span> <span class="o">=</span> <span class="dl">''</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nc">Number</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">codeLengthValue</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">otpCode</span> <span class="o">+=</span> <span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nf">querySelector</span><span class="p">(</span><span class="s2">`input#digit-</span><span class="p">${</span><span class="nx">i</span><span class="p">}</span><span class="s2">`</span><span class="p">).</span><span class="nx">value</span>
+    <span class="p">}</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">mainFieldTarget</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">otpCode</span>
+  <span class="p">}</span>
+
+  <span class="nf">_isValidOtpField</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return </span><span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">Backspace</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span>
+            <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">ArrowLeft</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span>
+            <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">ArrowRight</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span>
+            <span class="p">(</span><span class="dl">'</span><span class="s1">0</span><span class="dl">'</span> <span class="o">&lt;=</span> <span class="nx">key</span> <span class="o">&amp;&amp;</span> <span class="nx">key</span> <span class="o">&lt;=</span> <span class="dl">'</span><span class="s1">9</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span>
+            <span class="p">(</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span> <span class="o">&lt;=</span> <span class="nx">key</span> <span class="o">&amp;&amp;</span> <span class="nx">key</span> <span class="o">&lt;=</span> <span class="dl">'</span><span class="s1">z</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nf">_allFieldsAreFilled</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainFieldTarget</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="nc">Number</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">codeLengthValue</span><span class="p">)</span>
+  <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add CSS for OTP digit field at <code class="language-plaintext highlighter-rouge">app/assets/stylesheets/two_factor_authentication.scss</code></p>
+
+    <div class="language-scss highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// app/assets/stylesheets/two_factor_authentication.scss</span>
+<span class="nc">.otp-digit-fields-container</span> <span class="p">{</span>
+
+  <span class="nl">display</span><span class="p">:</span> <span class="n">flex</span><span class="p">;</span>
+  <span class="nl">margin-bottom</span><span class="p">:</span> <span class="m">1rem</span><span class="p">;</span>
+
+  <span class="nt">input</span> <span class="p">{</span>
+    <span class="nl">width</span><span class="p">:</span> <span class="m">35px</span><span class="p">;</span>
+    <span class="nl">height</span><span class="p">:</span> <span class="m">40px</span><span class="p">;</span>
+    <span class="nl">line-height</span><span class="p">:</span> <span class="m">50px</span><span class="p">;</span>
+    <span class="nl">text-align</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+    <span class="nl">font-size</span><span class="p">:</span> <span class="m">24px</span><span class="p">;</span>
+    <span class="nl">font-family</span><span class="p">:</span> <span class="n">ui-sans-serif</span><span class="o">,</span> <span class="n">system-ui</span><span class="o">,</span> <span class="o">-</span><span class="n">apple-system</span><span class="o">,</span> <span class="n">BlinkMacSystemFont</span><span class="o">,</span> <span class="s2">"Segoe UI"</span><span class="o">,</span> <span class="n">Roboto</span><span class="o">,</span> <span class="s2">"Helvetica Neue"</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="s2">"Noto Sans"</span><span class="o">,</span> <span class="nb">sans-serif</span><span class="o">,</span> <span class="s2">"Apple Color Emoji"</span><span class="o">,</span> <span class="s2">"Segoe UI Emoji"</span><span class="o">,</span> <span class="s2">"Segoe UI Symbol"</span><span class="o">,</span> <span class="s2">"Noto Color Emoji"</span><span class="p">;</span>
+    <span class="nl">font-weight</span><span class="p">:</span> <span class="m">200</span><span class="p">;</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="m">2px</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the confirmation view at <code class="language-plaintext highlighter-rouge">app/views/two_factor_authentication/confirmations/new.html.erb</code></p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Setup Two-Factor Authentication<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;p&gt;</span>Use your two-factor authentication app to scan the QR code<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;</span><span class="err">%=</span> <span class="err">@</span><span class="na">qrcode.as_svg</span><span class="err">(</span><span class="na">module_size:</span> <span class="err">3,</span> <span class="na">fill:</span> <span class="err">"</span><span class="na">ffffff</span><span class="err">").</span><span class="na">html_safe</span> <span class="err">%</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="err">%=</span> <span class="na">form_with</span><span class="err">(</span>
+      <span class="na">url:</span> <span class="na">two_factor_authentication_confirmation_path</span><span class="err">,</span>
+      <span class="na">local:</span> <span class="na">true</span><span class="err">,</span>
+      <span class="na">method:</span> <span class="na">:post</span>
+<span class="err">)</span> <span class="na">do</span> <span class="err">|</span><span class="na">f</span><span class="err">|</span> <span class="err">%</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Enter 6-digit code from your two factor authenticator app.<span class="nt">&lt;/p&gt;</span>
+
+  <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">render</span> <span class="err">'</span><span class="na">components</span><span class="err">/</span><span class="na">otp_field</span><span class="err">',</span> <span class="na">f:</span> <span class="na">f</span><span class="err">,</span> <span class="na">field_name:</span> <span class="na">:otp_code</span><span class="err">,</span> <span class="na">code_length:</span> <span class="err">6</span> <span class="err">%</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">f.button</span> <span class="err">"</span><span class="na">Confirm</span> <span class="na">and</span> <span class="na">activate</span><span class="err">",</span> <span class="na">type:</span> <span class="na">:submit</span> <span class="err">%</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">link_to</span> <span class="err">'</span><span class="na">Cancel</span><span class="err">',</span> <span class="na">two_factor_authentication_path</span> <span class="err">%</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;</span><span class="err">%</span> <span class="na">end</span> <span class="err">%</span><span class="nt">&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Now we have a 2FA setup confirmation page</p>
+
+<p><img src="/images/posts/devise-two-factor/2FA-setup-confirmation-page.png" alt="" /></p>
+
+<p>Next, we need to create the confirmation success page for confirmation code submit.</p>
+
+<ol>
+  <li>
+    <p>Add <code class="language-plaintext highlighter-rouge">create</code> action to <code class="language-plaintext highlighter-rouge">TwoFactorAuthentication::ConfirmationsController</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentication/confirmations_controller.rb</span>
+<span class="k">def</span> <span class="nf">create</span>
+  <span class="k">if</span> <span class="n">current_user</span><span class="p">.</span><span class="nf">validate_and_consume_otp!</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="nf">dig</span><span class="p">(</span><span class="ss">:otp_code</span><span class="p">))</span>
+    <span class="n">current_user</span><span class="p">.</span><span class="nf">otp_required_for_login</span> <span class="o">=</span> <span class="kp">true</span>
+    <span class="n">current_user</span><span class="p">.</span><span class="nf">save!</span>
+
+    <span class="n">render</span> <span class="s2">"two_factor_authentication/confirmations/success"</span>
+  <span class="k">else</span>
+    <span class="n">flash</span><span class="p">.</span><span class="nf">now</span><span class="p">[</span><span class="ss">:alert</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Failed to confirm the 2FA code"</span>
+    <span class="n">prepare_2fa_form</span>
+    <span class="n">render</span> <span class="ss">:new</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the success page at <code class="language-plaintext highlighter-rouge">app/views/two_factor_authentication/confirmations/success.html.erb</code></p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>2FA Setup Success<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;</span><span class="err">%=</span> <span class="na">link_to</span> <span class="err">"</span><span class="na">Done</span><span class="err">",</span> <span class="na">two_factor_authentication_path</span> <span class="err">%</span><span class="nt">&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Now, after scan the QR code, user can succesfully enable 2FA by submit the 6-digit confirmation code from the authenticator app</p>
+
+<h3 id="step-4-generate-and-show-recovery-codes-on-the-success-page">Step 4: Generate and show recovery codes on the success page</h3>
+
+<p><img src="/images/posts/devise-two-factor/2FA-setup-success-page.png" alt="" /></p>
+
+<p>Generate backup codes on submit confirmation at <code class="language-plaintext highlighter-rouge">app/controllers/two_factor_authentication/confirmations_controller.rb</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">def create
+</span>  if current_user.validate_and_consume_otp!(params.dig(:otp_code))
+    current_user.otp_required_for_login = true
+<span class="gi">+   @recovery_codes = current_user.generate_otp_backup_codes!
+</span>    current_user.save!
+<span class="err">
+</span>    render "two_factor_authentication/confirmations/success"
+  else
+    flash.now[:alert] = "Failed to confirm the 2FA code"
+    prepare_2fa_form
+    render :new
+  end
+<span class="p">end
+</span></code></pre></div></div>
+
+<p>Show backup codes on success view <code class="language-plaintext highlighter-rouge">app/views/two_factor_authentication/confirmations/success.html.erb</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;h1&gt;2FA Setup Success&lt;/h1&gt;
+<span class="gi">+ &lt;p&gt;Save this emergency backup code and store it somewhere safe. If you lose your phone, you can use backup codes to sign in.&lt;/p&gt;
++ 
++ &lt;ul&gt;
++   &lt;% @recovery_codes.each do |code| %&gt;
++     &lt;li&gt;&lt;%= code %&gt;&lt;/li&gt;
++   &lt;% end %&gt;
++ &lt;/ul&gt;
+</span><span class="err">
+</span>  &lt;%= link_to "Done", two_factor_authentication_path %&gt;
+</code></pre></div></div>
+
+<h3 id="step-5-login-with-an-otp-token-from-an-authenticator-app">Step 5: Login with an OTP token from an authenticator app</h3>
+
+<p>Create a new devise authentication strategy called <code class="language-plaintext highlighter-rouge">otp_attempt_authenticatable</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># lib/devise-two-factor/strategies/otp_attempt_authenticatable.rb</span>
+<span class="k">module</span> <span class="nn">Devise</span>
+  <span class="k">module</span> <span class="nn">Strategies</span>
+    <span class="k">class</span> <span class="nc">OtpAttemptAuthenticatable</span> <span class="o">&lt;</span> <span class="no">Devise</span><span class="o">::</span><span class="no">Strategies</span><span class="o">::</span><span class="no">Base</span>
+
+      <span class="k">def</span> <span class="nf">authenticate!</span>
+        <span class="n">resource</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">.</span><span class="nf">to</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">validate_otp</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+          <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+          <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id_expires_at</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+          <span class="n">success!</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+        <span class="k">else</span>
+          <span class="nb">fail</span><span class="o">!</span><span class="p">(</span><span class="s1">'Failed to authenticate your code'</span><span class="p">)</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="kp">private</span>
+
+      <span class="k">def</span> <span class="nf">validate_otp</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kp">true</span> <span class="k">unless</span> <span class="n">resource</span><span class="p">.</span><span class="nf">otp_required_for_login</span>
+        <span class="k">return</span> <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="n">scope</span><span class="p">][</span><span class="s1">'otp_attempt'</span><span class="p">].</span><span class="nf">nil?</span>
+        <span class="n">resource</span><span class="p">.</span><span class="nf">validate_and_consume_otp!</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">scope</span><span class="p">][</span><span class="s1">'otp_attempt'</span><span class="p">])</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">Warden</span><span class="o">::</span><span class="no">Strategies</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="ss">:otp_attempt_authenticatable</span><span class="p">,</span> <span class="no">Devise</span><span class="o">::</span><span class="no">Strategies</span><span class="o">::</span><span class="no">OtpAttemptAuthenticatable</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Require this strategy file at the begining of the <code class="language-plaintext highlighter-rouge">config/initializers/devise.rb</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">require</span> <span class="no">Rails</span><span class="p">.</span><span class="nf">root</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s2">"lib/devise-two-factor/strategies/otp_attempt_authenticatable.rb"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Customize devise session controller</p>
+
+<ol>
+  <li>
+    <p>Generate session controller by run</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/rails generate devise:controllers <span class="nb">users</span> <span class="nt">-c</span><span class="o">=</span>sessions
+</code></pre></div>    </div>
+    <p>Then we get</p>
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># /app/controllers/users/sessions_controller.b</span>
+<span class="k">class</span> <span class="nc">Users::SessionsController</span> <span class="o">&lt;</span> <span class="no">Devise</span><span class="o">::</span><span class="no">SessionsController</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+    <p>We also need to update routes</p>
+    <div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gd">- devise_for :users
+</span><span class="gi">+ devise_for :users, controllers: {
++   sessions: 'users/sessions'
++ }
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Customize <code class="language-plaintext highlighter-rouge">Users::SessionsController#create</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># POST /resource/sign_in</span>
+<span class="k">def</span> <span class="nf">create</span>
+  <span class="nb">self</span><span class="p">.</span><span class="nf">resource</span> <span class="o">=</span> <span class="n">warden</span><span class="p">.</span><span class="nf">authenticate!</span><span class="p">(</span><span class="ss">:database_authenticatable</span><span class="p">,</span> <span class="n">auth_options</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">resource</span><span class="p">.</span><span class="nf">otp_required_for_login?</span>
+    <span class="n">sign_out</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+    <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">resource</span><span class="p">.</span><span class="nf">id</span>
+
+    <span class="n">redirect_to</span> <span class="n">users_sign_in_otp_path</span>
+  <span class="k">else</span>
+    <span class="n">set_flash_message!</span><span class="p">(</span><span class="ss">:notice</span><span class="p">,</span> <span class="ss">:signed_in</span><span class="p">)</span>
+    <span class="n">sign_in</span><span class="p">(</span><span class="n">resource_name</span><span class="p">,</span> <span class="n">resource</span><span class="p">)</span>
+    <span class="n">respond_with</span> <span class="n">resource</span><span class="p">,</span> <span class="ss">location: </span><span class="n">after_sign_in_path_for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Create a OTP session page</p>
+
+<ol>
+  <li>
+    <p>Update routes</p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># config/routes.rb</span>
+<span class="n">devise_scope</span> <span class="ss">:user</span> <span class="k">do</span>
+  <span class="n">get</span> <span class="s1">'/users/sign_in/otp'</span> <span class="o">=&gt;</span> <span class="s1">'users/otp/sessions#new'</span>
+  <span class="n">post</span> <span class="s1">'/users/sign_in/otp'</span> <span class="o">=&gt;</span> <span class="s1">'users/otp/sessions#create'</span>
+<span class="k">end</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create the controller <code class="language-plaintext highlighter-rouge">Users::Otp::SessionsController</code></p>
+
+    <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/users/otp/sessions_controller.rb</span>
+<span class="k">class</span> <span class="nc">Users::Otp::SessionsController</span> <span class="o">&lt;</span> <span class="no">DeviseController</span>
+  <span class="n">prepend_before_action</span> <span class="ss">:require_no_authentication</span><span class="p">,</span> <span class="ss">only: </span><span class="p">[</span><span class="ss">:new</span><span class="p">,</span> <span class="ss">:create</span><span class="p">]</span>
+
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="k">unless</span> <span class="no">User</span><span class="p">.</span><span class="nf">exists?</span><span class="p">(</span><span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">])</span>
+      <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+      <span class="n">redirect_to</span> <span class="n">new_user_session_path</span> 
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="n">resource</span> <span class="o">=</span> <span class="n">warden</span><span class="p">.</span><span class="nf">authenticate!</span><span class="p">(</span>
+      <span class="ss">:otp_attempt_authenticatable</span><span class="p">,</span>
+      <span class="p">{</span>
+        <span class="ss">scope: </span><span class="n">resource_name</span><span class="p">,</span>
+        <span class="ss">recall: </span><span class="s2">"</span><span class="si">#{</span><span class="n">controller_path</span><span class="si">}</span><span class="s2">#new"</span>
+      <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">set_flash_message!</span><span class="p">(</span><span class="ss">:notice</span><span class="p">,</span> <span class="ss">:signed_in</span><span class="p">)</span>
+    <span class="n">sign_in</span><span class="p">(</span><span class="n">resource_name</span><span class="p">,</span> <span class="n">resource</span><span class="p">)</span>
+    <span class="n">respond_with</span> <span class="n">resource</span><span class="p">,</span> <span class="ss">location: </span><span class="n">after_sign_in_path_for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div>    </div>
+    <p>Now, it will redirectc to otp session new page after success authentication the email and password</p>
+  </li>
+  <li>
+    <p>Create the OPT session view at <code class="language-plaintext highlighter-rouge">app/views/users/otp/sessions/new.html.erb</code></p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Authenticate your account<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;</span><span class="err">%=</span> <span class="na">form_with</span><span class="err">(</span>
+      <span class="na">url:</span> <span class="na">users_sign_in_otp_path</span><span class="err">,</span>
+      <span class="na">scope:</span> <span class="na">:user</span><span class="err">,</span>
+      <span class="na">method:</span> <span class="na">:post</span><span class="err">,</span>
+      <span class="na">local:</span> <span class="na">true</span>
+<span class="err">)</span> <span class="na">do</span> <span class="err">|</span><span class="na">f</span><span class="err">|</span> <span class="err">%</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Enter 6-digit code from your two factor authenticator app.<span class="nt">&lt;/p&gt;</span>
+
+  <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">render</span> <span class="err">'</span><span class="na">components</span><span class="err">/</span><span class="na">otp_field</span><span class="err">',</span> <span class="na">f:</span> <span class="na">f</span><span class="err">,</span> <span class="na">field_name:</span> <span class="na">:otp_attempt</span><span class="err">,</span> <span class="na">code_length:</span> <span class="err">6</span> <span class="err">%</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">f.submit</span> <span class="err">'</span><span class="na">Verify</span><span class="err">'</span> <span class="err">%</span><span class="nt">&gt;</span>
+<span class="nt">&lt;</span><span class="err">%</span> <span class="na">end</span> <span class="err">%</span><span class="nt">&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Now we get a OTP login page</p>
+
+<p><img src="/images/posts/devise-two-factor/2FA-login-page.png" alt="" /></p>
+
+<h3 id="step-6-login-with-a-recovery-code">Step 6: Login with a recovery code</h3>
+
+<p>Login with recovery code is similar with login with OTP code</p>
+
+<p>Create a new devise authentication strategy called <code class="language-plaintext highlighter-rouge">recovery_code_authenticatable</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># lib/devise-two-factor/strategies/recovery_code_authenticatable.rb</span>
+<span class="k">module</span> <span class="nn">Devise</span>
+  <span class="k">module</span> <span class="nn">Strategies</span>
+    <span class="k">class</span> <span class="nc">RecoveryCodeAuthenticatable</span> <span class="o">&lt;</span> <span class="no">Devise</span><span class="o">::</span><span class="no">Strategies</span><span class="o">::</span><span class="no">Base</span>
+
+      <span class="k">def</span> <span class="nf">authenticate!</span>
+        <span class="n">resource</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">.</span><span class="nf">to</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">validate_recovery_code</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+          <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+          <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id_expires_at</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+          <span class="n">success!</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+        <span class="k">else</span>
+          <span class="nb">fail</span><span class="o">!</span><span class="p">(</span><span class="s1">'Failed to authenticate your code'</span><span class="p">)</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="kp">private</span>
+
+      <span class="k">def</span> <span class="nf">validate_recovery_code</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kp">true</span> <span class="k">unless</span> <span class="n">resource</span><span class="p">.</span><span class="nf">otp_required_for_login</span>
+        <span class="k">return</span> <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="n">scope</span><span class="p">][</span><span class="s1">'recovery_code'</span><span class="p">].</span><span class="nf">nil?</span>
+        <span class="n">resource</span><span class="p">.</span><span class="nf">invalidate_otp_backup_code!</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">scope</span><span class="p">][</span><span class="s1">'recovery_code'</span><span class="p">])</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">Warden</span><span class="o">::</span><span class="no">Strategies</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="ss">:recovery_code_authenticatable</span><span class="p">,</span> <span class="no">Devise</span><span class="o">::</span><span class="no">Strategies</span><span class="o">::</span><span class="no">RecoveryCodeAuthenticatable</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Require this strategy file at the begining of the <code class="language-plaintext highlighter-rouge">config/initializers/devise.rb</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">require</span> <span class="no">Rails</span><span class="p">.</span><span class="nf">root</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s2">"lib/devise-two-factor/strategies/recovery_code_authenticatable.rb"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Update <code class="language-plaintext highlighter-rouge">config/routes.rb</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">devise_scope :user do
+</span>  get '/users/sign_in/otp' =&gt; 'users/otp/sessions#new'
+  post '/users/sign_in/otp' =&gt; 'users/otp/sessions#create'
+<span class="gi">+  get '/users/sign_in/recovery_code' =&gt; 'users/recovery_code/sessions#new'
++  post '/users/sign_in/recovery_code' =&gt; 'users/recovery_code/sessions#create'
+</span><span class="p">end
+</span></code></pre></div></div>
+
+<p>Create the controller: <code class="language-plaintext highlighter-rouge">Users::RecoveryCode::SessionsController</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/users/recovery_code/sessions_controller.rb</span>
+<span class="k">class</span> <span class="nc">Users::RecoveryCode::SessionsController</span> <span class="o">&lt;</span> <span class="no">DeviseController</span>
+  <span class="n">prepend_before_action</span> <span class="ss">:require_no_authentication</span><span class="p">,</span> <span class="ss">only: </span><span class="p">[</span><span class="ss">:new</span><span class="p">,</span> <span class="ss">:create</span><span class="p">]</span>
+
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="k">unless</span> <span class="no">User</span><span class="p">.</span><span class="nf">exists?</span><span class="p">(</span><span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">])</span>
+      <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+      <span class="n">redirect_to</span> <span class="n">new_user_session_path</span> 
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="n">resource</span> <span class="o">=</span> <span class="n">warden</span><span class="p">.</span><span class="nf">authenticate!</span><span class="p">(</span>
+      <span class="ss">:recovery_code_authenticatable</span><span class="p">,</span>
+      <span class="p">{</span>
+        <span class="ss">scope: </span><span class="n">resource_name</span><span class="p">,</span>
+        <span class="ss">recall: </span><span class="s2">"</span><span class="si">#{</span><span class="n">controller_path</span><span class="si">}</span><span class="s2">#new"</span>
+      <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">set_flash_message!</span><span class="p">(</span><span class="ss">:notice</span><span class="p">,</span> <span class="ss">:signed_in</span><span class="p">)</span>
+    <span class="n">sign_in</span><span class="p">(</span><span class="n">resource_name</span><span class="p">,</span> <span class="n">resource</span><span class="p">)</span>
+    <span class="n">respond_with</span> <span class="n">resource</span><span class="p">,</span> <span class="ss">location: </span><span class="n">after_sign_in_path_for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Create recovery code login page at <code class="language-plaintext highlighter-rouge">app/views/users/recovery_code/sessions/new.html.erb</code></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Authenticate your account with a recovery code<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;</span><span class="err">%=</span> <span class="na">form_with</span><span class="err">(</span>
+      <span class="na">url:</span> <span class="na">users_sign_in_recovery_code_path</span><span class="err">,</span>
+      <span class="na">scope:</span> <span class="na">:user</span><span class="err">,</span>
+      <span class="na">method:</span> <span class="na">:post</span><span class="err">,</span>
+      <span class="na">local:</span> <span class="na">true</span>
+<span class="err">)</span> <span class="na">do</span> <span class="err">|</span><span class="na">f</span><span class="err">|</span> <span class="err">%</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;p&gt;</span>To access your account, enter one of the recovery codes you saved when you set up your two-factor authentication device.<span class="nt">&lt;/p&gt;</span>
+
+  <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">render</span> <span class="err">'</span><span class="na">components</span><span class="err">/</span><span class="na">otp_field</span><span class="err">',</span> <span class="na">f:</span> <span class="na">f</span><span class="err">,</span> <span class="na">field_name:</span> <span class="na">:recovery_code</span><span class="err">,</span> <span class="na">code_length:</span> <span class="err">8</span> <span class="err">%</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">f.submit</span> <span class="err">'</span><span class="na">Verify</span><span class="err">'</span> <span class="err">%</span><span class="nt">&gt;</span>
+<span class="nt">&lt;</span><span class="err">%</span> <span class="na">end</span> <span class="err">%</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>Add a login with recovery code link on otp login page at <code class="language-plaintext highlighter-rouge">app/views/users/otp/sessions/new.html.erb</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gi">+ &lt;div&gt;
++   &lt;p&gt;Don't have your phone?&lt;/p&gt;
++   &lt;%= link_to "Use a recovery code to access your account.", users_sign_in_recovery_code_path %&gt;
++ &lt;/div&gt;
+</span></code></pre></div></div>
+
+<p><img src="/images/posts/devise-two-factor/2FA-login-with-recovery-code-page.png" alt="" /></p>
+
+<p>Now we have finished basic feature of 2FA, congurationlatous. But we still have multiple things need to do. Let’s go on.</p>
+
+<h3 id="step-7-expire-otp-session-after-30-seconds">Step 7: Expire OTP session after 30 seconds</h3>
+
+<p>We need user to re-auth with email and password if an user hasn’t pass the OTP authentication after30 seconds. It means we need to expire <code class="language-plaintext highlighter-rouge">session[:otp_user_id]</code> after 30 seconds.</p>
+
+<p>So we need a concern for both <code class="language-plaintext highlighter-rouge">Users::Otp::SessionsController</code> and <code class="language-plaintext highlighter-rouge">Users::RecoveryCode::SessionsController</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/concerns/otp_session_expirable.rb</span>
+<span class="k">module</span> <span class="nn">OtpSessionExpirable</span>
+  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+
+  <span class="n">included</span> <span class="k">do</span>
+    <span class="kp">private</span>
+
+    <span class="k">def</span> <span class="nf">expire_otp_session!</span>
+      <span class="k">return</span> <span class="k">unless</span> <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">]</span>
+      <span class="k">return</span> <span class="k">unless</span> <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id_expires_at</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id_expires_at</span><span class="p">]</span> <span class="o">&lt;</span> <span class="no">Time</span><span class="p">.</span><span class="nf">current</span>
+        <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+        <span class="n">session</span><span class="p">[</span><span class="ss">:otp_user_id_expires_at</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+
+        <span class="n">redirect_to</span> <span class="n">new_user_session_path</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Apply <code class="language-plaintext highlighter-rouge">OtpSessionExpirable</code> to two OTP session controllers</p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">class Users::Otp::SessionsController &lt; DeviseController
+</span><span class="gi">+   include OtpSessionExpirable
++   before_action :expire_otp_session!
+</span><span class="err">
+</span>  # ...
+<span class="p">end
+</span><span class="err">
+</span><span class="p">class Users::RecoveryCodes::SessionsController &lt; DeviseController
+</span><span class="gi">+   include OtpSessionExpirable
++   before_action :expire_otp_session!
+</span><span class="err">
+</span>  # ...
+<span class="p">end
+</span></code></pre></div></div>
+
+<p>Then set expires_at on <code class="language-plaintext highlighter-rouge">Users::SessionsController</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">def create
+</span>  self.resource = warden.authenticate!(:database_authenticatable, auth_options)
+<span class="err">
+</span>  if resource.otp_required_for_login?
+    sign_out(resource)
+    session[:otp_user_id] = resource.id
+<span class="gi">+    session[:otp_user_id_expires_at] = 30.seconds.after
+</span><span class="err">
+</span>    redirect_to users_sign_in_otp_path
+  else
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    respond_with resource, location: after_sign_in_path_for(resource)
+  end
+<span class="p">end
+</span></code></pre></div></div>
+
+<h3 id="step-8-regenerate-recovery-codes">Step 8: Regenerate recovery codes</h3>
+
+<p><img src="/images/posts/devise-two-factor/2FA-setup-page-v1.png" alt="" /></p>
+
+<p>Put the “regenerate” button on 2FA setup page at <code class="language-plaintext highlighter-rouge">app/controllers/two_factor_authentications/show.html.erb</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gi">+ &lt;% if current_user.otp_required_for_login %&gt;
++   &lt;h2&gt;Recovery codes&lt;/h2&gt;
++ 
++   &lt;%= button_to "Regenerate", two_factor_authentication_recovery_codes_path, method: :post %&gt;
++ &lt;% end %&gt;
+</span></code></pre></div></div>
+
+<p>Update <code class="language-plaintext highlighter-rouge">config/routes</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">resource :two_factor_authentication do
+</span>  scope module: :two_factor_authentication do
+    resource :confirmation
+<span class="gi">+    resources :recovery_codes
+</span>  end
+<span class="p">end
+</span></code></pre></div></div>
+
+<p>Create the controller: <code class="language-plaintext highlighter-rouge">TwoFactorAuthentication::RecoveryCodesController</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentication/recovery_codes_controller.rb</span>
+<span class="k">class</span> <span class="nc">TwoFactorAuthentication::RecoveryCodesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="vi">@recovery_codes</span> <span class="o">=</span> <span class="n">current_user</span><span class="p">.</span><span class="nf">generate_otp_backup_codes!</span>
+    <span class="n">current_user</span><span class="p">.</span><span class="nf">save!</span>
+    <span class="n">render</span> <span class="ss">:index</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Create the index view at <code class="language-plaintext highlighter-rouge">app/views/two_factor_authentication/recovery_codes/index.html.erb</code></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Regenerate Recovery Codes Success<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Save this emergency backup code and store it somewhere safe. (All previous codes are expired.)<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;ul&gt;</span>
+  <span class="nt">&lt;</span><span class="err">%</span> <span class="err">@</span><span class="na">recovery_codes.each</span> <span class="na">do</span> <span class="err">|</span><span class="na">code</span><span class="err">|</span> <span class="err">%</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;li&gt;&lt;</span><span class="err">%=</span> <span class="na">code</span> <span class="err">%</span><span class="nt">&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;</span><span class="err">%</span> <span class="na">end</span> <span class="err">%</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+<span class="nt">&lt;</span><span class="err">%=</span> <span class="na">link_to</span> <span class="err">"</span><span class="na">Done</span><span class="err">",</span> <span class="na">two_factor_authentication_path</span> <span class="err">%</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<h3 id="step-9-disable-2fa">Step 9: Disable 2FA</h3>
+
+<p>Add “Disable” button on 2FA setup page at <code class="language-plaintext highlighter-rouge">app/controllers/two_factor_authentications/show.html.erb</code></p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gd">- &lt;%= button_to 'Enable', two_factor_authentication_path, method: :post %&gt;
+</span><span class="gi">+ &lt;% if current_user.otp_required_for_login %&gt;
++   &lt;%= button_to "Disable", two_factor_authentication_path, method: :delete %&gt;
++ &lt;% else %&gt;
++   &lt;%= button_to 'Enable', two_factor_authentication_path, method: :post %&gt;
++ &lt;% end %&gt;
+</span></code></pre></div></div>
+
+<p>Add <code class="language-plaintext highlighter-rouge">destroy</code> action to <code class="language-plaintext highlighter-rouge">TwoFactorAuthenticationsController</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentications_controller.rb</span>
+<span class="k">class</span> <span class="nc">TwoFactorAuthenticationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+
+  <span class="c1"># ...</span>
+
+  <span class="k">def</span> <span class="nf">destroy</span>
+    <span class="n">current_user</span><span class="p">.</span><span class="nf">otp_required_for_login</span> <span class="o">=</span> <span class="kp">false</span>
+    <span class="n">current_user</span><span class="p">.</span><span class="nf">otp_backup_codes</span><span class="o">&amp;</span><span class="p">.</span><span class="nf">clear</span>
+    <span class="n">current_user</span><span class="p">.</span><span class="nf">save!</span>
+    <span class="n">redirect_to</span> <span class="n">two_factor_authentication_path</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="step-10-fix-two-page-refresh-issues">Step 10: Fix two page refresh issues</h3>
+
+<p>Fix a refresh issue on <code class="language-plaintext highlighter-rouge">/two_factor/authentication/confirmations</code> after a failed submit</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentication/confirmations_controller.rb</span>
+<span class="k">def</span> <span class="nf">show</span>
+  <span class="n">redirect_to</span> <span class="n">two_factor_authentication_path</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Fix another refresh issue on <code class="language-plaintext highlighter-rouge">/two_factor_authentication/recovery_codes</code> after a failed submit</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/two_factor_authentication/recovery_codes_controller.rb</span>
+<span class="k">def</span> <span class="nf">index</span>
+  <span class="n">redirect_to</span> <span class="n">two_factor_authentication_path</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="step-11-refactor-routes-to-only-allow-specific-actions">Step 11: Refactor routes to only allow specific actions</h3>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gd">- resource :two_factor_authentication do
+-   scope module: :two_factor_authentication do
+-     resource :confirmation
+-     resources :recovery_codes
+-   end
+- end
+</span><span class="gi">+ resource :two_factor_authentication, only: [:show, :create, :destroy] do
++   scope module: :two_factor_authentication do
++     resource :confirmation, only: [:create, :show]
++     resources :recovery_codes, only: [:create, :index]
++   end
++ end
+</span></code></pre></div></div>
+
+<h3 id="step-12-how-to-write-system-tests-for-2fa-login">Step 12: How to write system tests for 2FA login?</h3>
+
+<p>Here is all system tests for two-factor authentication.</p>
+
+<p>Create a authentication system helper</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/support/helpers/system/authentication_system_helper.rb</span>
+<span class="k">module</span> <span class="nn">AuthenticationSystemHelper</span>
+  <span class="k">def</span> <span class="nf">scan_the_qr_code_and_get_an_onetime_token</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">user</span><span class="p">.</span><span class="nf">reload</span><span class="p">.</span><span class="nf">current_otp</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">get_an_onetime_token_from_authenticator_app</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">user</span><span class="p">.</span><span class="nf">reload</span><span class="p">.</span><span class="nf">current_otp</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">fill_in_digit_fields_with</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">chars</span> <span class="o">=</span> <span class="n">number</span><span class="p">.</span><span class="nf">to_s</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+
+    <span class="n">chars</span><span class="p">.</span><span class="nf">each</span><span class="p">.</span><span class="nf">with_index</span> <span class="k">do</span> <span class="o">|</span><span class="n">char</span><span class="p">,</span> <span class="n">index</span><span class="o">|</span>
+      <span class="n">fill_in</span> <span class="s2">"digit-</span><span class="si">#{</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="ss">with: </span><span class="n">char</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">setup_2fa</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">user</span><span class="p">.</span><span class="nf">otp_secret</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">generate_otp_secret</span>
+    <span class="n">user</span><span class="p">.</span><span class="nf">otp_required_for_login</span> <span class="o">=</span> <span class="kp">true</span>
+    <span class="n">user</span><span class="p">.</span><span class="nf">generate_otp_backup_codes!</span>
+    <span class="n">user</span><span class="p">.</span><span class="nf">save!</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Include the helper for system tests</p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">require "test_helper"
+</span><span class="gi">+ require "support/helpers/system/authentication_system_helper"
+</span><span class="err">
+</span><span class="p">class ApplicationSystemTestCase &lt; ActionDispatch::SystemTestCase
+</span><span class="gi">+  include Devise::Test::IntegrationHelpers
++  include AuthenticationSystemHelper
+</span><span class="err">
+</span>  driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
+<span class="p">end
+</span></code></pre></div></div>
+
+<p>Create 2FA setup and login tests</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/system/two_factor_auth/setup_2fa_test.rb</span>
+<span class="nb">require</span> <span class="s1">'application_system_test_case'</span>
+
+<span class="k">class</span> <span class="nc">Setup2FATest</span> <span class="o">&lt;</span> <span class="no">ApplicationSystemTestCase</span>
+
+  <span class="n">setup</span> <span class="k">do</span>
+    <span class="vi">@hopper</span> <span class="o">=</span> <span class="n">users</span><span class="p">(</span><span class="ss">:hopper</span><span class="p">)</span>
+    <span class="n">sign_in</span> <span class="vi">@hopper</span>
+  <span class="k">end</span>
+
+  <span class="nb">test</span> <span class="s2">"can success setup 2FA and login with it"</span> <span class="k">do</span>
+    <span class="n">visit</span> <span class="n">root_path</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Dashboard"</span>
+
+    <span class="n">click_link</span> <span class="s2">"Two-factor authentication"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Two-factor authentication"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticator app"</span>
+
+    <span class="n">click_on</span> <span class="s2">"Enable"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Setup Two-Factor Authentication"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Use your two-factor authentication app to scan the QR code"</span>
+
+    <span class="n">click_on</span> <span class="s2">"Cancel"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Two-factor authentication"</span>
+    <span class="n">assert_equal</span> <span class="n">two_factor_authentication_path</span><span class="p">,</span> <span class="n">page</span><span class="p">.</span><span class="nf">current_path</span>
+
+    <span class="n">click_on</span> <span class="s2">"Enable"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Setup Two-Factor Authentication"</span>
+
+    <span class="n">token</span> <span class="o">=</span> <span class="n">scan_the_qr_code_and_get_an_onetime_token</span><span class="p">(</span><span class="vi">@hopper</span><span class="p">)</span>
+    <span class="n">fill_in_digit_fields_with</span> <span class="n">token</span>
+    <span class="n">click_button</span> <span class="s2">"Confirm and activate"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"2FA Setup Success"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Save this emergency backup code and store it somewhere safe."</span>
+    <span class="n">assert_selector</span> <span class="s2">"li"</span><span class="p">,</span> <span class="ss">count: </span><span class="mi">12</span>
+    <span class="n">all</span><span class="p">(</span><span class="s2">"li"</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">li</span><span class="o">|</span>
+      <span class="n">assert_match</span> <span class="sr">/\w{8}/</span><span class="p">,</span> <span class="n">li</span><span class="p">.</span><span class="nf">text</span>
+    <span class="k">end</span>
+
+    <span class="n">click_on</span> <span class="s2">"Done"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Two-factor authentication"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticator app"</span>
+    <span class="n">assert_button</span> <span class="s2">"Disable"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Recovery codes"</span>
+    <span class="n">assert_button</span> <span class="s2">"Regenerate"</span>
+
+    <span class="n">click_on</span> <span class="s2">"Regenerate"</span> <span class="c1"># Regenerate recovery codes</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Regenerate Recovery Codes Success"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Save this emergency backup code and store it somewhere safe. (All previous codes are expired.)"</span>
+    <span class="n">assert_selector</span> <span class="s2">"li"</span><span class="p">,</span> <span class="ss">count: </span><span class="mi">12</span>
+    <span class="n">save_recovery_codes</span>
+
+    <span class="n">click_on</span> <span class="s2">"Done"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Two-factor authentication"</span>
+
+    <span class="c1">####################</span>
+    <span class="c1">## Login with 2FA ##</span>
+    <span class="c1">####################</span>
+
+    <span class="n">click_on</span> <span class="s2">"Logout"</span>
+    <span class="n">assert_content</span> <span class="s2">"Signed out successfully."</span>
+
+    <span class="n">click_on</span> <span class="s2">"Login"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Log in"</span>
+
+    <span class="n">travel_to</span> <span class="mi">30</span><span class="p">.</span><span class="nf">seconds</span><span class="p">.</span><span class="nf">after</span> <span class="k">do</span>
+      <span class="n">fill_in</span> <span class="s1">'Email'</span><span class="p">,</span> <span class="ss">with: </span><span class="s1">'hopper@example.com'</span>
+      <span class="n">fill_in</span> <span class="s1">'Password'</span><span class="p">,</span> <span class="ss">with: </span><span class="s1">'12345678'</span>
+      <span class="n">click_button</span> <span class="s2">"Log in"</span>
+      <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account"</span>
+      <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Enter 6-digit code from your two factor authenticator app."</span>
+
+      <span class="n">fill_in_digit_fields_with</span> <span class="s1">'111111'</span>
+      <span class="n">click_button</span> <span class="s2">"Verify"</span>
+      <span class="n">assert_content</span> <span class="s2">"Failed to authenticate your code"</span>
+
+      <span class="n">token</span> <span class="o">=</span> <span class="n">get_an_onetime_token_from_authenticator_app</span><span class="p">(</span><span class="vi">@hopper</span><span class="p">)</span>
+      <span class="n">fill_in_digit_fields_with</span> <span class="n">token</span>
+      <span class="n">click_button</span> <span class="s2">"Verify"</span>
+      <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Dashboard"</span>
+      <span class="n">assert_equal</span> <span class="n">dashboard_path</span><span class="p">,</span> <span class="n">page</span><span class="p">.</span><span class="nf">current_path</span>
+    <span class="k">end</span>
+
+    <span class="c1">##############################</span>
+    <span class="c1">## Login with a backup code ##</span>
+    <span class="c1">##############################</span>
+    <span class="n">click_on</span> <span class="s2">"Logout"</span>
+    <span class="n">assert_content</span> <span class="s2">"Signed out successfully."</span>
+
+    <span class="n">click_on</span> <span class="s2">"Login"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Log in"</span>
+
+    <span class="n">fill_in</span> <span class="s1">'Email'</span><span class="p">,</span> <span class="ss">with: </span><span class="s1">'hopper@example.com'</span>
+    <span class="n">fill_in</span> <span class="s1">'Password'</span><span class="p">,</span> <span class="ss">with: </span><span class="s1">'12345678'</span>
+    <span class="n">click_button</span> <span class="s2">"Log in"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Enter 6-digit code from your two factor authenticator app."</span>
+
+    <span class="n">click_link</span> <span class="s2">"Use a recovery code to access your account."</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account with a recovery code"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"To access your account, enter one of the recovery codes you saved when you set up your two-factor authentication device."</span>
+
+    <span class="n">fill_in_digit_fields_with</span> <span class="s1">'1234abcd'</span>
+    <span class="n">click_button</span> <span class="s2">"Verify"</span>
+    <span class="n">assert_content</span> <span class="s2">"Failed to authenticate your code"</span>
+
+    <span class="n">fill_in_digit_fields_with</span> <span class="vi">@recovery_codes</span><span class="p">.</span><span class="nf">pop</span>
+    <span class="n">click_button</span> <span class="s2">"Verify"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Dashboard"</span>
+    <span class="n">assert_equal</span> <span class="n">dashboard_path</span><span class="p">,</span> <span class="n">page</span><span class="p">.</span><span class="nf">current_path</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">save_recovery_codes</span>
+    <span class="vi">@recovery_codes</span> <span class="o">=</span> <span class="n">all</span><span class="p">(</span><span class="s2">"li"</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:text</span><span class="p">)</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+
+</code></pre></div></div>
+
+<p>Create Disable 2FA tests</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/system/two_factor_auth/disable_2fa_test.rb</span>
+<span class="nb">require</span> <span class="s1">'application_system_test_case'</span>
+
+<span class="k">class</span> <span class="nc">Disable2FATest</span> <span class="o">&lt;</span> <span class="no">ApplicationSystemTestCase</span>
+
+  <span class="n">setup</span> <span class="k">do</span>
+    <span class="vi">@hopper</span> <span class="o">=</span> <span class="n">users</span><span class="p">(</span><span class="ss">:hopper</span><span class="p">)</span>
+    <span class="n">setup_2fa</span><span class="p">(</span><span class="vi">@hopper</span><span class="p">)</span>
+    <span class="n">sign_in</span><span class="p">(</span><span class="vi">@hopper</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="nb">test</span> <span class="s2">"can success disable 2FA and login without 2FA"</span> <span class="k">do</span>
+    <span class="n">visit</span> <span class="n">two_factor_authentication_path</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Two-factor authentication"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticator app"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Recovery codes"</span>
+
+    <span class="n">click_on</span> <span class="s2">"Disable"</span>
+    <span class="n">assert_button</span> <span class="s2">"Enable"</span>
+
+    <span class="n">click_on</span> <span class="s2">"Logout"</span>
+    <span class="n">assert_content</span> <span class="s2">"Signed out successfully."</span>
+
+    <span class="n">click_on</span> <span class="s2">"Login"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Log in"</span>
+
+    <span class="n">fill_in</span> <span class="s2">"Email"</span><span class="p">,</span> <span class="ss">with: </span><span class="s2">"hopper@example.com"</span>
+    <span class="n">fill_in</span> <span class="s2">"Password"</span><span class="p">,</span> <span class="ss">with: </span><span class="s2">"12345678"</span>
+    <span class="n">click_button</span> <span class="s2">"Log in"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Dashboard"</span>
+
+    <span class="n">click_link</span> <span class="s2">"Two-factor authentication"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Two-factor authentication"</span>
+    <span class="n">assert_button</span> <span class="s2">"Enable"</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+
+</code></pre></div></div>
+
+<p>Create OTP session expiration tests</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/system/two_factor_auth/otp_session_expiration_test.rb</span>
+<span class="nb">require</span> <span class="s1">'application_system_test_case'</span>
+
+<span class="k">class</span> <span class="nc">OTPSessionExpiration</span> <span class="o">&lt;</span> <span class="no">ApplicationSystemTestCase</span>
+
+  <span class="n">setup</span> <span class="k">do</span>
+    <span class="vi">@hopper</span> <span class="o">=</span> <span class="n">users</span><span class="p">(</span><span class="ss">:hopper</span><span class="p">)</span>
+    <span class="n">setup_2fa</span><span class="p">(</span><span class="vi">@hopper</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="nb">test</span> <span class="s2">"expire after 30 seconds on OTP login page"</span> <span class="k">do</span>
+    <span class="n">visit</span> <span class="n">root_path</span>
+    <span class="n">assert_content</span> <span class="s2">"Welcome to 2FA Demo!"</span>
+
+    <span class="n">click_on</span> <span class="s2">"Login"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Log in"</span>
+
+    <span class="n">fill_in</span> <span class="s2">"Email"</span><span class="p">,</span> <span class="ss">with: </span><span class="s2">"hopper@example.com"</span>
+    <span class="n">fill_in</span> <span class="s2">"Password"</span><span class="p">,</span> <span class="ss">with: </span><span class="s2">"12345678"</span>
+    <span class="n">click_button</span> <span class="s2">"Log in"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Enter 6-digit code from your two factor authenticator app."</span>
+
+    <span class="n">refresh</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Enter 6-digit code from your two factor authenticator app."</span>
+    <span class="n">assert_equal</span> <span class="s2">"/users/sign_in/otp"</span><span class="p">,</span> <span class="n">page</span><span class="p">.</span><span class="nf">current_path</span>
+
+    <span class="n">travel_to</span> <span class="mi">31</span><span class="p">.</span><span class="nf">seconds</span><span class="p">.</span><span class="nf">after</span> <span class="k">do</span>
+      <span class="n">refresh</span>
+      <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Log in"</span>
+      <span class="n">assert_equal</span> <span class="s2">"/users/sign_in"</span><span class="p">,</span> <span class="n">page</span><span class="p">.</span><span class="nf">current_path</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="nb">test</span> <span class="s2">"expire after 30 seconds on recovery codee login page"</span> <span class="k">do</span>
+    <span class="n">visit</span> <span class="n">root_path</span>
+    <span class="n">assert_content</span> <span class="s2">"Welcome to 2FA Demo!"</span>
+
+    <span class="n">click_on</span> <span class="s2">"Login"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Log in"</span>
+
+    <span class="n">fill_in</span> <span class="s2">"Email"</span><span class="p">,</span> <span class="ss">with: </span><span class="s2">"hopper@example.com"</span>
+    <span class="n">fill_in</span> <span class="s2">"Password"</span><span class="p">,</span> <span class="ss">with: </span><span class="s2">"12345678"</span>
+    <span class="n">click_button</span> <span class="s2">"Log in"</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Enter 6-digit code from your two factor authenticator app."</span>
+
+    <span class="n">click_link</span> <span class="s2">"Use a recovery code to access your account."</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account with a recovery code"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"To access your account, enter one of the recovery codes you saved when you set up your two-factor authentication device."</span>
+
+    <span class="n">refresh</span>
+    <span class="n">assert_selector</span> <span class="s2">"h1"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Authenticate your account with a recovery code"</span>
+    <span class="n">assert_selector</span> <span class="s2">"p"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"To access your account, enter one of the recovery codes you saved when you set up your two-factor authentication device."</span>
+    <span class="n">assert_equal</span> <span class="s2">"/users/sign_in/recovery_code"</span><span class="p">,</span> <span class="n">page</span><span class="p">.</span><span class="nf">current_path</span>
+
+    <span class="n">travel_to</span> <span class="mi">31</span><span class="p">.</span><span class="nf">seconds</span><span class="p">.</span><span class="nf">after</span> <span class="k">do</span>
+      <span class="n">refresh</span>
+      <span class="n">assert_selector</span> <span class="s2">"h2"</span><span class="p">,</span> <span class="ss">text: </span><span class="s2">"Log in"</span>
+      <span class="n">assert_equal</span> <span class="s2">"/users/sign_in"</span><span class="p">,</span> <span class="n">page</span><span class="p">.</span><span class="nf">current_path</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Update user fixtures at <code class="language-plaintext highlighter-rouge">test/fixtures/users.yml</code></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">hopper</span><span class="pi">:</span>
+  <span class="na">email</span><span class="pi">:</span> <span class="s">hopper@example.com</span>
+  <span class="na">encrypted_password</span><span class="pi">:</span> <span class="s">&lt;%= Devise::Encryptor.digest(User, '12345678') %&gt;</span>
+  <span class="na">created_at</span><span class="pi">:</span> <span class="s">&lt;%= 10.days.ago.strftime("%Y-%m-%d %H:%M:%S") %&gt;</span>
+</code></pre></div></div>
+
+<h3 id="summary">Summary</h3>
+
+<h4 id="flow-design-overview">Flow design overview</h4>
+<h5 id="2fa-enable">2FA Enable</h5>
+
+<p><img src="/images/posts/devise-two-factor/flows/dashboard-to-2fa.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/dashboard</td>
+      <td>/two_factor_authentication</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>DashBoard#show</td>
+      <td>TwoFactorAuthentications#show</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>dashboard/show</td>
+      <td>two_factor_authentication/show</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/posts/devise-two-factor/flows/2FA-to-setup-confirm.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/two_factor_authentication</td>
+      <td>/two_factor_authentication</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>TwoFactorAuthentications#show</td>
+      <td>TwoFactorAuthentications#create</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>two_factor_authentication/show</td>
+      <td>two_factor_authentication/confirmations/show</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/posts/devise-two-factor/flows/2FA-setup-success.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/two_factor_authentication</td>
+      <td>/two_factor_authentication/confirmation</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>TwoFactorAuthentications#create</td>
+      <td>TwoFactorAuthentications/Confirmation#create</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>two_factor_authentication/confirmations/show</td>
+      <td>two_factor_authentication/confirmations/success</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="2fa-disable">2FA Disable</h5>
+
+<p><img src="/images/posts/devise-two-factor/flows/disable-2FA.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/two_factor_authentication</td>
+      <td>/two_factor_authentication</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>TwoFactorAuthentications#show</td>
+      <td>TwoFactorAuthentications#destroy -&gt; #show</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>two_factor_authentication/show</td>
+      <td>two_factor_authentication/show</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="regenerate-recovery-codes">Regenerate recovery codes</h5>
+
+<p><img src="/images/posts/devise-two-factor/flows/regenerate-recovery-codes.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/two_factor_authentication</td>
+      <td>/two_factor_authentication/recovery_codes</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>TwoFactorAuthentications#show</td>
+      <td>TwoFactorAuthentications/RecoveryCodes#create</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>two_factor_authentication/show</td>
+      <td>two_factor_authentication/recovery_codes/index</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="login-with-2fa">Login with 2FA</h5>
+
+<p><img src="/images/posts/devise-two-factor/flows/login-with-email-and-password.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/users/sign_in</td>
+      <td>/users/sign_in/otp</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>users/sessions#new</td>
+      <td>users/sessions#create -&gt; users/otp/sessions#new</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>devise/sessions/new</td>
+      <td>users/otp/sessions/new</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/posts/devise-two-factor/flows/login-with-otp-code.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/users/sign_in/otp</td>
+      <td>/dashboard</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>users/otp/sessions#new</td>
+      <td>users/otp/sessions#create -&gt; dashboard#show</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>users/otp/sessions/new</td>
+      <td>dashbord/show</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="login-with-recovery-code">Login with recovery code</h5>
+
+<p><img src="/images/posts/devise-two-factor/flows/go-to-recovery-code-login-page.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/users/sign_in/otp</td>
+      <td>/users/sign_in/recovery_code</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>users/otp/sessions#new</td>
+      <td>users/recovery_code/sessions#new</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>users/otp/sessions/new</td>
+      <td>users/recovery_code/sessions/new</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/posts/devise-two-factor/flows/login-with-recovery-code.png" alt="" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>From</td>
+      <td>To</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>/users/sign_in/recovery_code</td>
+      <td>/dashboard</td>
+    </tr>
+    <tr>
+      <td>Controller</td>
+      <td>users/recovery_code/sessions#new</td>
+      <td>users/recovery_code/sessions#create -&gt; dashboard#show</td>
+    </tr>
+    <tr>
+      <td>Render</td>
+      <td>users/recovery_code/sessions/new</td>
+      <td>dashboard/show</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="database-schema-overview">Database schema overview</h4>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">create_table</span> <span class="s2">"users"</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+  <span class="c1"># ...</span>
+  <span class="n">t</span><span class="p">.</span><span class="nf">string</span> <span class="s2">"encrypted_otp_secret"</span>
+  <span class="n">t</span><span class="p">.</span><span class="nf">string</span> <span class="s2">"encrypted_otp_secret_iv"</span>
+  <span class="n">t</span><span class="p">.</span><span class="nf">string</span> <span class="s2">"encrypted_otp_secret_salt"</span>
+  <span class="n">t</span><span class="p">.</span><span class="nf">integer</span> <span class="s2">"consumed_timestep"</span>
+  <span class="n">t</span><span class="p">.</span><span class="nf">boolean</span> <span class="s2">"otp_required_for_login"</span>
+  <span class="n">t</span><span class="p">.</span><span class="nf">text</span> <span class="s2">"otp_backup_codes"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+  </main>
+
+  <footer>
+    <a href="/">RubyGems.Guide</a>
+
+    <div class="social">
+      <a href="https://twitter.com/hoppergeegee" target="_blank" class="twitter">
+        <img src="/images/social/twitter.png" alt="twitter">
+      </a>
+      <a href="https://github.com/rubygemsguide/rubygemsguide" target="_blank" class="github">
+        <img src="/images/social/github.png" alt="github">
+      </a>
+    </div>
+  </footer> 
+
+  <script async defer src="https://cloud.rubygems.guide/latest.js"></script>
+  <noscript><img src="https://cloud.rubygems.guide/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+</body>
+
+</html>

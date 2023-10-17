@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RubyGems.Guide | rest-man | Streaming</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="apple-mobile-web-app-title" content="RubyGems.Guide">
+<meta name="application-name" content="RubyGems.Guide">
+<meta name="msapplication-TileColor" content="#ad5153">
+<meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/css/rest-man/post.css?81a7d00c459574cfc21cded0942ccd2e">
+  <link rel="stylesheet" href="/css/rest-man/syntax-highlight.css?81a7d00c459574cfc21cded0942ccd2e">
+  <script type="importmap">
+  {
+    "imports": {
+      "stimulus@3.2.2": "/js/modules/stimulus@3.2.2.js",
+      "./controllers/": "./js/rest-man/controllers/"
+    }
+  }
+</script>
+
+  <script type="module" src="/js/rest-man/post.js?f9d2fd2c6150fdcc7704b68372899477">
+
+  
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>RubyGems.Guide rest-man Streaming | RubyGems.Guide</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="RubyGems.Guide rest-man Streaming" />
+<meta name="author" content="Hopper Gee" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Streaming" />
+<meta property="og:description" content="Streaming" />
+<link rel="canonical" href="https://rubygems.guide/rest-man/streaming" />
+<meta property="og:url" content="https://rubygems.guide/rest-man/streaming" />
+<meta property="og:site_name" content="RubyGems.Guide" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-17T08:21:03+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="RubyGems.Guide rest-man Streaming" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Hopper Gee"},"dateModified":"2023-10-17T08:21:03+00:00","datePublished":"2023-10-17T08:21:03+00:00","description":"Streaming","headline":"RubyGems.Guide rest-man Streaming","mainEntityOfPage":{"@type":"WebPage","@id":"https://rubygems.guide/rest-man/streaming"},"url":"https://rubygems.guide/rest-man/streaming"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <h1>
+      <a href="/rest-man" class="rest-man">rest-man</a>
+      <div class="powered-by">
+        <img src="/images/logo-white.png" alt="logo" class="logo">
+        RubyGems.Guide
+      </div>
+    </h1>
+    <div class="guides" data-controller="nav" style="visibility: hidden;">
+      
+
+
+
+  <a href="/rest-man/request/get" class="guide" data-nav-target="item">GET</a>
+
+      
+
+
+
+  <a href="/rest-man/request/post" class="guide" data-nav-target="item">POST</a>
+
+      
+
+
+
+  <a href="/rest-man/request/put" class="guide" data-nav-target="item">PUT</a>
+
+      
+
+
+
+  <a href="/rest-man/request/patch" class="guide" data-nav-target="item">PATCH</a>
+
+      
+
+
+
+  <a href="/rest-man/request/delete" class="guide" data-nav-target="item">DELETE</a>
+
+      
+
+
+
+  <a href="/rest-man/request/options" class="guide" data-nav-target="item">OPTIONS</a>
+
+      
+
+
+
+  <a href="/rest-man/request/head" class="guide" data-nav-target="item">HEAD</a>
+
+      <div class="basic">Basic</div>
+      
+
+
+
+  <a href="/rest-man/headers" class="guide" data-nav-target="item">Headers</a>
+
+      
+
+
+
+  <a href="/rest-man/cookies" class="guide" data-nav-target="item">Cookies</a>
+
+      
+
+
+
+  <a href="/rest-man/body" class="guide" data-nav-target="item">Body</a>
+
+      
+
+
+
+  <a href="/rest-man/http-status" class="guide" data-nav-target="item">Status</a>
+
+      <div class="advance">Advance</div>
+      
+
+
+
+  <a href="/rest-man/ssl-tls" class="guide" data-nav-target="item">SSL/TLS</a>
+
+      
+
+
+
+  <a href="/rest-man/retry" class="guide" data-nav-target="item">Retry</a>
+
+      
+
+
+
+  <a href="/rest-man/timeout" class="guide" data-nav-target="item">Timeout</a>
+
+      
+
+
+
+  <a href="/rest-man/proxy" class="guide" data-nav-target="item">Proxy</a>
+
+      
+
+
+
+  <a href="/rest-man/redirection" class="guide" data-nav-target="item">Redirection</a>
+
+      
+
+
+
+  <a href="/rest-man/exception" class="guide" data-nav-target="item">Exception</a>
+
+      
+
+
+
+  <a href="/rest-man/logging" class="guide" data-nav-target="item">Logging</a>
+
+      
+
+
+
+  <a href="/rest-man/streaming" class="guide active" data-nav-target="item">Streaming</a>
+
+    </div>
+    <div class="footer">
+      <a href="https://twitter.com/hoppergeegee" target="_blank" class="twitter">
+        <img src="/images/social/twitter.png" alt="twitter">
+      </a>
+      <a href="https://github.com/rubygemsguide/rubygemsguide" target="_blank" class="github">
+        <img src="/images/social/github.png" alt="github">
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="post">
+  <h2 class="title">Streaming</h2>
+
+  
+
+  
+    
+
+
+
+
+
+
+
+
+
+<div class="example-section">
+  
+    <h3 class="example-title">Streaming request payload</h3>
+  
+  
+    <div class="example-pre-desc"><p>RestMan will try to stream any file-like payload rather than reading it into
+memory. This happens through <code class="language-plaintext highlighter-rouge">RestMan::Payload::Streamed</code>, which is
+automatically called internally by <code class="language-plaintext highlighter-rouge">RestMan::Payload.generate</code> on anything
+with a <code class="language-plaintext highlighter-rouge">read</code> method.</p>
+</div>
+  
+
+  
+    <div class="request-box">
+      <div class="http-method">PUT</div>
+      <div class="request-target">/api/image</div>
+      <div class="http-version">HTTP/1.1</div>
+      <div class="http-headers">
+        
+          <div class="http-header" title="Accept: */*">Accept: */*</div>
+        
+          <div class="http-header" title="Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3">Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3</div>
+        
+          <div class="http-header" title="Host: example.com">Host: example.com</div>
+        
+          <div class="http-header" title="User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20">User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20</div>
+        
+          <div class="http-header" title="Content-Type: image/jpeg">Content-Type: image/jpeg</div>
+        
+          <div class="http-header" title="Content-Length: 143685">Content-Length: 143685</div>
+        
+      </div>
+      
+        <div class="http-body">[&quot;JPEG binary data goes here&quot;]</div>
+      
+    </div>
+
+    <div class="request-arrow">
+      <?xml version="1.0" encoding="UTF-8"?>
+<svg width="248px" height="22px" viewBox="0 0 248 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Page-1" stroke="none" stroke-width="1" fill="currentColor" fill-rule="evenodd">
+      <path id="Line" d="M230.508552,-2.71830388 L247.133391,5.06724195 C248.192682,5.56331625 248.301809,7.02706842 247.327787,7.67473219 L232.041188,17.8393706 C231.351345,18.2980733 230.420264,18.1106971 229.961562,17.4208541 C229.502859,16.7310111 229.690235,15.7999309 230.380078,15.3412282 L240.898,8.346 L230.753506,9.10356057 C189.311546,12.0870822 155.706444,13.5791595 129.931955,13.5791595 C101.148678,13.5791595 58.309368,11.7181973 1.40211822,7.99681061 C0.575456766,7.942752 -0.050861591,7.22878731 0.00319702098,6.40212585 C0.0572556329,5.57546439 0.771220317,4.94914604 1.59788178,5.00320465 C58.4454288,8.72068712 101.227422,10.5791595 129.931955,10.5791595 C155.62452,10.5791595 189.161978,9.09008563 230.534275,6.11158405 L240.674,5.355 L229.236235,-0.00146580008 C228.530132,-0.332139372 228.202154,-1.14262439 228.458926,-1.86230642 L228.513974,-1.9960434 C228.865315,-2.74627752 229.758318,-3.06964455 230.508552,-2.71830388 Z" transform="translate(123.500000, 9.289584) scale(1, -1) translate(-123.500000, -9.289584) " fill-rule="nonzero">
+      </path>
+  </g>
+</svg>
+      
+      
+    </div>
+
+    <div class="response-box">
+      <div class="http-version">HTTP/1.1</div>
+      <div class="status-code">200</div>
+      <div class="status-text">OK</div>
+      <div class="http-headers">
+        
+          <div class="http-header" title="Content-Type: text/plain">Content-Type: text/plain</div>
+        
+      </div>
+      
+        <div class="http-body">Image uploaded successfully</div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class="terminal" data-controller="terminal">
+      <div class="terminal-bar">
+        <div class="close-icon"></div>
+        <div class="minimize-icon"></div>
+        <div class="fullscreen-icon"></div>
+        
+          
+            <div class="terminal-tab active" data-index="1" data-terminal-target="tab" data-action="click-&gt;terminal#switchTab">
+              simple
+            </div>
+          
+        
+          
+            <div class="terminal-tab " data-index="2" data-terminal-target="tab" data-action="click-&gt;terminal#switchTab">
+              advance
+            </div>
+          
+        
+          
+            <div class="terminal-tab " data-index="3" data-terminal-target="tab" data-action="click-&gt;terminal#switchTab">
+              resource
+            </div>
+          
+        
+          
+            <div class="terminal-tab " data-index="4" data-terminal-target="tab" data-action="click-&gt;terminal#switchTab">
+              cli
+            </div>
+          
+        
+      </div>
+      
+        <div class="terminal-body active" data-index="1" data-terminal-target="body">
+          <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">response</span> <span class="o">=</span> <span class="no">RestMan</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
+  <span class="s1">'http://example.com/api/image'</span><span class="p">,</span>
+  <span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s2">"./files/profile.jpg"</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">),</span>
+  <span class="p">{</span><span class="ss">content_type: :jpg</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">response</span><span class="p">.</span><span class="nf">code</span>                   <span class="c1">#=&gt; 200</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">headers</span>                <span class="c1">#=&gt; Hash</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">headers</span><span class="p">[</span><span class="ss">:content_type</span><span class="p">]</span> <span class="c1">#=&gt; text/plain</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">body</span>                   <span class="c1">#=&gt; Image uploaded successfully</span>
+</code></pre></div></div>
+
+        </div>
+      
+        <div class="terminal-body " data-index="2" data-terminal-target="body">
+          <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">response</span> <span class="o">=</span> <span class="no">RestMan</span><span class="o">::</span><span class="no">Request</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span>
+  <span class="ss">method: :put</span><span class="p">,</span>
+  <span class="ss">url: </span><span class="s1">'http://example.com/api/image'</span><span class="p">,</span>
+  <span class="ss">payload: </span><span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s2">"./files/profile.jpg"</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">),</span>
+  <span class="ss">headers: </span><span class="p">{</span> <span class="ss">content_type: :jpg</span> <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">response</span><span class="p">.</span><span class="nf">code</span>                   <span class="c1">#=&gt; 200</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">headers</span>                <span class="c1">#=&gt; Hash</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">headers</span><span class="p">[</span><span class="ss">:content_type</span><span class="p">]</span> <span class="c1">#=&gt; text/plain</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">body</span>                   <span class="c1">#=&gt; Image uploaded successfully</span>
+</code></pre></div></div>
+
+        </div>
+      
+        <div class="terminal-body " data-index="3" data-terminal-target="body">
+          <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resource</span> <span class="o">=</span> <span class="no">RestMan</span><span class="o">::</span><span class="no">Resource</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"http://example.com/api/image"</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">resource</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
+  <span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s2">"./files/profile.jpg"</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">),</span>
+  <span class="p">{</span><span class="ss">content_type: :jpg</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">response</span><span class="p">.</span><span class="nf">code</span>                   <span class="c1">#=&gt; 200</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">headers</span>                <span class="c1">#=&gt; Hash</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">headers</span><span class="p">[</span><span class="ss">:content_type</span><span class="p">]</span> <span class="c1">#=&gt; text/plain</span>
+<span class="n">response</span><span class="p">.</span><span class="nf">body</span>                   <span class="c1">#=&gt; Image uploaded successfully</span>
+</code></pre></div></div>
+
+        </div>
+      
+        <div class="terminal-body " data-index="4" data-terminal-target="body">
+          <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RestMan CLI hasn't support file upload with custom headers
+</code></pre></div></div>
+
+        </div>
+      
+    </div>
+  
+</div>
+  
+    
+
+
+
+
+
+
+
+
+
+<div class="example-section">
+  
+    <h3 class="example-title">Streaming responses</h3>
+  
+  
+    <div class="example-pre-desc"><h4 id="use-raw_response-with-tempfile">Use <code class="language-plaintext highlighter-rouge">raw_response</code> with Tempfile</h4>
+
+<p>If you pass <code class="language-plaintext highlighter-rouge">raw_response: true</code> to <code class="language-plaintext highlighter-rouge">RestMan::Request.execute</code>, it will save
+the response body to a temporary file (using <code class="language-plaintext highlighter-rouge">Tempfile</code>) and return a
+<code class="language-plaintext highlighter-rouge">RestMan::RawResponse</code> object rather than a <code class="language-plaintext highlighter-rouge">RestMan::Response</code>.</p>
+
+<p>Note that the tempfile created by <code class="language-plaintext highlighter-rouge">Tempfile.new</code> will be in <code class="language-plaintext highlighter-rouge">Dir.tmpdir</code>
+(usually <code class="language-plaintext highlighter-rouge">/tmp/</code>), which you can override to store temporary files in a
+different location. This file will be unlinked when it is dereferenced.</p>
+
+<p>If logging is enabled, this will also print download progress.
+Customize the interval with <code class="language-plaintext highlighter-rouge">:stream_log_percent</code> (defaults to
+10 for printing a message every 10% complete).</p>
+
+<p>For example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">raw</span> <span class="o">=</span> <span class="no">RestMan</span><span class="o">::</span><span class="no">Request</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span>
+  <span class="ss">method: :get</span><span class="p">,</span>
+  <span class="ss">url: </span><span class="s1">'http://releases.ubuntu.com/16.04.2/ubuntu-16.04.2-desktop-amd64.iso'</span><span class="p">,</span>
+  <span class="ss">raw_response: </span><span class="kp">true</span>
+<span class="p">)</span>
+<span class="c1">#=&gt; &lt;RestMan::RawResponse</span>
+<span class="c1"># @code=200,@file=#&lt;Tempfile:/tmp/rest-man.20170522-5346-1pptjm1&gt;,</span>
+<span class="c1"># @request=&lt;RestMan::Request @method="get",</span>
+<span class="c1"># @url="http://releases.ubuntu.com/16.04.2/ubuntu-16.04.2-desktop-amd64.iso"&gt;&gt;</span>
+
+<span class="n">raw</span><span class="p">.</span><span class="nf">file</span><span class="p">.</span><span class="nf">size</span>     <span class="c1">#=&gt; 1554186240</span>
+<span class="n">raw</span><span class="p">.</span><span class="nf">file</span><span class="p">.</span><span class="nf">path</span>     <span class="c1">#=&gt; "/tmp/rest-man.20170522-5346-1pptjm1"</span>
+<span class="n">raw</span><span class="p">.</span><span class="nf">file</span><span class="p">.</span><span class="nf">path</span>     <span class="c1">#=&gt; "/tmp/rest-man.20170522-5346-1pptjm1"</span>
+
+<span class="nb">require</span> <span class="s1">'digest/sha1'</span>
+<span class="no">Digest</span><span class="o">::</span><span class="no">SHA1</span><span class="p">.</span><span class="nf">file</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="nf">file</span><span class="p">.</span><span class="nf">path</span><span class="p">).</span><span class="nf">hexdigest</span>
+<span class="c1">#=&gt; "4375b73e3a1aa305a36320ffd7484682922262b3"</span>
+</code></pre></div></div>
+
+<h4 id="use-block_response-to-receive-raw-nethttpresponse">Use <code class="language-plaintext highlighter-rouge">block_response</code> to receive raw Net::HTTPResponse</h4>
+
+<p>If you want to stream the data from the response to a file as it comes, rather
+than entirely in memory, you can also pass <code class="language-plaintext highlighter-rouge">RestMan::Request.execute</code> a
+parameter <code class="language-plaintext highlighter-rouge">:block_response</code> to which you pass a block/proc. This block receives
+the raw unmodified Net::HTTPResponse object from Net::HTTP, which you can use
+to stream directly to a file as each chunk is received.</p>
+
+<p>Note that this bypasses all the usual HTTP status code handling, so you will
+want to do you own checking for HTTP 20x response codes, redirects, etc.</p>
+
+<p>The following is an example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s1">'/some/output/file'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span>
+  <span class="n">block</span> <span class="o">=</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="n">response</span><span class="o">|</span>
+    <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span> <span class="k">do</span> <span class="o">|</span><span class="n">chunk</span><span class="o">|</span>
+      <span class="n">f</span><span class="p">.</span><span class="nf">write</span> <span class="n">chunk</span>
+    <span class="k">end</span>
+  <span class="p">}</span>
+  <span class="no">RestMan</span><span class="o">::</span><span class="no">Request</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span>
+    <span class="ss">method: :get</span><span class="p">,</span>
+    <span class="ss">url: </span><span class="s1">'http://example.com/some/really/big/file.img'</span><span class="p">,</span>
+    <span class="ss">block_response: </span><span class="n">block</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+</div>
+  
+
+  
+
+  
+
+  
+</div>
+  
+</div>
+
+  </main>
+
+  <script async defer src="https://cloud.rubygems.guide/latest.js"></script>
+<noscript><img src="https://cloud.rubygems.guide/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+</body>
+
+</html>
+

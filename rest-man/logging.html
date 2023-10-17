@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RubyGems.Guide | rest-man | Logging</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="apple-mobile-web-app-title" content="RubyGems.Guide">
+<meta name="application-name" content="RubyGems.Guide">
+<meta name="msapplication-TileColor" content="#ad5153">
+<meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/css/rest-man/post.css?81a7d00c459574cfc21cded0942ccd2e">
+  <link rel="stylesheet" href="/css/rest-man/syntax-highlight.css?81a7d00c459574cfc21cded0942ccd2e">
+  <script type="importmap">
+  {
+    "imports": {
+      "stimulus@3.2.2": "/js/modules/stimulus@3.2.2.js",
+      "./controllers/": "./js/rest-man/controllers/"
+    }
+  }
+</script>
+
+  <script type="module" src="/js/rest-man/post.js?f9d2fd2c6150fdcc7704b68372899477">
+
+  
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>RubyGems.Guide rest-man Logging | RubyGems.Guide</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="RubyGems.Guide rest-man Logging" />
+<meta name="author" content="Hopper Gee" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Logging" />
+<meta property="og:description" content="Logging" />
+<link rel="canonical" href="https://rubygems.guide/rest-man/logging" />
+<meta property="og:url" content="https://rubygems.guide/rest-man/logging" />
+<meta property="og:site_name" content="RubyGems.Guide" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-17T08:21:03+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="RubyGems.Guide rest-man Logging" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Hopper Gee"},"dateModified":"2023-10-17T08:21:03+00:00","datePublished":"2023-10-17T08:21:03+00:00","description":"Logging","headline":"RubyGems.Guide rest-man Logging","mainEntityOfPage":{"@type":"WebPage","@id":"https://rubygems.guide/rest-man/logging"},"url":"https://rubygems.guide/rest-man/logging"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <h1>
+      <a href="/rest-man" class="rest-man">rest-man</a>
+      <div class="powered-by">
+        <img src="/images/logo-white.png" alt="logo" class="logo">
+        RubyGems.Guide
+      </div>
+    </h1>
+    <div class="guides" data-controller="nav" style="visibility: hidden;">
+      
+
+
+
+  <a href="/rest-man/request/get" class="guide" data-nav-target="item">GET</a>
+
+      
+
+
+
+  <a href="/rest-man/request/post" class="guide" data-nav-target="item">POST</a>
+
+      
+
+
+
+  <a href="/rest-man/request/put" class="guide" data-nav-target="item">PUT</a>
+
+      
+
+
+
+  <a href="/rest-man/request/patch" class="guide" data-nav-target="item">PATCH</a>
+
+      
+
+
+
+  <a href="/rest-man/request/delete" class="guide" data-nav-target="item">DELETE</a>
+
+      
+
+
+
+  <a href="/rest-man/request/options" class="guide" data-nav-target="item">OPTIONS</a>
+
+      
+
+
+
+  <a href="/rest-man/request/head" class="guide" data-nav-target="item">HEAD</a>
+
+      <div class="basic">Basic</div>
+      
+
+
+
+  <a href="/rest-man/headers" class="guide" data-nav-target="item">Headers</a>
+
+      
+
+
+
+  <a href="/rest-man/cookies" class="guide" data-nav-target="item">Cookies</a>
+
+      
+
+
+
+  <a href="/rest-man/body" class="guide" data-nav-target="item">Body</a>
+
+      
+
+
+
+  <a href="/rest-man/http-status" class="guide" data-nav-target="item">Status</a>
+
+      <div class="advance">Advance</div>
+      
+
+
+
+  <a href="/rest-man/ssl-tls" class="guide" data-nav-target="item">SSL/TLS</a>
+
+      
+
+
+
+  <a href="/rest-man/retry" class="guide" data-nav-target="item">Retry</a>
+
+      
+
+
+
+  <a href="/rest-man/timeout" class="guide" data-nav-target="item">Timeout</a>
+
+      
+
+
+
+  <a href="/rest-man/proxy" class="guide" data-nav-target="item">Proxy</a>
+
+      
+
+
+
+  <a href="/rest-man/redirection" class="guide" data-nav-target="item">Redirection</a>
+
+      
+
+
+
+  <a href="/rest-man/exception" class="guide" data-nav-target="item">Exception</a>
+
+      
+
+
+
+  <a href="/rest-man/logging" class="guide active" data-nav-target="item">Logging</a>
+
+      
+
+
+
+  <a href="/rest-man/streaming" class="guide" data-nav-target="item">Streaming</a>
+
+    </div>
+    <div class="footer">
+      <a href="https://twitter.com/hoppergeegee" target="_blank" class="twitter">
+        <img src="/images/social/twitter.png" alt="twitter">
+      </a>
+      <a href="https://github.com/rubygemsguide/rubygemsguide" target="_blank" class="github">
+        <img src="/images/social/github.png" alt="github">
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="post">
+  <h2 class="title">Logging</h2>
+
+  
+    <div class="post-desc">
+      <p>To enable logging globally you can:</p>
+
+<p>Set RestMan.log with a Ruby Logger</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">RestMan</span><span class="p">.</span><span class="nf">log</span> <span class="o">=</span> <span class="no">STDOUT</span>
+</code></pre></div></div>
+
+<p>Or set an environment variable to avoid modifying the code (in this case you can use a file name, “stdout” or “stderr”):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ RESTCLIENT_LOG</span><span class="o">=</span>stdout path/to/my/program
+</code></pre></div></div>
+
+<p>You can also set individual loggers when instantiating a Resource or making an
+individual request:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">resource</span> <span class="o">=</span> <span class="no">RestMan</span><span class="o">::</span><span class="no">Resource</span><span class="p">.</span><span class="nf">new</span> <span class="s1">'http://example.com/resource'</span><span class="p">,</span> <span class="ss">log: </span><span class="no">Logger</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="no">STDOUT</span><span class="p">)</span>
+
+<span class="no">RestMan</span><span class="o">::</span><span class="no">Request</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="ss">method: :get</span><span class="p">,</span> <span class="ss">url: </span><span class="s1">'http://example.com/foo'</span><span class="p">,</span> <span class="ss">log: </span><span class="no">Logger</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="no">STDERR</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>All options produce logs like this:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">RestMan</span><span class="p">.</span><span class="nf">get</span> <span class="s2">"http://some/resource"</span>
+<span class="c1"># =&gt; 200 OK | text/html 250 bytes</span>
+<span class="no">RestMan</span><span class="p">.</span><span class="nf">put</span> <span class="s2">"http://some/resource"</span><span class="p">,</span> <span class="s2">"payload"</span>
+<span class="c1"># =&gt; 401 Unauthorized | application/xml 340 bytes</span>
+</code></pre></div></div>
+
+<p>Note that these logs are valid Ruby, so you can paste them into the <code class="language-plaintext highlighter-rouge">restman</code>
+shell or a script to replay your sequence of rest calls.</p>
+
+    </div>
+  
+
+  
+</div>
+
+  </main>
+
+  <script async defer src="https://cloud.rubygems.guide/latest.js"></script>
+<noscript><img src="https://cloud.rubygems.guide/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+</body>
+
+</html>
+

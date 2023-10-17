@@ -1,0 +1,508 @@
+.static {
+  position: static;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+}
+
+:root {
+  --sans-font: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Nimbus Sans L, Roboto, Noto, Segoe UI, Arial, Helvetica, Helvetica Neue, sans-serif;
+  --mono-font: ${$font-mono};
+  --brand-color: #ad5153;
+  --brand-border-color: #232323;
+}
+
+html {
+  font-family: var(--sans-font);
+  overflow: hidden;
+}
+
+body {
+  background: #f9fafb;
+  font-size: 16px;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  flex: 1;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+header {
+  background-color: var(--brand-color);
+  border-bottom: 2px solid var(--brand-border-color);
+  text-align: center;
+  padding: 0.5rem;
+  width: 100vw;
+  position: relative;
+  box-sizing: border-box;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+@media (min-width: 768px) {
+  header {
+    padding: 1rem 2rem;
+  }
+}
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 20px;
+  margin-right: 0.5rem;
+  opacity: 0.75;
+}
+
+@media (min-width: 640px) {
+  .logo {
+    width: 32px;
+    opacity: 1;
+  }
+}
+header {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+@media (min-width: 640px) {
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: center;
+    position: relative;
+  }
+}
+header h1 {
+  display: none;
+  font-size: 0.875rem;
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  header h1 {
+    margin: unset;
+    display: unset;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 1.5rem;
+    z-index: 1;
+  }
+}
+header h1 a, header h2 a {
+  color: white !important;
+  text-decoration: none;
+}
+
+header h1 a:hover, header h2 a:hover {
+  background-color: unset;
+}
+
+header h2 {
+  display: block;
+  text-align: center;
+  color: white;
+  width: 100%;
+  margin: -8px 0 0 0;
+  font-size: 40px;
+}
+
+@media (min-width: 640px) {
+  header h2 {
+    margin: 15px 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    font-size: 1.5em;
+    height: 100%;
+  }
+}
+footer {
+  padding: 10px;
+  color: #ad5153;
+  background-color: #f9fafb;
+  font-size: 1rem;
+  text-align: center;
+  border-top: 2px solid var(--brand-border-color);
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+footer .social {
+  display: flex;
+  align-items: center;
+}
+footer a.twitter {
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  opacity: 70%;
+}
+footer a.twitter:hover {
+  background-color: unset;
+  opacity: 100%;
+}
+footer a.twitter img {
+  width: 24px;
+}
+footer a.github {
+  display: flex;
+  align-items: center;
+  opacity: 70%;
+}
+footer a.github:hover {
+  background-color: unset;
+  opacity: 100%;
+}
+footer a.github img {
+  width: 24px;
+}
+
+@media (min-width: 640px) {
+  footer {
+    padding: 2rem 1rem 1.5rem 1rem;
+  }
+}
+main {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.main-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+@media (min-width: 640px) {
+  .main-section {
+    flex-direction: row;
+    margin: 50px;
+  }
+}
+.advance-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+@media (min-width: 640px) {
+  .advance-section {
+    margin-bottom: unset;
+    margin-left: unset;
+    margin-right: unset;
+  }
+}
+/*
+###########
+# Request Box
+###########
+*/
+.request-box-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 640px) {
+  .request-box-wrapper {
+    width: 33.3333333%;
+  }
+}
+.request-box-wrapper a {
+  cursor: pointer;
+}
+
+.request-box {
+  width: 300px;
+  border: 2px solid;
+}
+
+.request {
+  display: block;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -8px;
+}
+
+.request-action {
+  box-sizing: border-box;
+  width: 33.333333%;
+  border: 2px solid;
+  margin-left: -2px;
+  margin-top: -2px;
+  text-align: center;
+  padding: 20px 0;
+  text-decoration: unset;
+  color: black;
+}
+
+.request-action:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+.request-headers {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+
+.request-headers:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+.request-cookies {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 2px dashed;
+  border-bottom-style: solid;
+  border-right-style: solid;
+  padding: 4px 16px;
+  margin-right: -2px;
+  background: #f9fafb;
+  text-decoration: unset;
+  color: black;
+}
+
+.request-cookies:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+.request-body {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  margin-bottom: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+
+.request-body:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+/*
+###########
+# Arrow
+###########
+*/
+.arrow {
+  display: none;
+  width: 33.333333%;
+  text-align: center;
+  padding: 0 20px;
+  color: #873F41;
+}
+
+@media (min-width: 640px) {
+  .arrow {
+    display: unset;
+  }
+}
+.arrow svg {
+  width: 100%;
+}
+
+/*
+###########
+# Response box
+###########
+*/
+.response-box-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (min-width: 640px) {
+  .response-box-wrapper {
+    margin-top: unset;
+    width: 33.3333333%;
+  }
+}
+.response-box-wrapper a {
+  cursor: pointer;
+}
+
+.response-box {
+  width: 300px;
+  border: 2px solid;
+}
+
+.response {
+  display: block;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.response-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -8px;
+}
+
+.response-status {
+  box-sizing: border-box;
+  width: 33.333333%;
+  border: 2px solid;
+  margin-left: -2px;
+  margin-top: -2px;
+  text-align: center;
+  padding: 20px 0;
+  text-decoration: unset;
+  color: black;
+}
+
+.response-status:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+.response-headers {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+
+.response-headers:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+.response-cookies {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 2px dashed;
+  padding: 4px 16px;
+  margin-right: -2px;
+  background: #f9fafb;
+  border-bottom-style: solid;
+  border-right-style: solid;
+  text-decoration: unset;
+  color: black;
+}
+
+.response-cookies:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+.response-body {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  margin-bottom: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+
+.response-body:hover {
+  background: #AD5153;
+  border-color: black;
+  color: white;
+}
+
+.advance-box {
+  border: 2px solid black;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+@media (min-width: 640px) {
+  .advance-box {
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.advance-box > a {
+  border: 2px solid black;
+  text-align: center;
+  padding: 20px 10px;
+  cursor: pointer;
+  margin: -2px;
+  text-decoration: unset;
+  color: black;
+}
+
+.advance-box > a:hover {
+  background: #AD5153;
+  color: white;
+  z-index: 1;
+}
+
+/*# sourceMappingURL=home.css.map */

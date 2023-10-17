@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RubyGems.Guide | rest-man | HTTP Status</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="apple-mobile-web-app-title" content="RubyGems.Guide">
+<meta name="application-name" content="RubyGems.Guide">
+<meta name="msapplication-TileColor" content="#ad5153">
+<meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/css/rest-man/post.css?81a7d00c459574cfc21cded0942ccd2e">
+  <link rel="stylesheet" href="/css/rest-man/syntax-highlight.css?81a7d00c459574cfc21cded0942ccd2e">
+  <script type="importmap">
+  {
+    "imports": {
+      "stimulus@3.2.2": "/js/modules/stimulus@3.2.2.js",
+      "./controllers/": "./js/rest-man/controllers/"
+    }
+  }
+</script>
+
+  <script type="module" src="/js/rest-man/post.js?f9d2fd2c6150fdcc7704b68372899477">
+
+  
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>RubyGems.Guide rest-man HTTP Status | RubyGems.Guide</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="RubyGems.Guide rest-man HTTP Status" />
+<meta name="author" content="Hopper Gee" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Status Code" />
+<meta property="og:description" content="Status Code" />
+<link rel="canonical" href="https://rubygems.guide/rest-man/http-status" />
+<meta property="og:url" content="https://rubygems.guide/rest-man/http-status" />
+<meta property="og:site_name" content="RubyGems.Guide" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-17T08:21:03+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="RubyGems.Guide rest-man HTTP Status" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Hopper Gee"},"dateModified":"2023-10-17T08:21:03+00:00","datePublished":"2023-10-17T08:21:03+00:00","description":"Status Code","headline":"RubyGems.Guide rest-man HTTP Status","mainEntityOfPage":{"@type":"WebPage","@id":"https://rubygems.guide/rest-man/http-status"},"url":"https://rubygems.guide/rest-man/http-status"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <h1>
+      <a href="/rest-man" class="rest-man">rest-man</a>
+      <div class="powered-by">
+        <img src="/images/logo-white.png" alt="logo" class="logo">
+        RubyGems.Guide
+      </div>
+    </h1>
+    <div class="guides" data-controller="nav" style="visibility: hidden;">
+      
+
+
+
+  <a href="/rest-man/request/get" class="guide" data-nav-target="item">GET</a>
+
+      
+
+
+
+  <a href="/rest-man/request/post" class="guide" data-nav-target="item">POST</a>
+
+      
+
+
+
+  <a href="/rest-man/request/put" class="guide" data-nav-target="item">PUT</a>
+
+      
+
+
+
+  <a href="/rest-man/request/patch" class="guide" data-nav-target="item">PATCH</a>
+
+      
+
+
+
+  <a href="/rest-man/request/delete" class="guide" data-nav-target="item">DELETE</a>
+
+      
+
+
+
+  <a href="/rest-man/request/options" class="guide" data-nav-target="item">OPTIONS</a>
+
+      
+
+
+
+  <a href="/rest-man/request/head" class="guide" data-nav-target="item">HEAD</a>
+
+      <div class="basic">Basic</div>
+      
+
+
+
+  <a href="/rest-man/headers" class="guide" data-nav-target="item">Headers</a>
+
+      
+
+
+
+  <a href="/rest-man/cookies" class="guide" data-nav-target="item">Cookies</a>
+
+      
+
+
+
+  <a href="/rest-man/body" class="guide" data-nav-target="item">Body</a>
+
+      
+
+
+
+  <a href="/rest-man/http-status" class="guide active" data-nav-target="item">Status</a>
+
+      <div class="advance">Advance</div>
+      
+
+
+
+  <a href="/rest-man/ssl-tls" class="guide" data-nav-target="item">SSL/TLS</a>
+
+      
+
+
+
+  <a href="/rest-man/retry" class="guide" data-nav-target="item">Retry</a>
+
+      
+
+
+
+  <a href="/rest-man/timeout" class="guide" data-nav-target="item">Timeout</a>
+
+      
+
+
+
+  <a href="/rest-man/proxy" class="guide" data-nav-target="item">Proxy</a>
+
+      
+
+
+
+  <a href="/rest-man/redirection" class="guide" data-nav-target="item">Redirection</a>
+
+      
+
+
+
+  <a href="/rest-man/exception" class="guide" data-nav-target="item">Exception</a>
+
+      
+
+
+
+  <a href="/rest-man/logging" class="guide" data-nav-target="item">Logging</a>
+
+      
+
+
+
+  <a href="/rest-man/streaming" class="guide" data-nav-target="item">Streaming</a>
+
+    </div>
+    <div class="footer">
+      <a href="https://twitter.com/hoppergeegee" target="_blank" class="twitter">
+        <img src="/images/social/twitter.png" alt="twitter">
+      </a>
+      <a href="https://github.com/rubygemsguide/rubygemsguide" target="_blank" class="github">
+        <img src="/images/social/github.png" alt="github">
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="post">
+  <h2 class="title">Status Code</h2>
+
+  <table class="http-status-table">
+    <tbody>
+      
+        <tr>
+          <td colspan="3" class="http-status-category" id="1xx">1XX Informational</td>
+        </tr>
+        
+          <tr class="http-status-1xx">
+            <td class="http-status-code">100</td>
+            <td class="http-status-class">RestMan::Continue</td>
+            <td class="http-status-message">Continue</td>
+          </tr>
+        
+          <tr class="http-status-1xx">
+            <td class="http-status-code">101</td>
+            <td class="http-status-class">RestMan::SwitchingProtocols</td>
+            <td class="http-status-message">Switching Protocols</td>
+          </tr>
+        
+          <tr class="http-status-1xx">
+            <td class="http-status-code">102</td>
+            <td class="http-status-class">RestMan::Processing</td>
+            <td class="http-status-message">Processing</td>
+          </tr>
+        
+      
+        <tr>
+          <td colspan="3" class="http-status-category" id="2xx">2XX Success</td>
+        </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">200</td>
+            <td class="http-status-class">RestMan::OK</td>
+            <td class="http-status-message">OK</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">201</td>
+            <td class="http-status-class">RestMan::Created</td>
+            <td class="http-status-message">Created</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">202</td>
+            <td class="http-status-class">RestMan::Accepted</td>
+            <td class="http-status-message">Accepted</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">203</td>
+            <td class="http-status-class">RestMan::NonAuthoritativeInformation</td>
+            <td class="http-status-message">Non-Authoritative Information</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">204</td>
+            <td class="http-status-class">RestMan::NoContent</td>
+            <td class="http-status-message">No Content</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">205</td>
+            <td class="http-status-class">RestMan::ResetContent</td>
+            <td class="http-status-message">Reset Content</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">206</td>
+            <td class="http-status-class">RestMan::PartialContent</td>
+            <td class="http-status-message">Partial Content</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">207</td>
+            <td class="http-status-class">RestMan::MultiStatus</td>
+            <td class="http-status-message">Multi-Status</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">208</td>
+            <td class="http-status-class">RestMan::AlreadyReported</td>
+            <td class="http-status-message">Already Reported</td>
+          </tr>
+        
+          <tr class="http-status-2xx">
+            <td class="http-status-code">226</td>
+            <td class="http-status-class">RestMan::IMUsed</td>
+            <td class="http-status-message">IM Used</td>
+          </tr>
+        
+      
+        <tr>
+          <td colspan="3" class="http-status-category" id="3xx">3XX Redirection</td>
+        </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">300</td>
+            <td class="http-status-class">RestMan::MultipleChoices</td>
+            <td class="http-status-message">Multiple Choices</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">301</td>
+            <td class="http-status-class">RestMan::MovedPermanently</td>
+            <td class="http-status-message">Moved Permanently</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">302</td>
+            <td class="http-status-class">RestMan::Found</td>
+            <td class="http-status-message">Found</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">303</td>
+            <td class="http-status-class">RestMan::SeeOther</td>
+            <td class="http-status-message">See Other</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">304</td>
+            <td class="http-status-class">RestMan::NotModified</td>
+            <td class="http-status-message">Not Modified</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">305</td>
+            <td class="http-status-class">RestMan::UseProxy</td>
+            <td class="http-status-message">Use Proxy</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">306</td>
+            <td class="http-status-class">RestMan::SwitchProxy</td>
+            <td class="http-status-message">Switch Proxy</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">307</td>
+            <td class="http-status-class">RestMan::TemporaryRedirect</td>
+            <td class="http-status-message">Temporary Redirect</td>
+          </tr>
+        
+          <tr class="http-status-3xx">
+            <td class="http-status-code">308</td>
+            <td class="http-status-class">RestMan::PermanentRedirect</td>
+            <td class="http-status-message">Permanent Redirect</td>
+          </tr>
+        
+      
+        <tr>
+          <td colspan="3" class="http-status-category" id="4xx">4XX Client Error</td>
+        </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">400</td>
+            <td class="http-status-class">RestMan::BadRequest</td>
+            <td class="http-status-message">Bad Request</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">401</td>
+            <td class="http-status-class">RestMan::Unauthorized</td>
+            <td class="http-status-message">Unauthorized</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">402</td>
+            <td class="http-status-class">RestMan::PaymentRequired</td>
+            <td class="http-status-message">Payment Required</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">403</td>
+            <td class="http-status-class">RestMan::Forbidden</td>
+            <td class="http-status-message">Forbidden</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">404</td>
+            <td class="http-status-class">RestMan::NotFound</td>
+            <td class="http-status-message">Not Found</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">405</td>
+            <td class="http-status-class">RestMan::MethodNotAllowed</td>
+            <td class="http-status-message">Method Not Allowed</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">406</td>
+            <td class="http-status-class">RestMan::NotAcceptable</td>
+            <td class="http-status-message">Not Acceptable</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">407</td>
+            <td class="http-status-class">RestMan::ProxyAuthenticationRequired</td>
+            <td class="http-status-message">Proxy Authentication Required</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">408</td>
+            <td class="http-status-class">RestMan::RequestTimeout</td>
+            <td class="http-status-message">Request Timeout</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">409</td>
+            <td class="http-status-class">RestMan::Conflict</td>
+            <td class="http-status-message">Conflict</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">410</td>
+            <td class="http-status-class">RestMan::Gone</td>
+            <td class="http-status-message">Gone</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">411</td>
+            <td class="http-status-class">RestMan::LengthRequired</td>
+            <td class="http-status-message">Length Required</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">412</td>
+            <td class="http-status-class">RestMan::PreconditionFailed</td>
+            <td class="http-status-message">Precondition Failed</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">413</td>
+            <td class="http-status-class">RestMan::PayloadTooLarge</td>
+            <td class="http-status-message">Payload Too Large</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">414</td>
+            <td class="http-status-class">RestMan::URITooLong</td>
+            <td class="http-status-message">URI Too Long</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">415</td>
+            <td class="http-status-class">RestMan::UnsupportedMediaType</td>
+            <td class="http-status-message">Unsupported Media Type</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">416</td>
+            <td class="http-status-class">RestMan::RangeNotSatisfiable</td>
+            <td class="http-status-message">Range Not Satisfiable</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">417</td>
+            <td class="http-status-class">RestMan::ExpectationFailed</td>
+            <td class="http-status-message">Expectation Failed</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">418</td>
+            <td class="http-status-class">RestMan::ImATeapot</td>
+            <td class="http-status-message">I'm A Teapot</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">421</td>
+            <td class="http-status-class">RestMan::TooManyConnectionsFromThisIP</td>
+            <td class="http-status-message">Too Many Connections From This IP</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">422</td>
+            <td class="http-status-class">RestMan::UnprocessableEntity</td>
+            <td class="http-status-message">Unprocessable Entity</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">423</td>
+            <td class="http-status-class">RestMan::Locked</td>
+            <td class="http-status-message">Locked</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">424</td>
+            <td class="http-status-class">RestMan::FailedDependency</td>
+            <td class="http-status-message">Failed Dependency</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">425</td>
+            <td class="http-status-class">RestMan::UnorderedCollection</td>
+            <td class="http-status-message">Unordered Collection</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">426</td>
+            <td class="http-status-class">RestMan::UpgradeRequired</td>
+            <td class="http-status-message">Upgrade Required</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">428</td>
+            <td class="http-status-class">RestMan::PreconditionRequired</td>
+            <td class="http-status-message">Precondition Required</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">429</td>
+            <td class="http-status-class">RestMan::TooManyRequests</td>
+            <td class="http-status-message">Too Many Requests</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">431</td>
+            <td class="http-status-class">RestMan::RequestHeaderFieldsTooLarge</td>
+            <td class="http-status-message">Request Header Fields Too Large</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">449</td>
+            <td class="http-status-class">RestMan::RetryWith</td>
+            <td class="http-status-message">Retry With</td>
+          </tr>
+        
+          <tr class="http-status-4xx">
+            <td class="http-status-code">450</td>
+            <td class="http-status-class">RestMan::BlockedByWindowsParentalControls</td>
+            <td class="http-status-message">Blocked By Windows Parental Controls</td>
+          </tr>
+        
+      
+        <tr>
+          <td colspan="3" class="http-status-category" id="5xx">5XX Server Error</td>
+        </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">500</td>
+            <td class="http-status-class">RestMan::InternalServerError</td>
+            <td class="http-status-message">Internal Server Error</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">501</td>
+            <td class="http-status-class">RestMan::NotImplemented</td>
+            <td class="http-status-message">Not Implemented</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">502</td>
+            <td class="http-status-class">RestMan::BadGateway</td>
+            <td class="http-status-message">Bad Gateway</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">503</td>
+            <td class="http-status-class">RestMan::ServiceUnavailable</td>
+            <td class="http-status-message">Service Unavailable</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">504</td>
+            <td class="http-status-class">RestMan::GatewayTimeout</td>
+            <td class="http-status-message">Gateway Timeout</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">505</td>
+            <td class="http-status-class">RestMan::HTTPVersionNotSupported</td>
+            <td class="http-status-message">HTTP Version Not Supported</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">506</td>
+            <td class="http-status-class">RestMan::VariantAlsoNegotiates</td>
+            <td class="http-status-message">Variant Also Negotiates</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">507</td>
+            <td class="http-status-class">RestMan::InsufficientStorage</td>
+            <td class="http-status-message">Insufficient Storage</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">508</td>
+            <td class="http-status-class">RestMan::LoopDetected</td>
+            <td class="http-status-message">Loop Detected</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">509</td>
+            <td class="http-status-class">RestMan::BandwidthLimitExceeded</td>
+            <td class="http-status-message">Bandwidth Limit Exceeded</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">510</td>
+            <td class="http-status-class">RestMan::NotExtended</td>
+            <td class="http-status-message">Not Extended</td>
+          </tr>
+        
+          <tr class="http-status-5xx">
+            <td class="http-status-code">511</td>
+            <td class="http-status-class">RestMan::NetworkAuthenticationRequired</td>
+            <td class="http-status-message">Network Authentication Required</td>
+          </tr>
+        
+      
+    </tbody>
+  </table>
+
+</div>
+
+  </main>
+
+  <script async defer src="https://cloud.rubygems.guide/latest.js"></script>
+<noscript><img src="https://cloud.rubygems.guide/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+</body>
+
+</html>
+
