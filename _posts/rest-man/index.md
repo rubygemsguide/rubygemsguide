@@ -35,11 +35,11 @@ permalink: /rest-man
     <div class="response-box">
       <div class="response">Response</div>
       <div class="response-statuses">
-        <a href="/rest-man/response/1xx" class="response-status">1xx</a>
-        <a href="/rest-man/response/2xx" class="response-status">2xx</a>
-        <a href="/rest-man/response/3xx" class="response-status">3xx</a>
-        <a href="/rest-man/response/4xx" class="response-status">4xx</a>
-        <a href="/rest-man/response/5xx" class="response-status">5xx</a>
+        <a href="/rest-man/basic/http-status#1xx" class="response-status">1xx</a>
+        <a href="/rest-man/basic/http-status#2xx" class="response-status">2xx</a>
+        <a href="/rest-man/basic/http-status#3xx" class="response-status">3xx</a>
+        <a href="/rest-man/basic/http-status#4xx" class="response-status">4xx</a>
+        <a href="/rest-man/basic/http-status#5xx" class="response-status">5xx</a>
       </div>
       <div class="relative">
         <a href="/rest-man/basic/headers" class="response-headers">Headers</a>

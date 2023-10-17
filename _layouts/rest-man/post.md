@@ -43,7 +43,7 @@ permalink: /rest-man/:title
       <a href="/rest-man/basic/headers" class="guide">Headers</a>
       <a href="/rest-man/basic/cookies" class="guide">Cookies</a>
       <a href="/rest-man/basic/body" class="guide">Body</a>
-      <a href="/rest-man/basic/status" class="guide">Status</a>
+      <a href="/rest-man/basic/http-status" class="guide">Status</a>
       <div class="advance">Advance</div>
       <a href="/rest-man/advance/ssl-tls" class="guide">SSL/TLS</a>
       <a href="/rest-man/advance/retry" class="guide">Retry</a>

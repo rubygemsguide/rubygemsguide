@@ -1,0 +1,107 @@
+.http-status-table {
+  border-collapse: collapse;
+}
+
+.http-status-table td {
+  border: 1px solid;
+}
+
+.http-status-category {
+  padding: 4px 6px;
+  font-weight: 600;
+}
+@media (min-width: $xs) {
+  .http-status-category {
+    padding: 8px 16px;
+  }
+}
+
+.http-status-1xx .http-status-code,
+.http-status-2xx .http-status-code,
+.http-status-3xx .http-status-code,
+.http-status-4xx .http-status-code,
+.http-status-5xx .http-status-code {
+  padding: 4px 6px;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.http-status-1xx:nth-of-type(2n) {
+  background-color: #F5F5F5;
+  .http-status-code {
+    background-color: #C6F0F5;
+  }
+}
+.http-status-1xx:nth-of-type(2n+1) {
+  .http-status-code {
+    background-color: #CEF8FD;
+  }
+}
+
+.http-status-2xx:nth-of-type(2n) {
+  background-color: #F5F5F5;
+  .http-status-code {
+    background-color: #C7E9A4;
+  }
+}
+.http-status-2xx:nth-of-type(2n+1) {
+  .http-status-code {
+    background-color: #D4F7AE;
+  }
+}
+
+.http-status-3xx:nth-of-type(2n) {
+  background-color: #F5F5F5;
+  .http-status-code {
+    background-color: #C4BFF6;
+  }
+}
+.http-status-3xx:nth-of-type(2n+1) {
+  .http-status-code {
+    background-color: #CDC7FF;
+  }
+}
+
+.http-status-4xx:nth-of-type(2n) {
+  background-color: #F5F5F5;
+  .http-status-code {
+    background-color: #EFEAAD;
+  }
+}
+.http-status-4xx:nth-of-type(2n+1) {
+  .http-status-code {
+    background-color: #F9F4B5;
+  }
+}
+
+.http-status-5xx:nth-of-type(2n) {
+  background-color: #F5F5F5;
+  .http-status-code {
+    background-color: #F1AFAF;
+  }
+}
+.http-status-5xx:nth-of-type(2n+1) {
+  .http-status-code {
+    background-color: #FBB7B7;
+  }
+}
+
+@media (min-width: $xs) {
+  .http-status-1xx .http-status-code,
+  .http-status-2xx .http-status-code,
+  .http-status-3xx .http-status-code,
+  .http-status-4xx .http-status-code,
+  .http-status-5xx .http-status-code {
+    padding: 4px 16px;
+  }
+}
+
+.http-status-class {
+  padding: 4px 8px;
+  text-align: left;
+}
+
+.http-status-message {
+  padding: 4px 8px;
+  text-align: left;
+}

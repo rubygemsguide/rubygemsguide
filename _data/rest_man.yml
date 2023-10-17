@@ -3484,3 +3484,212 @@ body:
     - Get string or binary response with `response.body`
     - Handle json resposne with `JSON.parse(response.body)`
     - [Handle file response with `raw_response`](/rest-man/advance/streaming)
+
+status_code:
+  - title: 1XX Informational
+    category: 1xx
+    items:
+      - code: 100
+        class: RestMan::Continue
+        message: Continue
+      - code: 101
+        class: RestMan::SwitchingProtocols
+        message: Switching Protocols
+      - code: 102
+        class: RestMan::Processing
+        message: Processing
+  - title: 2XX Success
+    category: 2xx
+    items:
+      - code: 200
+        class: RestMan::OK
+        message: OK
+      - code: 201
+        class: RestMan::Created
+        message: Created
+      - code: 202
+        class: RestMan::Accepted
+        message: Accepted
+      - code: 203
+        class: RestMan::NonAuthoritativeInformation
+        message: Non-Authoritative Information
+      - code: 204
+        class: RestMan::NoContent
+        message: No Content
+      - code: 205
+        class: RestMan::ResetContent
+        message: Reset Content
+      - code: 206
+        class: RestMan::PartialContent
+        message: Partial Content
+      - code: 207
+        class: RestMan::MultiStatus
+        message: Multi-Status
+      - code: 208
+        class: RestMan::AlreadyReported
+        message: Already Reported
+      - code: 226
+        class: RestMan::IMUsed
+        message: IM Used
+  - title: 3XX Redirection
+    category: 3xx
+    items:
+      - code: 300
+        class: RestMan::MultipleChoices
+        message: Multiple Choices
+      - code: 301
+        class: RestMan::MovedPermanently
+        message: Moved Permanently
+      - code: 302
+        class: RestMan::Found
+        message: Found
+      - code: 303
+        class: RestMan::SeeOther
+        message: See Other
+      - code: 304
+        class: RestMan::NotModified
+        message: Not Modified
+      - code: 305
+        class: RestMan::UseProxy
+        message: Use Proxy
+      - code: 306
+        class: RestMan::SwitchProxy
+        message: Switch Proxy
+      - code: 307
+        class: RestMan::TemporaryRedirect
+        message: Temporary Redirect
+      - code: 308
+        class: RestMan::PermanentRedirect
+        message: Permanent Redirect
+  - title: 4XX Client Error
+    category: 4xx
+    items:
+      - code: 400
+        class: RestMan::BadRequest
+        message: Bad Request
+      - code: 401
+        class: RestMan::Unauthorized
+        message: Unauthorized
+      - code: 402
+        class: RestMan::PaymentRequired
+        message: Payment Required
+      - code: 403
+        class: RestMan::Forbidden
+        message: Forbidden
+      - code: 404
+        class: RestMan::NotFound
+        message: Not Found
+      - code: 405
+        class: RestMan::MethodNotAllowed
+        message: Method Not Allowed
+      - code: 406
+        class: RestMan::NotAcceptable
+        message: Not Acceptable
+      - code: 407
+        class: RestMan::ProxyAuthenticationRequired
+        message: Proxy Authentication Required
+      - code: 408
+        class: RestMan::RequestTimeout
+        message: Request Timeout
+      - code: 409
+        class: RestMan::Conflict
+        message: Conflict
+      - code: 410
+        class: RestMan::Gone
+        message: Gone
+      - code: 411
+        class: RestMan::LengthRequired
+        message: Length Required
+      - code: 412
+        class: RestMan::PreconditionFailed
+        message: Precondition Failed
+      - code: 413
+        class: RestMan::PayloadTooLarge
+        message: Payload Too Large
+      - code: 414
+        class: RestMan::URITooLong
+        message: URI Too Long
+      - code: 415
+        class: RestMan::UnsupportedMediaType
+        message: Unsupported Media Type
+      - code: 416
+        class: RestMan::RangeNotSatisfiable
+        message: Range Not Satisfiable
+      - code: 417
+        class: RestMan::ExpectationFailed
+        message: Expectation Failed
+      - code: 418
+        class: RestMan::ImATeapot
+        message: I'm A Teapot
+      - code: 421
+        class: RestMan::TooManyConnectionsFromThisIP
+        message: Too Many Connections From This IP
+      - code: 422
+        class: RestMan::UnprocessableEntity
+        message: Unprocessable Entity
+      - code: 423
+        class: RestMan::Locked
+        message: Locked
+      - code: 424
+        class: RestMan::FailedDependency
+        message: Failed Dependency
+      - code: 425
+        class: RestMan::UnorderedCollection
+        message: Unordered Collection
+      - code: 426
+        class: RestMan::UpgradeRequired
+        message: Upgrade Required
+      - code: 428
+        class: RestMan::PreconditionRequired
+        message: Precondition Required
+      - code: 429
+        class: RestMan::TooManyRequests
+        message: Too Many Requests
+      - code: 431
+        class: RestMan::RequestHeaderFieldsTooLarge
+        message: Request Header Fields Too Large
+      - code: 449
+        class: RestMan::RetryWith
+        message: Retry With
+      - code: 450
+        class: RestMan::BlockedByWindowsParentalControls
+        message: Blocked By Windows Parental Controls
+  - title: 5XX Server Error
+    category: 5xx
+    items:
+      - code: 500
+        class: RestMan::InternalServerError
+        message: Internal Server Error
+      - code: 501
+        class: RestMan::NotImplemented
+        message: Not Implemented
+      - code: 502
+        class: RestMan::BadGateway
+        message: Bad Gateway
+      - code: 503
+        class: RestMan::ServiceUnavailable
+        message: Service Unavailable
+      - code: 504
+        class: RestMan::GatewayTimeout
+        message: Gateway Timeout
+      - code: 505
+        class: RestMan::HTTPVersionNotSupported
+        message: HTTP Version Not Supported
+      - code: 506
+        class: RestMan::VariantAlsoNegotiates
+        message: Variant Also Negotiates
+      - code: 507
+        class: RestMan::InsufficientStorage
+        message: Insufficient Storage
+      - code: 508
+        class: RestMan::LoopDetected
+        message: Loop Detected
+      - code: 509
+        class: RestMan::BandwidthLimitExceeded
+        message: Bandwidth Limit Exceeded
+      - code: 510
+        class: RestMan::NotExtended
+        message: Not Extended
+      - code: 511
+        class: RestMan::NetworkAuthenticationRequired
+        message: Network Authentication Required
