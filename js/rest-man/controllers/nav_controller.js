@@ -7,7 +7,9 @@ export default class extends Controller {
   initialize() {
     this.itemTargets.forEach(item => {
       if (item.classList.contains("active")) {
-        item.scrollIntoView()
+        item.scrollIntoView({
+          block: "center"
+        })
       }
     });
     this.element.style.visibility = "visible"
