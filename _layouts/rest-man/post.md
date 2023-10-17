@@ -31,28 +31,28 @@ permalink: /rest-man/:title
         RubyGems.Guide
       </div>
     </h1>
-    <div class="guides">
-      <a href="/rest-man/request/get" class="guide">GET</a>
-      <a href="/rest-man/request/post" class="guide">POST</a>
-      <a href="/rest-man/request/put" class="guide">PUT</a>
-      <a href="/rest-man/request/patch" class="guide">PATCH</a>
-      <a href="/rest-man/request/delete" class="guide">DELETE</a>
-      <a href="/rest-man/request/options" class="guide">OPTIONS</a>
-      <a href="/rest-man/request/head" class="guide">HEAD</a>
+    <div class="guides" data-controller="nav" style="visibility: hidden;">
+      {% include rest-man/nav-guide-item.md url="/rest-man/request/get" name="GET" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/request/post" name="POST" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/request/put" name="PUT" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/request/patch" name="PATCH" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/request/delete" name="DELETE" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/request/options" name="OPTIONS" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/request/head" name="HEAD" %}
       <div class="basic">Basic</div>
-      <a href="/rest-man/headers" class="guide">Headers</a>
-      <a href="/rest-man/cookies" class="guide">Cookies</a>
-      <a href="/rest-man/body" class="guide">Body</a>
-      <a href="/rest-man/http-status" class="guide">Status</a>
+      {% include rest-man/nav-guide-item.md url="/rest-man/headers" name="Headers" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/cookies" name="Cookies" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/body" name="Body" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/http-status" name="Status" %}
       <div class="advance">Advance</div>
-      <a href="/rest-man/ssl-tls" class="guide">SSL/TLS</a>
-      <a href="/rest-man/retry" class="guide">Retry</a>
-      <a href="/rest-man/timeout" class="guide">Timeout</a>
-      <a href="/rest-man/proxy" class="guide">Proxy</a>
-      <a href="/rest-man/redirection" class="guide">Redirection</a>
-      <a href="/rest-man/exception" class="guide">Exception</a>
-      <a href="/rest-man/logging" class="guide">Logging</a>
-      <a href="/rest-man/streaming" class="guide">Streaming</a>
+      {% include rest-man/nav-guide-item.md url="/rest-man/ssl-tls" name="SSL/TLS" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/retry" name="Retry" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/timeout" name="Timeout" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/proxy" name="Proxy" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/redirection" name="Redirection" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/exception" name="Exception" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/logging" name="Logging" %}
+      {% include rest-man/nav-guide-item.md url="/rest-man/streaming" name="Streaming" %}
     </div>
     <div class="footer">
       <a href="https://twitter.com/hoppergeegee" target="_blank" class="twitter">

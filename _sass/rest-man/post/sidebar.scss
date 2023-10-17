@@ -51,6 +51,7 @@
       align-items: stretch;
       overflow-y: scroll;
       overflow-x: hidden;
+      padding-top: 4px;
     }
   }
 
@@ -82,18 +83,23 @@
   .guide {
     text-align: center;
     padding: 15px 0;
-    border: 2px solid $stone-200;
+    border-top: 2px solid $stone-200;
+    border-bottom: 2px solid $stone-200;
     border-left: 0;
     text-decoration: none;
     color: $stone-500;
     margin-top: -2px;
-    margin-right: -2px;
-    margin-left: 4px;
+    margin-right: 6px;
+    margin-left: 6px;
   }
   .guide:hover {
     background: $stone-300;
     color: $stone-600;
     z-index: 1;
+  }
+  .guide.active {
+    background-color: $red-500;
+    color: white;
   }
 
   .basic, .advance {
