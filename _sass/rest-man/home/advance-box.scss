@@ -1,0 +1,29 @@
+.advance-box {
+  border: 2px solid black;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+@media (min-width: $xs) {
+  .advance-box {
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.advance-box > a {
+  border: 2px solid black;
+  text-align: center;
+  padding: 20px 10px;
+  cursor: pointer;
+  margin: -2px;
+  text-decoration: unset;
+  color: black;
+}
+
+.advance-box > a:hover {
+  background: $red-500;
+  color: white;
+  z-index: 1;
+}

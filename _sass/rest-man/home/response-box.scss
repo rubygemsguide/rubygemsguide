@@ -1,0 +1,109 @@
+/*
+###########
+# Response box
+###########
+*/
+
+.response-box-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+@media (min-width: $xs) {
+  .response-box-wrapper {
+    margin-top: unset;
+    width: 33.3333333%;
+  }
+}
+
+.response-box-wrapper a {
+  cursor: pointer;
+}
+
+.response-box {
+  width: 300px;
+  border: 2px solid;
+}
+
+.response {
+  display: block;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.response-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -8px;
+}
+
+.response-status {
+  box-sizing: border-box;
+  width: 33.333333%;
+  border: 2px solid;
+  margin-left: -2px;
+  margin-top: -2px;
+  text-align: center;
+  padding: 20px 0;
+  text-decoration: unset;
+  color: black;
+}
+.response-status:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.response-headers {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+.response-headers:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.response-cookies {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 2px dashed;
+  padding: 4px 16px;
+  margin-right: -2px;
+  background: $gray-50;
+  border-bottom-style: solid;
+  border-right-style: solid;
+  text-decoration: unset;
+  color: black;
+}
+.response-cookies:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.response-body {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  margin-bottom: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+.response-body:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}

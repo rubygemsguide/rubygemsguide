@@ -1,0 +1,3699 @@
+examples:
+
+  ######
+  # GET
+  ######
+
+  get:
+    - title: Request for plain text
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/test"
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman get http://example.com/test
+
+            Hello world!
+            ```
+
+    - title: Request for a static HTML page
+      request:
+        http_method: GET
+        request_target: /about
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <head>
+          <title>About Us</title></head>
+          <body>
+          ...
+          </body>
+          </html>
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/about", headers: {"User-Agent" => "Mozilla/5.0"}
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ...
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/about",
+              headers: {"User-Agent" => "Mozilla/5.0"}
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ...
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/about")
+            resposne = resource.get({"User-Agent" => "Mozilla/5.0"})
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ...
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman get http://example.com/about
+
+            <html>
+            <head>
+            <title>About Us</title>
+            </head>
+            <body>
+            ...
+            </body>
+            </html>
+            ```
+
+    - title: Request with custom headers
+      request:
+        http_method: GET
+        request_target: /data
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: application/json"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - 'If-None-Match: e22d62c1'
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+          - 'ETag: e22d62c1'
+        http_body: |
+          {
+            "name": "John Hill",
+            "age": 30
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/data", {accept: "application/json", "If-None-Match": "e22d62c1"}
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.headers[:etag]         #=> "e22d62c1"
+            response.body                   #=> {"name": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/data",
+              headers: {accept: "application/json", "If-None-Match": "e22d62c1"}
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.headers[:etag]         #=> "e22d62c1"
+            response.body                   #=> {"name": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/data")
+            resposne = resource.get({
+              accept: "application/json",
+              "If-None-Match": "e22d62c1"
+            })
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.headers[:etag]         #=> "e22d62c1"
+            response.body                   #=> {"name": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support customize headers currently.
+            ```
+
+  ######
+  # POST
+  ######
+
+  post:
+    - title: Submitting plain text data
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: { content_type: "text/plain" }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            resposne = resource.post(
+              "Hello, world!",
+              {content_type: "text/plain"}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "Hello world!" | restman post http://example.com/resource
+
+            Text received.
+            ```
+
+    - title: Submitting form data
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/x-www-form-urlencoded"
+          - "Content-Length: 27"
+        http_body: first_name=john&last_name=hil
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <body>
+          Thank you, John Hill, for submitting the form!
+          </body>
+          </html>
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: 'http://example.com/resource',
+              payload: { first_name: "John", last_name: "Hill" }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            response = resource.post({ first_name: "John", last_name: "Hill" })
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "first_name=john&last_name=hil" | restman post http://example.com/resource
+
+            <html>
+            <body>
+            Thank you, John Hill, for submitting the form!
+            </body>
+            </html>
+            ```
+
+    - title: Posting JSON data with custom headers
+      request:
+        http_method: POST
+        request_target: /api/resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: application/json"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/json"
+          - "Authorization: Bearer token123"
+          - "Content-Length: 32"
+        http_body: {"username": "johnhill", "age": 20}
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Data updated successfully"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post(
+              'http://example.com/api/resource',
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: 'http://example.com/api/resource',
+              payload: {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              headers: {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/api/resource")
+            response = resource.post(
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support JSON submit currently.
+            ```
+
+    - title: Posting a file directly
+      request:
+        http_method: POST
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: image/jpeg"
+          - "Content-Length: 143685"
+        http_body: [JPEG binary data goes here]
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Image uploaded successfully
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post(
+              'http://example.com/api/image',
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: 'http://example.com/api/image',
+              payload: File.new("./files/profile.jpg", 'rb'),
+              headers: { content_type: :jpg }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/image")
+            response = resource.post(
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support file upload with custom headers
+            ```
+
+    - title: Posting files with multipart
+      request:
+        http_method: POST
+        request_target: /api/profile
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: multipart/form-data; boundary=RubyFormBoundary123"
+          - "Content-Length: 8362"
+        http_body: |
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="username"
+
+          johnhill
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile1"; filename="profile.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile2"; filename="profile2.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123--
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Profile updated successfully",
+            "url": "/images/profile.jpg"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post(
+              'http://example.com/api/profile',
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: post,
+              url: "http://example.com/api/profile",
+              payload: {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/profile")
+            resposne = resource.post(
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support multipart request currently.
+            ```
+
+  ######
+  # PUT
+  ######
+
+  put:
+    - title: Submitting plain text data
+      request:
+        http_method: PUT
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: { content_type: "text/plain" }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            resposne = resource.put(
+              "Hello, world!",
+              {content_type: "text/plain"}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "Hello world!" | restman put http://example.com/resource
+
+            Text received.
+            ```
+
+    - title: Submitting form data
+      request:
+        http_method: PUT
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/x-www-form-urlencoded"
+          - "Content-Length: 27"
+        http_body: first_name=john&last_name=hil
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <body>
+          Thank you, John Hill, for submitting the form!
+          </body>
+          </html>
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/resource',
+              payload: { first_name: "John", last_name: "Hill" }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            response = resource.put({ first_name: "John", last_name: "Hill" })
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "first_name=john&last_name=hil" | restman put http://example.com/resource
+
+            <html>
+            <body>
+            Thank you, John Hill, for submitting the form!
+            </body>
+            </html>
+            ```
+
+    - title: Posting JSON data with custom headers
+      request:
+        http_method: PUT
+        request_target: /api/resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: application/json"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/json"
+          - "Authorization: Bearer token123"
+          - "Content-Length: 32"
+        http_body: {"username": "johnhill", "age": 20}
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Data updated successfully"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/resource',
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/api/resource',
+              payload: {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              headers: {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/api/resource")
+            response = resource.put(
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support JSON submit currently.
+            ```
+
+    - title: Posting a file directly
+      request:
+        http_method: PUT
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: image/jpeg"
+          - "Content-Length: 143685"
+        http_body: [JPEG binary data goes here]
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Image uploaded successfully
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/image',
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/api/image',
+              payload: File.new("./files/profile.jpg", 'rb'),
+              headers: { content_type: :jpg }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/image")
+            response = resource.put(
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support file upload with custom headers
+            ```
+
+    - title: Posting files with multipart
+      request:
+        http_method: PUT
+        request_target: /api/profile
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: multipart/form-data; boundary=RubyFormBoundary123"
+          - "Content-Length: 8362"
+        http_body: |
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="username"
+
+          johnhill
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile1"; filename="profile.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile2"; filename="profile2.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123--
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Profile updated successfully",
+            "url": "/images/profile.jpg"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/profile',
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: put,
+              url: "http://example.com/api/profile",
+              payload: {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/profile")
+            resposne = resource.put(
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support multipart request currently.
+            ```
+
+  ######
+  # PATCH
+  ######
+
+  patch:
+    - title: Submitting plain text data
+      request:
+        http_method: PATCH
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch "http://example.com/resource", "Hello, world!", { content_type: "text/plain" }
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: { content_type: "text/plain" }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            resposne = resource.patch(
+              "Hello, world!",
+              {content_type: "text/plain"}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Text received.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "Hello world!" | restman patch http://example.com/resource
+
+            Text received.
+            ```
+
+    - title: Submitting form data
+      request:
+        http_method: PATCH
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/x-www-form-urlencoded"
+          - "Content-Length: 27"
+        http_body: first_name=john&last_name=hil
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/html"
+        http_body: |
+          <html>
+          <body>
+          Thank you, John Hill, for submitting the form!
+          </body>
+          </html>
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch 'http://example.com/resource', { first_name: "John", last_name: "Hill" }
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: 'http://example.com/resource',
+              payload: { first_name: "John", last_name: "Hill" }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            response = resource.patch({ first_name: "John", last_name: "Hill" })
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/html
+            response.body                   #=> <html> ... 
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ echo "first_name=john&last_name=hil" | restman patch http://example.com/resource
+
+            <html>
+            <body>
+            Thank you, John Hill, for submitting the form!
+            </body>
+            </html>
+            ```
+
+    - title: Posting JSON data with custom headers
+      request:
+        http_method: PATCH
+        request_target: /api/resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: application/json"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: application/json"
+          - "Authorization: Bearer token123"
+          - "Content-Length: 32"
+        http_body: {"username": "johnhill", "age": 20}
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Data updated successfully"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch(
+              'http://example.com/api/resource',
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: 'http://example.com/api/resource',
+              payload: {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              headers: {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/api/resource")
+            response = resource.patch(
+              {
+                username: "johnhill",
+                age: 30,
+              }.to_json,
+              {
+                authorization: "Bearer token123",
+                accept: :json,
+                content_type: :json
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support JSON submit currently.
+            ```
+
+    - title: Posting a file directly
+      request:
+        http_method: PATCH
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: image/jpeg"
+          - "Content-Length: 143685"
+        http_body: [JPEG binary data goes here]
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Image uploaded successfully
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch(
+              'http://example.com/api/image',
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :patch,
+              url: 'http://example.com/api/image',
+              payload: File.new("./files/profile.jpg", 'rb'),
+              headers: { content_type: :jpg }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/image")
+            response = resource.patch(
+              File.new("./files/profile.jpg", 'rb'),
+              {content_type: :jpg}
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support file upload with custom headers
+            ```
+
+    - title: Posting files with multipart
+      request:
+        http_method: PATCH
+        request_target: /api/profile
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: multipart/form-data; boundary=RubyFormBoundary123"
+          - "Content-Length: 8362"
+        http_body: |
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="username"
+
+          johnhill
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile1"; filename="profile.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123
+          Content-Disposition: form-data; name="profile2"; filename="profile2.jpg"
+          Content-Type: image/jpeg
+
+          [BINARY DATA FOR JPEG IMAGE]
+          ------RubyFormBoundary123--
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "status": "success",
+            "message": "Profile updated successfully",
+            "url": "/images/profile.jpg"
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.patch(
+              'http://example.com/api/profile',
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: patch,
+              url: "http://example.com/api/profile",
+              payload: {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: resource
+          body: |
+            ```bash
+            resource = RestMan::Resource.new("http://example.com/api/profile")
+            resposne = resource.patch(
+              {
+                username: 'johnhill',
+                profile1: File.new("./files/profile.jpg", 'rb'),
+                profile2: File.new("./files/profile2.jpg", 'rb')
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"status": ...}
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support multipart request currently.
+            ```
+
+  ######
+  # DELETE
+  ######
+
+  delete:
+    - title: Delete resource
+      request:
+        http_method: DELETE
+        request_target: /resource/1
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "message": "Resource with ID 1 has been deleted."
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.delete "http://example.com/resource/1"
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan.execute(method: :delete, url: "http://example.com/resource/1")
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource/1")
+            resposne = resource.delete
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman delete http://example.com/resource/1
+
+            {"message": ...}
+            ```
+
+    - title: Delete resource with custom headers
+      request:
+        http_method: DELETE
+        request_target: /user/1
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Authorization: Bearer token123"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: application/json"
+        http_body: |
+          {
+            "message": "User with ID 1 has been deleted."
+          }
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.delete "http://example.com/user/1", { authorization: "Bearer token123" }
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan.execute(
+              method: :delete,
+              url: "http://example.com/user/1",
+              headers: {
+                authorization: "Bearer token123"
+              }
+            )
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource/1")
+            resposne = resource.delete({authorization: "Bearer token123"})
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> application/json
+            response.body                   #=> {"message": ...}
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support custom headers
+            ```
+
+  ######
+  # OPTIONS
+  ######
+
+  options:
+    - title: OPTIONS request for a resource
+      request:
+        http_method: OPTIONS
+        request_target: /resource/1
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Allow: GET, POST, HEAD, OPTIONS"
+        http_body:
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.options "http://example.com/resource/1"
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:allow] #=> "GET, POST, HEAD, OPTIONS"
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan.execute(method: :options, url: "http://example.com/resource/1")
+
+            response.code                 #=> 200
+            response.headers                #=> Hash
+            response.headers[:allow] #=> "GET, POST, HEAD, OPTIONS"
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            # RestMan::Resource hasn't support options request
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support options request.
+            ```
+
+  ######
+  # HEAD
+  ######
+
+  head:
+    - title: Check file metadata
+      request:
+        http_method: HEAD
+        request_target: /version-2.0.1.zip
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Date: Fri, 25 Aug 2023 17:22:33 GMT"
+          - "Last-Modified: Wed, 23 Aug 2023 11:41:12 GMT"
+          - "Content-Type: application/zip"
+          - "Content-Length: 10338267"
+        http_body:
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.head "http://example.com/version-2.0.1.zip"
+
+            response.code                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> application/zip
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/version-2.0.1.zip"
+            )
+
+            response.code                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> application/zip
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/version-2.0.1.zip")
+            resposne = resource.head
+
+            response.code                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> application/zip
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support head request.
+            ```
+
+    - title: Verifying Availability of a video streaming resource
+      request:
+        http_method: HEAD
+        request_target: /video/1.mp4
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+          - "X-Api-Key: api-key-abc"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Date: Fri, 25 Aug 2023 17:22:33 GMT"
+          - "Last-Modified: Wed, 23 Aug 2023 11:41:12 GMT"
+          - "Content-Type: video/mp4"
+          - "Accept-Range: bytes"
+          - "Content-Length: 10338267"
+        http_body:
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.head "http://example.com/video/1.mp4", { "X-API-Key": "api-key-abc" }
+
+            response.code                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> video/mp4
+            response.headers[:accept_range]   #=> bytes
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/video/1.mp4",
+              headers: {
+                "X-API-Key": "api-key-abc"
+              }
+            )
+
+            response.code                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> video/mp4
+            response.headers[:accept_range]   #=> bytes
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/video/1.mp4")
+            resposne = resource.head({
+              "X-API-Key": "api-key-abc"
+            })
+
+            response.code                   #=>200
+            response.headers                  #=> Hash
+            response.headers[:date]           #=> Fri, 25 Aug 2023 17:22:33 GMT
+            response.headers[:last_modified]  #=> Wed, 23 Aug 2023 11:41:12 GMT
+            response.headers[:content_type]   #=> video/mp4
+            response.headers[:accept_range]   #=> bytes
+            response.headers[:content_length] #=> 10338267
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support head request.
+            ```
+
+ssl_tls:
+  description: |
+    Various options are supported for configuring rest-man's TLS settings. By
+    default, rest-man will verify certificates using the system's CA store on
+    all platforms. This is intended to be similar to how browsers behave. You
+    can also customize it as you like.
+
+    - Customize the certificate authorities by specify `:ssl_ca_file`, `:ssl_ca_path`, or `:ssl_cert_store`.
+    - Set client certificate for mutual authentication by specify `:ssl_client_cert` and `:ssl_client_key`
+
+    Self-signed certificates can be generated with the openssl command-line tool.
+  examples:
+    - title: Customize certificate authorities
+      request:
+        https: true
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support SSL/TLS customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            # Customize ssl_ca_file
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "https://example.com/test",
+              ssl_ca_file: "/path/to/ca_certs.pem"
+              verify_ssl: OpenSSL::SSL::VERIFY_PEER
+            )
+
+            # Customize ssl_ca_path
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "https://example.com/test",
+              ssl_ca_path: "/path/to/certs"
+              verify_ssl: OpenSSL::SSL::VERIFY_PEER
+            )
+
+            # Customize ssl_cert_store
+            store = OpenSSL::X509::Store.new
+            store.set_default_paths
+            cert = OpenSSL::X509::Certificate.new(File.read('path/to/certificate.pem'))
+            store.add_cert(cert)
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "https://example.com/test",
+              ssl_cert_store: store,
+              verify_ssl: OpenSSL::SSL::VERIFY_PEER
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            # Customize ssl_ca_file
+            resource = RestMan::Resource.new(
+              "https://example.com/test",
+              ssl_ca_file: "/path/to/ca_certs.pem"
+              verify_ssl: OpenSSL::SSL::VERIFY_PEER
+            )
+            resposne = resource.get
+
+            # Customize ssl_ca_path
+            resource = RestMan::Resource.new(
+              "https://example.com/test",
+              ssl_ca_path: "/path/to/certs"
+              verify_ssl: OpenSSL::SSL::VERIFY_PEER
+            )
+            resposne = resource.get
+
+            # Customize ssl_cert_store
+            store = OpenSSL::X509::Store.new
+            store.set_default_paths
+            cert = OpenSSL::X509::Certificate.new(File.read('path/to/certificate.pem'))
+            store.add_cert(cert)
+            resource = RestMan::Resource.new(
+              "https://example.com/test",
+              ssl_cert_store: store,
+              verify_ssl: OpenSSL::SSL::VERIFY_PEER
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support SSL/TLS customization.
+            ```
+    - title: Customize client certificates
+      request:
+        https: true
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support SSL/TLS customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "https://example.com/test",
+              ssl_client_cert: OpenSSL::X509::Certificate.new(File.read("client.crt")),
+              ssl_client_key: OpenSSL::PKey::RSA.new(File.read("client.key"))
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "https://example.com/test",
+              ssl_client_cert: OpenSSL::X509::Certificate.new(File.read("client.crt")),
+              ssl_client_key: OpenSSL::PKey::RSA.new(File.read("client.key"))
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support SSL/TLS customization.
+            ```
+
+retry:
+  examples:
+    - title: Manually set max retries
+      pre_desc: |
+        The default `max_retries` is 1. You can change it to any number you like. 
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support retry customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              max_retries: 0
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              max_retries: 0
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support SSL/TLS customization.
+            ```
+
+timeout:
+  examples:
+    - title: Set Read Timeout
+      pre_desc: |
+        The default `read_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              read_timeout: 30
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              read_timeout: 30
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set Open Timeout
+      pre_desc: |
+        The default `open_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              open_timeout: 30
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              open_timeout: 30
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set Write Timeout
+      pre_desc: |
+        The default `write_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              write_timeout: 30
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              write_timeout: 30
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set SSL Timeout
+      pre_desc: |
+        The default `ssl_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              ssl_timeout: 30
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              ssl_timeout: 30
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+    - title: Set Keep-Alive Timeout
+      pre_desc: |
+        The default `keep_alive_timeout` is from `net/http` which is based on the Ruby version you're using.
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support timeout customization.
+            Please use advance or resource mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              keep_alive_timeout: 30
+            )
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              keep_alive_timeout: 30
+            )
+            resposne = resource.get
+
+            response.code                 #=>200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Hello world! 
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support timeout customization.
+            ```
+
+proxy:
+  examples:
+    - title: Set global proxy
+      pre_desc: |
+        All calls to RestMan, including Resources, will use the proxy specified by `RestMan.proxy`.
+      request:
+        proxy: true
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan.proxy = "http://proxy.example.com"
+            RestMan.get "http://example.com/test"
+
+            response.code                 #=>200
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            RestMan.proxy = "http://proxy.example.com"
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            response.code                 #=>200
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            RestMan.proxy = "http://proxy.example.com"
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            response.code                 #=>200
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support proxy customization.
+            ```
+    - title: Set per-request proxy
+      pre_desc: |
+        Specify a per-request proxy by passing the :proxy option to RestMan::Request. This will override any proxies set by environment variable
+        or by the global `RestMan.proxy` value.
+      request:
+        proxy: true
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              proxy: "http://proxy.example.com"
+            )
+
+            response.code                 #=>200
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support proxy customization.
+            ```
+    - title: Disable proxy for a particular request
+      request:
+        http_method: HEAD
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            RestMan.proxy = "http://proxy.example.com"
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              proxy: nil
+            )
+
+            response.code                 #=>200
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support per-request proxy customization.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support proxy customization.
+            ```
+
+redirection:
+  description: |
+    By default, rest-man will follow:
+      - HTTP 301, 302, 307 redirection requests for GET and HEAD only
+      - HTTP 303 redirection requests
+
+    `RestMan::Response` exposes a `#history` method that returns
+    a list of each response received in a redirection chain.
+  examples:
+    - title: Get responses in the redirection chain
+      pre_desc: |
+        All calls to RestMan, including Resources, will use the proxy specified by `RestMan.proxy`.
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/test"
+        http_body: The document has moved to http://www.example.com/test
+      redirection_request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: www.example.com"
+      redirection_response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan.get "http://example.com/test"
+
+            response.code                 #=> 200
+            response.request.url          #=> http://www.example.com/test
+
+            response.history              #=> Arry of RestMan::Response
+            response.history[0].code      #=> 301
+            response.history[0].url       #=> http://example.com/test
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            response.code                 #=> 200
+            response.request.url          #=> http://www.example.com/test
+
+            response.history              #=> Arry of RestMan::Response
+            response.history[0].code      #=> 301
+            response.history[0].url       #=> http://example.com/test
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            response.code                 #=> 200
+            response.request.url          #=> http://www.example.com/test
+
+            response.history              #=> Arry of RestMan::Response
+            response.history[0].code      #=> 301
+            response.history[0].url       #=> http://example.com/test
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            $ restman get http://example.com/test
+
+            Hello world!
+
+            RestMan CLI hasn't support a way to check the history
+            ```
+    - title: Disable auto redirection
+      pre_desc: |
+        To disable automatic redirection, set `:max_redirects => 0`.
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/test"
+        http_body: The document has moved to http://www.example.com/test
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support disable auto redirection.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            begin
+              RestMan::Request.execute(
+                method: :get,
+                url: "http://example.com/test",
+                max_redirects: 0
+              )
+            rescue => error
+              error                             #=> 301 Moved Permanently
+              error.response.code               #=> 301
+              error.response.headers[:location] #=> http://www.example.com/test
+              error.response.body               #=> The document has moved to http://www.example.com/test
+            end 
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support disable auto redirection.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support disable auto redirection.
+            ```
+    - title: Manually follow redirection
+      pre_desc: |
+        To manually follow redirection, you can call `Response#follow_redirection`. Or
+        you could of course inspect the result and choose custom behavior.
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: example.com"
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/test"
+        http_body: The document has moved to http://www.example.com/test
+      redirection_request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Host: www.example.com"
+      redirection_response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```
+            RestMan simple mode hasn't support disable auto redirection and manual follow redirection.
+            Please use advance mode.
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            begin
+              RestMan::Request.execute(
+                method: :get,
+                url: "http://example.com/test",
+                max_redirects: 0
+              )
+            rescue => error
+              error.response.code               #=> 301
+              error.response.headers[:location] #=> http://www.example.com/test
+
+              response = error.response.follow_redirection
+              response.code                     #=> 200
+              response.request.url              #=> http://www.example.com/test
+            end 
+            ```
+        - tab: resource
+          body: |
+            ```
+            RestMan Resource hasn't support disable auto redirection and manual follow redirection.
+            Please use advance mode.
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan CLI hasn't support manual follow redirectino.
+            ```
+    - title: Follow redirection for POST request
+      pre_desc: |
+        Follow redirections for all request types and not only for get and head
+
+        RFC : If the 301, 302 or 307 status code is received in response to a request other than GET or HEAD,
+              the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
+              since this might change the conditions under which the request was issued.
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 301
+        status_text: Moved Permanently
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Location: http://www.example.com/resource"
+        http_body: The document has moved to http://www.example.com/resource
+      redirection_request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: www.example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+        http_body: Hello, world!
+      redirection_response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            # block style
+            RestMan.post("http://example.com/resource", "Hello, world!", { content_type: "text/plain" }) do |response, request, result|
+              case response.code
+              when 301, 302, 307
+                response.follow_redirection
+              else
+                response.return!
+              end
+            end
+
+            # exception style by explicit classes
+            begin
+              RestMan.post("http://example.com/resource", "Hello, world!", { content_type: "text/plain" }) 
+            rescue RestMan::MovedPermanently, RestMan::Found, RestMan::TemporaryRedirect => error
+              error.response.follow_redirection
+            end
+
+            # exception style by response code
+            begin
+              RestMan.post("http://example.com/resource", "Hello, world!", { content_type: "text/plain" }) 
+            rescue RestMan::ExceptionWithResponse => error
+              case error.http_code
+              when 301, 302, 307
+                error.response.follow_redirection
+              else
+                raise
+              end
+            end
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            # block style
+            RestMan::Request.execute(
+              method: :post,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: { content_type: "text/plain" }
+            ) do |response, request, result|
+              case response.code
+              when 301, 302, 307
+                response.follow_redirection
+              else
+                response.return!
+              end
+            end
+
+            # exception style by explicit classes
+            begin
+              RestMan::Request.execute(
+                method: :post,
+                url: "http://example.com/resource",
+                payload: "Hello, world!",
+                headers: { content_type: "text/plain" }
+              )
+            rescue RestMan::MovedPermanently, RestMan::Found, RestMan::TemporaryRedirect => error
+              error.response.follow_redirection
+            end
+
+            # exception style by response code
+            begin
+              RestMan::Request.execute(
+                method: :post,
+                url: "http://example.com/resource",
+                payload: "Hello, world!",
+                headers: { content_type: "text/plain" }
+              )
+            rescue RestMan::ExceptionWithResponse => error
+              case error.http_code
+              when 301, 302, 307
+                error.response.follow_redirection
+              else
+                raise
+              end
+            end
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+
+            # block style
+            resource.post("Hello, world!", {content_type: "text/plain"}) do |response, request, result|
+              case response.code
+              when 301, 302, 307
+                response.follow_redirection
+              else
+                response.return!
+              end
+            end
+
+            # exception style by explicit classes
+            begin
+              resource.post("Hello, world!", {content_type: "text/plain"})
+            rescue RestMan::MovedPermanently, RestMan::Found, RestMan::TemporaryRedirect => error
+              error.response.follow_redirection
+            end
+
+            # exception style by response code
+            begin
+              resource.post("Hello, world!", {content_type: "text/plain"})
+            rescue RestMan::ExceptionWithResponse => error
+              case error.http_code
+              when 301, 302, 307
+                error.response.follow_redirection
+              else
+                raise
+              end
+            end
+            ```
+        - tab: cli
+          body: |
+            ```
+            RsetMan CLI doesn't offer a way to follow redirection. You have to doing it manually.
+            ```
+
+exception:
+  description: |
+    Exceptions (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
+
+    - for result codes between `200` and `207`, a `RestMan::Response` will be returned
+    - for result codes `301`, `302` or `307`, the redirection will be followed if the request is a `GET` or a `HEAD`
+    - for result code `303`, the redirection will be followed and the request transformed into a `GET`
+    - for other cases, a `RestMan::ExceptionWithResponse` holding the Response will be raised; a specific exception class will be thrown for known error codes
+    - call `.response` on the exception to get the server's response
+  examples:
+    - title: Catch errors
+      pre_desc: |
+        Most exceptions are collected under `RestMan::RequestFaield`.
+      codes:
+        - body: |
+            ```ruby
+            begin
+              RestMan.get "http://example.com/test"
+            rescue => RestMan::RequestFailed => e
+              e.response    #=> RestMan::Response
+            end
+            ```
+    - title: Catch socket errors
+      pre_desc: |
+        RestMan will propagate up socket errors without modification:
+      codes:
+        - body: |
+            ```ruby
+            RestMan.get 'http://example.com/test'
+            #=> Exception: Errno::ECONNREFUSED: Connection refused - connect(2) for "localhost" port 12345
+            ```
+    - title: Catch EOFError 
+      pre_desc: |
+        `RestMan::ServerBrokeConnection` is translated from `EOFError` to give a better error message.
+      codes:
+        - body: |
+            ```ruby
+            begin
+              RestMan.get 'http://example.com/test'
+            rescue RestMan::ServerBrokeConnection => error
+              error.message         #=> Server broke connection
+            end
+            ```
+    - title: Catch specific HTTP errors
+      pre_desc: |
+        It may be more straightforward to use exceptions to handle different HTTP error response cases.
+      codes:
+        - body: |
+            ```ruby
+            begin
+              response = RestMan.get('http://example.com/resource')
+            rescue RestMan::Unauthorized, RestMan::Forbidden => error
+              puts 'Access denied'
+              return error.response
+            rescue RestMan::ImATeapot =>error
+              puts 'The server is a teapot! # RFC 2324'
+              return error.response
+            else
+              puts 'It worked!'
+              return response
+            end
+            ```
+
+logging:
+  description: |
+    To enable logging globally you can:
+
+    Set RestMan.log with a Ruby Logger
+
+    ```ruby
+    RestMan.log = STDOUT
+    ```
+
+    Or set an environment variable to avoid modifying the code (in this case you can use a file name, "stdout" or "stderr"):
+
+    ```bash
+    $ RESTCLIENT_LOG=stdout path/to/my/program
+    ```
+
+    You can also set individual loggers when instantiating a Resource or making an
+    individual request:
+
+    ```ruby
+    resource = RestMan::Resource.new 'http://example.com/resource', log: Logger.new(STDOUT)
+
+    RestMan::Request.execute(method: :get, url: 'http://example.com/foo', log: Logger.new(STDERR))
+    ```
+
+    All options produce logs like this:
+
+    ```ruby
+    RestMan.get "http://some/resource"
+    # => 200 OK | text/html 250 bytes
+    RestMan.put "http://some/resource", "payload"
+    # => 401 Unauthorized | application/xml 340 bytes
+    ```
+
+    Note that these logs are valid Ruby, so you can paste them into the `restman`
+    shell or a script to replay your sequence of rest calls.
+
+streaming:
+  examples:
+    - title: Streaming request payload 
+      pre_desc: |
+        RestMan will try to stream any file-like payload rather than reading it into
+        memory. This happens through `RestMan::Payload::Streamed`, which is
+        automatically called internally by `RestMan::Payload.generate` on anything
+        with a `read` method.
+      request:
+        http_method: PUT
+        request_target: /api/image
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: rest-man/1.1.0 (darwin21 arm64) ruby/3.1.2p20"
+          - "Content-Type: image/jpeg"
+          - "Content-Length: 143685"
+        http_body: [JPEG binary data goes here]
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Image uploaded successfully
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.put(
+              'http://example.com/api/image',
+              File.open("./files/profile.jpg", 'r'),
+              {content_type: :jpg}
+            )
+
+            response.code                   #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :put,
+              url: 'http://example.com/api/image',
+              payload: File.open("./files/profile.jpg", 'r'),
+              headers: { content_type: :jpg }
+            )
+
+            response.code                   #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/api/image")
+            response = resource.put(
+              File.open("./files/profile.jpg", 'r'),
+              {content_type: :jpg}
+            )
+
+            response.code                   #=> 200
+            response.headers                #=> Hash
+            response.headers[:content_type] #=> text/plain
+            response.body                   #=> Image uploaded successfully
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support file upload with custom headers
+            ```
+    - title: Streaming responses
+      pre_desc: |
+        #### Use `raw_response` with Tempfile
+
+        If you pass `raw_response: true` to `RestMan::Request.execute`, it will save
+        the response body to a temporary file (using `Tempfile`) and return a
+        `RestMan::RawResponse` object rather than a `RestMan::Response`.
+
+        Note that the tempfile created by `Tempfile.new` will be in `Dir.tmpdir`
+        (usually `/tmp/`), which you can override to store temporary files in a
+        different location. This file will be unlinked when it is dereferenced.
+
+        If logging is enabled, this will also print download progress.
+        Customize the interval with `:stream_log_percent` (defaults to
+        10 for printing a message every 10% complete).
+
+        For example:
+
+        ```ruby
+        raw = RestMan::Request.execute(
+          method: :get,
+          url: 'http://releases.ubuntu.com/16.04.2/ubuntu-16.04.2-desktop-amd64.iso',
+          raw_response: true
+        )
+        #=> <RestMan::RawResponse
+        # @code=200,@file=#<Tempfile:/tmp/rest-man.20170522-5346-1pptjm1>,
+        # @request=<RestMan::Request @method="get",
+        # @url="http://releases.ubuntu.com/16.04.2/ubuntu-16.04.2-desktop-amd64.iso">>
+
+        raw.file.size     #=> 1554186240
+        raw.file.path     #=> "/tmp/rest-man.20170522-5346-1pptjm1"
+        raw.file.path     #=> "/tmp/rest-man.20170522-5346-1pptjm1"
+
+        require 'digest/sha1'
+        Digest::SHA1.file(raw.file.path).hexdigest
+        #=> "4375b73e3a1aa305a36320ffd7484682922262b3"
+        ```
+
+        #### Use `block_response` to receive raw Net::HTTPResponse
+
+        If you want to stream the data from the response to a file as it comes, rather
+        than entirely in memory, you can also pass `RestMan::Request.execute` a
+        parameter `:block_response` to which you pass a block/proc. This block receives
+        the raw unmodified Net::HTTPResponse object from Net::HTTP, which you can use
+        to stream directly to a file as each chunk is received.
+
+        Note that this bypasses all the usual HTTP status code handling, so you will
+        want to do you own checking for HTTP 20x response codes, redirects, etc.
+
+        The following is an example:
+
+        ````ruby
+        File.open('/some/output/file', 'w') {|f|
+          block = proc { |response|
+            response.read_body do |chunk|
+              f.write chunk
+            end
+          }
+          RestMan::Request.execute(
+            method: :get,
+            url: 'http://example.com/some/really/big/file.img',
+            block_response: block
+          )
+        }
+        ````
+
+headers:
+  examples:
+    - title: Request headers
+      id: request-headers
+      pre_desc: |
+        Request headers can be set by passing a ruby hash containing keys and values
+        representing header names and values
+
+        ##### GET
+        ```ruby
+        # GET request with modified headers
+        RestMan.get(
+          'http://example.com/resource',
+          {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+
+        ##### POST
+        ```ruby
+        # POST request with modified headers
+        RestMan.post(
+          'http://example.com/resource',
+          {
+            foo: 'bar',
+            baz: 'qux'
+          }, {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+
+        ##### PUT
+        ```ruby
+        # PUT request with modified headers
+        RestMan.put(
+          'http://example.com/resource',
+          {
+            foo: 'bar',
+            baz: 'qux'
+          }, {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+
+        ##### PATCH
+        ```ruby
+        # PUT request with modified headers
+        RestMan.patch(
+          'http://example.com/resource',
+          {
+            foo: 'bar',
+            baz: 'qux'
+          }, {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+
+        ##### DELETE
+        ```ruby
+        # DELETE request with modified headers
+        RestMan.delete(
+          'http://example.com/resource',
+          {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+
+        ##### HEAD
+        ```ruby
+        # HEAD request with modified headers
+        RestMan.head(
+          'http://example.com/resource',
+          {
+            Authorization: 'Bearer cT0febFoD5lxAlNAXHo6g'
+          }
+        )
+        ```
+    - title: Request headers customization with underscore symbol
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: RestMan"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            RestMan.get(
+              "http://example.com/test",
+              { "User-Agent" => "RestMan" }
+            )
+
+            # Underscore symbol
+            RestMan.get(
+              "http://example.com/test",
+              { user_agent: "RestMan" }
+            )
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              headers: { "User-Agent" => "RestMan" }
+            )
+
+            # Underscore symbol
+            RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test",
+              headers: { user_agent: "RestMan" }
+            )
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              headers: { "User-Agent" => "RestMan" }
+            )
+            resposne = resource.get
+
+            # Underscore symbol
+            resource = RestMan::Resource.new(
+              "http://example.com/test",
+              headers: { user_agent: "RestMan" }
+            )
+            resposne = resource.get
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support custom headers currently.
+            ```
+    - title: Response headers (processed)
+      id: response-headers
+      pre_desc: RestMan will parse response header keys to underscore symbol
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/test"
+
+            resonse.headers[:content_type] #=> "text/plain"
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            resonse.headers[:content_type] #=> "text/plain"
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            resonse.headers[:content_type] #=> "text/plain"
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support check headers currently.
+            ```
+    - title: Response headers (raw)
+      pre_desc: RestMan offer a way to access raw headers if you don't like above underscore symbol style
+      request:
+        http_method: GET
+        request_target: /test
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/test"
+
+            resonse.headers["content-type"] #=> "text/plain"
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/test"
+            )
+
+            resonse.headers["content-type"] #=> "text/plain"
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/test")
+            resposne = resource.get
+
+            resonse.headers["content-type"] #=> "text/plain"
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support check headers currently.
+            ```
+
+cookies:
+  description: |
+    Request and Response objects know about HTTP cookies, and will automatically
+    extract and set headers for them as needed.
+  examples:
+    - title: Cookies in response
+      id: response-cookies
+      request:
+        http_method: GET
+        request_target: /
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Set-Cookie: app_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV; path=/; secure; HttpOnly"
+        http_body: Hello world!
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.get "http://example.com/"
+
+            response.cookies["app_session"] #=> BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :get,
+              url: "http://example.com/"
+            )
+
+            response.cookies["app_session"] #=> BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/")
+            resposne = resource.get
+
+            response.cookies["app_session"] #=> BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV
+            ```
+        - tab: cli
+          body: |
+            ```bash
+            RestMan doesn't support check cookies currently.
+            ```
+    - title: Request with cookies
+      id: request-cookies
+      request:
+        http_method: POST
+        request_target: /resource
+        http_version: HTTP/1.1
+        http_headers:
+          - "Accept: */*"
+          - "Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          - "Host: example.com"
+          - "User-Agent: Mozilla/5.0"
+          - "Content-Type: text/plain"
+          - "Content-Length: 14"
+          - "Cookie: app_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+        http_body: Hello, world!
+      response:
+        http_version: HTTP/1.1
+        status_code: 200
+        status_text: OK
+        http_headers:
+          - "Content-Type: text/plain"
+          - "Set-Cookie: app_session=c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86"
+        http_body: Text received.
+      codes: 
+        - tab: simple
+          body: |
+            ```ruby
+            response = RestMan.post(
+              "http://example.com/resource",
+              "Hello, world!",
+              {
+                content_type: "text/plain",
+                cookie: "BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+              }
+            )
+
+            response.cookies["app_session"] #=> c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86
+            ```
+        - tab: advance
+          body: |
+            ```ruby
+            response = RestMan::Request.execute(
+              method: :post,
+              url: "http://example.com/resource",
+              payload: "Hello, world!",
+              headers: {
+                content_type: "text/plain",
+                cookie: "BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+              }
+            )
+
+            response.cookies["app_session"] #=> c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86
+            ```
+        - tab: resource
+          body: |
+            ```ruby
+            resource = RestMan::Resource.new("http://example.com/resource")
+            resposne = resource.post(
+              "Hello, world!",
+              {
+                content_type: "text/plain",
+                cookie: "BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HV"
+              }
+            )
+
+            response.cookies["app_session"] #=> c8y36ZmP1K0kiD3Nlc1Npb25faWQGOgZTVG86
+            ```
+        - tab: cli
+          body: |
+            ```
+            RestMan CLI hasn't support set custom cookie currently.
+            ```
+
+body:
+  description: |
+    RestMan offers an intuitive way to deal with the body of HTTP requests and responses.
+
+    Request with body:
+    - [Submit plan text data (text/plain)](/rest-man/request/post)
+    - [Submit form data (application/x-www-form-urlencoded)](/rest-man/request/post)
+    - [Submit json (application/json)](/rest-man/request/post)
+    - [Submit file (image/jpeg ...)](/rest-man/request/post)
+    - [Submit multipart form data (multipart/form-data)](/rest-man/request/post)
+
+    Handle response body:
+    - Get string or binary response with `response.body`
+    - Handle json resposne with `JSON.parse(response.body)`
+    - [Handle file response with `raw_response`](/rest-man/streaming)
+
+status_code:
+  - title: 1XX Informational
+    category: 1xx
+    items:
+      - code: 100
+        class: RestMan::Continue
+        message: Continue
+      - code: 101
+        class: RestMan::SwitchingProtocols
+        message: Switching Protocols
+      - code: 102
+        class: RestMan::Processing
+        message: Processing
+  - title: 2XX Success
+    category: 2xx
+    items:
+      - code: 200
+        class: RestMan::OK
+        message: OK
+      - code: 201
+        class: RestMan::Created
+        message: Created
+      - code: 202
+        class: RestMan::Accepted
+        message: Accepted
+      - code: 203
+        class: RestMan::NonAuthoritativeInformation
+        message: Non-Authoritative Information
+      - code: 204
+        class: RestMan::NoContent
+        message: No Content
+      - code: 205
+        class: RestMan::ResetContent
+        message: Reset Content
+      - code: 206
+        class: RestMan::PartialContent
+        message: Partial Content
+      - code: 207
+        class: RestMan::MultiStatus
+        message: Multi-Status
+      - code: 208
+        class: RestMan::AlreadyReported
+        message: Already Reported
+      - code: 226
+        class: RestMan::IMUsed
+        message: IM Used
+  - title: 3XX Redirection
+    category: 3xx
+    items:
+      - code: 300
+        class: RestMan::MultipleChoices
+        message: Multiple Choices
+      - code: 301
+        class: RestMan::MovedPermanently
+        message: Moved Permanently
+      - code: 302
+        class: RestMan::Found
+        message: Found
+      - code: 303
+        class: RestMan::SeeOther
+        message: See Other
+      - code: 304
+        class: RestMan::NotModified
+        message: Not Modified
+      - code: 305
+        class: RestMan::UseProxy
+        message: Use Proxy
+      - code: 306
+        class: RestMan::SwitchProxy
+        message: Switch Proxy
+      - code: 307
+        class: RestMan::TemporaryRedirect
+        message: Temporary Redirect
+      - code: 308
+        class: RestMan::PermanentRedirect
+        message: Permanent Redirect
+  - title: 4XX Client Error
+    category: 4xx
+    items:
+      - code: 400
+        class: RestMan::BadRequest
+        message: Bad Request
+      - code: 401
+        class: RestMan::Unauthorized
+        message: Unauthorized
+      - code: 402
+        class: RestMan::PaymentRequired
+        message: Payment Required
+      - code: 403
+        class: RestMan::Forbidden
+        message: Forbidden
+      - code: 404
+        class: RestMan::NotFound
+        message: Not Found
+      - code: 405
+        class: RestMan::MethodNotAllowed
+        message: Method Not Allowed
+      - code: 406
+        class: RestMan::NotAcceptable
+        message: Not Acceptable
+      - code: 407
+        class: RestMan::ProxyAuthenticationRequired
+        message: Proxy Authentication Required
+      - code: 408
+        class: RestMan::RequestTimeout
+        message: Request Timeout
+      - code: 409
+        class: RestMan::Conflict
+        message: Conflict
+      - code: 410
+        class: RestMan::Gone
+        message: Gone
+      - code: 411
+        class: RestMan::LengthRequired
+        message: Length Required
+      - code: 412
+        class: RestMan::PreconditionFailed
+        message: Precondition Failed
+      - code: 413
+        class: RestMan::PayloadTooLarge
+        message: Payload Too Large
+      - code: 414
+        class: RestMan::URITooLong
+        message: URI Too Long
+      - code: 415
+        class: RestMan::UnsupportedMediaType
+        message: Unsupported Media Type
+      - code: 416
+        class: RestMan::RangeNotSatisfiable
+        message: Range Not Satisfiable
+      - code: 417
+        class: RestMan::ExpectationFailed
+        message: Expectation Failed
+      - code: 418
+        class: RestMan::ImATeapot
+        message: I'm A Teapot
+      - code: 421
+        class: RestMan::TooManyConnectionsFromThisIP
+        message: Too Many Connections From This IP
+      - code: 422
+        class: RestMan::UnprocessableEntity
+        message: Unprocessable Entity
+      - code: 423
+        class: RestMan::Locked
+        message: Locked
+      - code: 424
+        class: RestMan::FailedDependency
+        message: Failed Dependency
+      - code: 425
+        class: RestMan::UnorderedCollection
+        message: Unordered Collection
+      - code: 426
+        class: RestMan::UpgradeRequired
+        message: Upgrade Required
+      - code: 428
+        class: RestMan::PreconditionRequired
+        message: Precondition Required
+      - code: 429
+        class: RestMan::TooManyRequests
+        message: Too Many Requests
+      - code: 431
+        class: RestMan::RequestHeaderFieldsTooLarge
+        message: Request Header Fields Too Large
+      - code: 449
+        class: RestMan::RetryWith
+        message: Retry With
+      - code: 450
+        class: RestMan::BlockedByWindowsParentalControls
+        message: Blocked By Windows Parental Controls
+  - title: 5XX Server Error
+    category: 5xx
+    items:
+      - code: 500
+        class: RestMan::InternalServerError
+        message: Internal Server Error
+      - code: 501
+        class: RestMan::NotImplemented
+        message: Not Implemented
+      - code: 502
+        class: RestMan::BadGateway
+        message: Bad Gateway
+      - code: 503
+        class: RestMan::ServiceUnavailable
+        message: Service Unavailable
+      - code: 504
+        class: RestMan::GatewayTimeout
+        message: Gateway Timeout
+      - code: 505
+        class: RestMan::HTTPVersionNotSupported
+        message: HTTP Version Not Supported
+      - code: 506
+        class: RestMan::VariantAlsoNegotiates
+        message: Variant Also Negotiates
+      - code: 507
+        class: RestMan::InsufficientStorage
+        message: Insufficient Storage
+      - code: 508
+        class: RestMan::LoopDetected
+        message: Loop Detected
+      - code: 509
+        class: RestMan::BandwidthLimitExceeded
+        message: Bandwidth Limit Exceeded
+      - code: 510
+        class: RestMan::NotExtended
+        message: Not Extended
+      - code: 511
+        class: RestMan::NetworkAuthenticationRequired
+        message: Network Authentication Required

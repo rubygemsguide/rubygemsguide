@@ -1,0 +1,87 @@
+---
+---
+
+@import "variables/screens";
+@import "variables/colors";
+@import "variables/text-sizes";
+@import "variables/font-family";
+@import "variables/shadows";
+@import "utils";
+
+html {
+  font-family: var(--sans-font);
+}
+
+body {
+  background: $gray-50;
+  font-size: 16px;
+  display: flex;
+  min-height: 100vh;
+  flex: 1;
+  margin: 0 auto;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+@import "rest-man/post/sidebar";
+
+main {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 40px 0;
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+}
+@media (min-width: $md) {
+  main {
+    margin-top: 0;
+    margin-left: 240px;
+  }
+}
+
+h2.title {
+  font-weight: 700;
+  font-size: $text-2xl;
+  margin-top: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $gray-300;
+}
+
+.post {
+  max-width: 90%;
+}
+@media (min-width: $sm) {
+  .post {
+    max-width: $xs;
+  }
+}
+@media (min-width: $md) {
+  .post {
+    max-width: $sm;
+  }
+}
+
+.post-desc {
+  padding: 0;
+  line-height: 1.5;
+}
+.post-desc pre.highlight {
+  padding: 8px 16px;
+  border-radius: 10px;
+  overflow-x: scroll;
+}
+
+code.language-plaintext {
+  font-size: 14px;
+  background-color: $gray-200;
+  font-family: $font-mono;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 6px;
+}
+
+@import "rest-man/post/code-example";
+@import "rest-man/post/http-status";

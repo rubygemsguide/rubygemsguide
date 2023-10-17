@@ -22,7 +22,6 @@ title: RubyGems.Guide
 email: hopper.gee@hey.com
 description: >- # this means to ignore newlines until "baseurl:"
   Tutorials for popular Ruby gems
-baseurl: "/" # the subpath of your site, e.g. /blog
 url: "https://rubygems.guide" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: hoppergeegee
 github_username:  hoppergee

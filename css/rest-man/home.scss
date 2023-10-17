@@ -1,0 +1,237 @@
+---
+---
+
+@import "variables/screens";
+@import "variables/colors";
+@import "variables/text-sizes";
+@import "variables/font-family";
+@import "utils";
+
+:root {
+  --sans-font: #{$font-sans};
+  --mono-font: ${$font-mono};
+
+  --brand-color: #ad5153;
+  --brand-border-color: #232323;
+}
+
+html {
+  font-family: var(--sans-font);
+  overflow: hidden;
+}
+
+body {
+  background: $gray-50;
+  font-size: 16px;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  flex: 1;
+  margin: 0 auto;
+  padding: 0 .5rem;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+header {
+  background-color: var(--brand-color);
+  border-bottom: 2px solid var(--brand-border-color);
+  text-align: center;
+  padding: .5rem;
+  width: 100vw;
+  position: relative;
+  box-sizing: border-box;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+@media (min-width: 768px) {
+  header {
+    padding: 1rem 2rem;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 20px;
+  margin-right: 0.5rem;
+  opacity: 0.75;
+}
+@media (min-width: $xs) {
+  .logo {
+    width: 32px;
+    opacity: 1;
+  }
+}
+
+header {
+  display: flex;
+  flex-direction: column-reverse;
+}
+@media (min-width: $xs) {
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: center;
+    position: relative;
+  }
+}
+
+header h1 {
+  display: none;
+  font-size: $text-sm;
+  color: $gray-200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+@media (min-width: $xs) {
+  header h1 {
+    margin: unset;
+    display: unset;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: $text-2xl;
+    z-index: 1;
+  }
+}
+
+header h1 a, header h2 a{
+  color: white !important;
+  text-decoration: none;
+}
+
+header h1 a:hover, header h2 a:hover {
+  background-color: unset;
+}
+
+header h2 {
+  display: block;
+  text-align: center;
+  color: white;
+  width: 100%;
+  margin: -8px 0 0 0;
+  font-size: 40px;
+}
+@media (min-width: $xs) {
+  header h2 {
+    margin: 15px 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    font-size: 1.5em;
+    height: 100%;
+  }
+}
+
+footer {
+  padding: 10px;
+  color: #ad5153;
+  background-color: $gray-50;
+  font-size: 1rem;
+  text-align: center;
+
+  border-top: 2px solid var(--brand-border-color);
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  .social {
+    display: flex;
+    align-items: center;
+  }
+
+  a.twitter {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    opacity: 70%;
+
+    &:hover {
+      background-color: unset;
+      opacity: 100%;
+    }
+    
+    img {
+      width: 24px;
+    }
+  }
+
+  a.github {
+    display: flex;
+    align-items: center;
+    opacity: 70%;
+
+    &:hover {
+      background-color: unset;
+      opacity: 100%;
+    }
+    
+    img {
+      width: 24px;
+    }
+  }
+}
+@media (min-width: $xs) {
+  footer {
+    padding: 2rem 1rem 1.5rem 1rem;
+  }
+}
+
+main {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.main-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+@media (min-width: $xs) {
+  .main-section {
+    flex-direction: row;
+    margin: 50px;
+  }
+}
+
+.advance-section {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  margin-top: auto;
+  margin-bottom: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+@media (min-width: $xs) {
+  .advance-section {
+    margin-bottom: unset;
+    margin-left: unset;
+    margin-right: unset;
+  }
+}
+
+@import "rest-man/home/request-box";
+@import "rest-man/home/arrow";
+@import "rest-man/home/response-box";
+@import "rest-man/home/advance-box";

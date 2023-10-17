@@ -1,0 +1,107 @@
+/*
+###########
+# Request Box
+###########
+*/
+
+.request-box-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+@media (min-width: $xs) {
+  .request-box-wrapper {
+    width: 33.3333333%;
+  }
+}
+
+.request-box-wrapper a {
+  cursor: pointer;
+}
+
+.request-box {
+  width: 300px;
+  border: 2px solid;
+}
+
+.request {
+  display: block;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -8px;
+}
+
+.request-action {
+  box-sizing: border-box;
+  width: 33.333333%;
+  border: 2px solid;
+  margin-left: -2px;
+  margin-top: -2px;
+  text-align: center;
+  padding: 20px 0;
+  text-decoration: unset;
+  color: black;
+}
+.request-action:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.request-headers {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+.request-headers:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.request-cookies {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 2px dashed;
+  border-bottom-style: solid;
+  border-right-style: solid;
+  padding: 4px 16px;
+  margin-right: -2px;
+  background: $gray-50;
+  text-decoration: unset;
+  color: black;
+}
+.request-cookies:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}
+
+.request-body {
+  border: 2px solid;
+  width: 100%;
+  display: block;
+  margin-top: -2px;
+  margin-left: -2px;
+  margin-bottom: -2px;
+  text-align: center;
+  padding: 30px 0;
+  text-decoration: unset;
+  color: black;
+}
+.request-body:hover {
+  background: $red-500;
+  border-color: black;
+  color: white
+}

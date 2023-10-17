@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>lock</title>
+    <g id="Page-1-Copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="lock">
+            <rect id="Rectangle" fill="#FFFFFF" x="5" y="11" width="14" height="10"></rect>
+            <path d="M9,6 C9.25716306,5.29034263 9.48971895,4.83168953 9.69766767,4.6240407 C10.5349861,3.7879298 11.5092615,3.637366 12,3.637366 C12.4616483,3.637366 13.4090631,3.88411834 14.1774198,4.6240407 C14.4125442,4.85046395 14.6867376,5.30911705 15,6 L15,11 L9,11 L9,6 Z" id="Rectangle" fill="#FFFFFF"></path>
+            <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
+            <path d="M5,13 C5,11.8954305 5.8954305,11 7,11 L17,11 C18.1045695,11 19,11.8954305 19,13 L19,19 C19,20.1045695 18.1045695,21 17,21 L7,21 C5.8954305,21 5,20.1045695 5,19 L5,13 Z" id="Path" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M11,16 C11,16.5522847 11.4477153,17 12,17 C12.5522847,17 13,16.5522847 13,16 C13,15.4477153 12.5522847,15 12,15 C11.4477153,15 11,15.4477153 11,16" id="Path" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M8,11 L8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 L16,11" id="Path" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>
